@@ -1034,6 +1034,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roundTimer: {fileID: 1956897134}
+  State: 0
 --- !u!4 &1956897136
 Transform:
   m_ObjectHideFlags: 0
