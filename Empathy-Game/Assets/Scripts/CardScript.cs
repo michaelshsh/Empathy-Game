@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,6 +10,7 @@ public class CardScript : MonoBehaviour
     // Start is called before the first frame update 
 
     public bool drag;
+    private bool draggable;
     public SpriteRenderer mySpritRenderer;
     public TextMeshPro Time;
     public TextMeshPro PersonalPoints;
@@ -17,16 +19,27 @@ public class CardScript : MonoBehaviour
 
     void Start()
     {
+        GameLogicScript.OnStateChange += CardsOnStateChange;
         Time.text = "1:30";
         PersonalPoints.text = "+15";
         TeamPoints.text = "0";
         FreeText.text = "Hello im a free text let me live";
     }
 
+    private void CardsOnStateChange(GameState state)    
+    {
+        if(state == GameState.RoundStart)
+        {
+            draggable = true;
+        }
+        else
+            draggable = false;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if (drag)
+        if (drag && draggable)
         {
             Vector3 mousePos = Input.mousePosition;
             mousePos.z = Camera.main.nearClipPlane;
@@ -35,6 +48,11 @@ public class CardScript : MonoBehaviour
             gameObject.transform.position = (gameObject.transform.position + worldPosition) / 2;
             
         }
+    }
+
+    private void OnDestroy()
+    {
+        GameLogicScript.OnStateChange -= CardsOnStateChange;
     }
 
     private void OnMouseDown()

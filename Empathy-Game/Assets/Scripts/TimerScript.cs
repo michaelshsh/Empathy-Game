@@ -24,9 +24,12 @@ public class TimerScript : MonoBehaviour
             }
             else
             {
-                Debug.Log("Time has run out!");
                 timeRemaining = 0;
                 timerIsRunning = false;
+
+                //change the round to OVER!
+                Debug.Log("TimerScript Calling GameState.RoundEnd");
+                GameLogicScript.Instance.UpdateGameByState(GameState.RoundEnd);
             }
         }
     }
@@ -37,4 +40,6 @@ public class TimerScript : MonoBehaviour
         float seconds = Mathf.FloorToInt(timeToDisplay % 60);
         timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
+
+
 }
