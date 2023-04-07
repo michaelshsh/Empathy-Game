@@ -24,6 +24,7 @@ public class CardScript : MonoBehaviour
         PersonalPoints.text = "+15";
         TeamPoints.text = "0";
         FreeText.text = "Hello im a free text let me live";
+        draggable = true;
     }
 
     private void CardsOnStateChange(GameState state)    

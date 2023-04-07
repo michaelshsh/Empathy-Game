@@ -19,7 +19,7 @@ public class GameLogicScript : MonoBehaviour
     {
         if (deck.Count >= 1)
         {
-            CardScript card = deck[Random.Range(0, deck.Count)];
+            CardScript card = deck[UnityEngine.Random.Range(0, deck.Count)];
 
             for(int i = 0; i < availableSlot.Length; i++)
             {
@@ -65,7 +65,7 @@ public class GameLogicScript : MonoBehaviour
             case GameState.Lobby:
                 break;
             case GameState.RoundStart:
-                StartTimer(5);
+                StartTimer(30);
                 break;
             case GameState.RoundEnd:
                 break;
