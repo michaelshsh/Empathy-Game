@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class TimerScript : MonoBehaviour
 {
-    public float timeRemaining = 10;
-    public bool timerIsRunning = false;
-    public TextMeshProUGUI timeText;
-    private void Start()
+    public static TimerScript Instance;
+    [SerializeField] public float timeRemaining { get; private set; }
+    [SerializeField] public bool timerIsRunning { get; private set; }
+    [SerializeField] private TextMeshProUGUI timeText;
+    void Start()
     {
-        // Starts the timer automatically
-        timerIsRunning = true;
+        Instance = this;
     }
     void Update()
     {
@@ -33,6 +33,7 @@ public class TimerScript : MonoBehaviour
             }
         }
     }
+
     void DisplayTime(float timeToDisplay)
     {
         timeToDisplay += 1;
@@ -41,5 +42,11 @@ public class TimerScript : MonoBehaviour
         timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
+    public void SetRoundTime(int time)
+    {
+        timeRemaining = time;
+    }
 
+    public void StartTimer()
+    { timerIsRunning = true; }
 }

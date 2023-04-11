@@ -9,11 +9,25 @@ using UnityEngine.UI;
 public class GameLogicScript : MonoBehaviour
 {
     public static GameLogicScript Instance;
-    public TimerScript roundTimer;
+    public List<CardScript> deck = new List<CardScript>(); //should be moved to class CardManager
+    public Transform[] Slots; // should be moved to class CardManager or create new class - Slot manager
+    public bool[] availableSlot; // should be moved to class CardManager or create new class - Slot manager
+    [SerializeField] public GameState gameState { get; private set; }
+    public static event Action<GameState> OnStateChange; //can subscribe to it, to get notified when a state is changed
 
-    public List<CardScript> deck = new List<CardScript>();
-    public Transform[] Slots; // the cads slots objects
-    public bool[] availableSlot;
+    // Start is called before the first frame update
+    void Start()
+    {
+        Instance = this;
+        UpdateGameByState(GameState.GameStart);
+        UpdateGameByState(GameState.RoundStart);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     public void DrawCard()
     {
@@ -35,24 +49,6 @@ public class GameLogicScript : MonoBehaviour
         }
     }
 
-    public GameState gameState;
-
-    //can subscribe to it, to get notified when a state is changed
-    public static event Action<GameState> OnStateChange;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        Instance = this;
-        UpdateGameByState(GameState.RoundStart);
-    }
-    
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void UpdateGameByState(GameState newState)
     {
         gameState = newState;
@@ -65,23 +61,31 @@ public class GameLogicScript : MonoBehaviour
             case GameState.Lobby:
                 break;
             case GameState.RoundStart:
-                StartTimer(30);
+                RoundStartHandler();
                 break;
             case GameState.RoundEnd:
                 break;
-            case GameState.Victory: 
+            case GameState.Victory:
                 break;
             case GameState.Lose:
+                break;
+            case GameState.GameStart:
+                GameStartHandler();
                 break;
         }
 
         OnStateChange?.Invoke(newState);
     }
 
-    private void StartTimer(float roundTime)
+    private void RoundStartHandler()
     {
-        roundTimer.timeRemaining = roundTime;
-        roundTimer.timerIsRunning = true;
+        TimerScript.Instance.StartTimer();
+    }
+
+    private void GameStartHandler()
+    {
+        TimerScript.Instance.SetRoundTime(5);
+        RoundNumberScript.Instance.SetUpMaxRounds(6);
     }
 }
 
@@ -100,6 +104,7 @@ public enum GameState
 {
     MainMenu,
     Lobby,
+    GameStart,
     RoundEnd,
     RoundStart,
     Victory,
