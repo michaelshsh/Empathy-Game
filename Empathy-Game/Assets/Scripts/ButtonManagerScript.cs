@@ -8,19 +8,19 @@ using System;
 public class ButtonManagerScript : MonoBehaviour
 {
     public ButtonManagerScript Instance; // singleton
-    public Button createButton;
-    public Button joinButton;
-    public Button rulesButton;
-    public Button backButton;
-    public Button joinSpecificGameButton;
-    public Button createSpecificGameButton;
-    public TMP_Dropdown numberOfRounds;
-    public TMP_InputField numberOfPlayers;
-    public TextMeshProUGUI rulesOfTheGame;
-    public TMP_InputField gameIdField;
+    [SerializeField] private Button createButton; // create button at the main menu
+    [SerializeField] private Button joinButton; // join button at the main menu
+    [SerializeField] private Button rulesButton; // rules button at the main menu
+    [SerializeField] private Button backButton; // back button
+    [SerializeField] private Button joinSpecificGameButton; // join specific game button, at the join menu
+    [SerializeField] private Button createSpecificGameButton; // create specific game button, at the create menu
+    [SerializeField] private GameObject Lobby; // static game lobby
+    [SerializeField] private TMP_Dropdown numberOfRounds; // number of rounds in the game, at the create menu
+    [SerializeField] private TMP_InputField numberOfPlayers; // number of players in the game, at the create menu
+    [SerializeField] private TextMeshProUGUI rulesOfTheGame; // rules of the game, at the rules menu
+    [SerializeField] private TMP_InputField gameIdField; // game id field, at the join menu
 
 
-    public static event Action<GameState> ButtonEvent;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +29,8 @@ public class ButtonManagerScript : MonoBehaviour
         joinButton.onClick.AddListener(JoinButtonClicked);
         rulesButton.onClick.AddListener(RulesButtonClicked);
         backButton.onClick.AddListener(BackButtonClicked);
-
+        createSpecificGameButton.onClick.AddListener(CreateSpecificGameButtonClicked);
+        joinSpecificGameButton.onClick.AddListener(JoinSpecificGameButtonClicked);
     }
     private void changeMainMenuObjectsActivness(bool activity)
     {
@@ -57,14 +58,29 @@ public class ButtonManagerScript : MonoBehaviour
         rulesOfTheGame.gameObject.SetActive(activity);
     }
 
+    private void JoinSpecificGameButtonClicked() // every click on join specific game button does this
+    {
+        Debug.Log("Join specific game button clicked");
+        changeJoinMenuObjectsActiveness(false);
+        backButton.gameObject.SetActive(true); // back button is should be active at the lobby
+        Lobby.SetActive(true);
+    }
 
+    private void CreateSpecificGameButtonClicked() // every click on create specific game button does this
+    {
+        Debug.Log("Create specific game button clicked");
+        changeCreateMenuObjectsActiveness(false);
+        backButton.gameObject.SetActive(true); // back button is should be active at the lobby
+        Lobby.SetActive(true);
+    }
     private void BackButtonClicked() // every click on back button does this, only show the main menu buttons!!
     {
         Debug.Log("Back button clicked");
         changeMainMenuObjectsActivness(true);
         changeCreateMenuObjectsActiveness(false);
         changeJoinMenuObjectsActiveness(false);
-        changeRulesMenuObjectsActiveness(false );
+        changeRulesMenuObjectsActiveness(false);
+        Lobby.SetActive(false);
     }
 
     private void RulesButtonClicked()// every click on rules button does this
