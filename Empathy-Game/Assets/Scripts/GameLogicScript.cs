@@ -6,9 +6,20 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameLogicScript : MonoBehaviour
+public sealed class GameLogicScript : MonoBehaviour
 {
-    public static GameLogicScript Instance;
+    public static GameLogicScript Instance { get; private set; }
+    private void Awake()
+    {
+        if(Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
     public List<CardScript> deck = new List<CardScript>(); //should be moved to class CardManager
     public Transform[] Slots; // should be moved to class CardManager or create new class - Slot manager
     public bool[] availableSlot; // should be moved to class CardManager or create new class - Slot manager
