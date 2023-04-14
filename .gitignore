@@ -1,14 +1,12 @@
-
-*.log
-
 # .gitignore for unity
 
 # Unity
-/[Ll]ibrary/
+/Library/
 /[Tt]emp/
 /[Oo]bj/
 /[Bb]uild/
 /[Bb]uilds/
+/[Ll]ogs/
 /Assets/AssetStoreTools*
 sysinfo.txt
 *.pidb.meta
