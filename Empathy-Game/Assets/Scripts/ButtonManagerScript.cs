@@ -20,6 +20,7 @@ public class ButtonManagerScript : MonoBehaviour
     [SerializeField] private TextMeshProUGUI rulesOfTheGame; // rules of the game, at the rules menu
     [SerializeField] private TMP_InputField gameIdField; // game id field, at the join menu
 
+     
 
     // Start is called before the first frame update
     void Start()
