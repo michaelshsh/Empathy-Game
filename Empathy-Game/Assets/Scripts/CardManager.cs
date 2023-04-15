@@ -16,7 +16,8 @@ public sealed class CardManager : MonoBehaviour
             InstanceCardManager = this;
         }
     }
-    public List<CardScript> deck = new List<CardScript>(); //should be moved to class CardManager
+    public List<CardScript> deck = new List<CardScript>();
+    public List<CardScript> UsedCards = new List<CardScript>();
     // Start is called before the first frame update
     void Start()
     {
@@ -27,5 +28,17 @@ public sealed class CardManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void ReturnUsedCardsToDeck()
+    {
+        if(UsedCards.Count >= 1)
+        {
+            foreach(CardScript card in UsedCards)
+            {
+                deck.Add(card);
+            }
+            UsedCards.Clear();
+        }
     }
 }
