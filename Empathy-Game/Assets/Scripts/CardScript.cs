@@ -17,6 +17,7 @@ public class CardScript : MonoBehaviour
     public TextMeshPro TeamPoints;
     public TextMeshPro FreeText;
     public bool Played;
+    public int SlotIndex;
 
     void Start()
     {
@@ -67,6 +68,13 @@ public class CardScript : MonoBehaviour
     {
         drag = false;
         gameObject.transform.position += new Vector3(0, 0, 1);
+        //Invoke("MoveToPlayedCardDeck", 2f);// Launches a MoveToPlayedCardDeck in 2 seconds - for testing needs to be moved
     }
 
+    private void MoveToPlayedCardDeck()//not sure if it should be here
+    {
+        CardManager.InstanceCardManager.UsedCards.Add(this);
+        CardSlotsManager.InstanceSlotManager.availableSlot[SlotIndex] = true;
+        gameObject.SetActive(false);
+    }
 }

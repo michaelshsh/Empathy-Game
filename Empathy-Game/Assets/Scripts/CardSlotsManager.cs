@@ -42,6 +42,8 @@ public sealed class CardSlotsManager : MonoBehaviour
                 {
                     card.gameObject.SetActive(true);
                     card.transform.position = Slots[i].position;
+                    card.SlotIndex = i;
+                    card.Played = false;
                     availableSlot[i] = false;
                     CardManager.InstanceCardManager.deck.Remove(card);
                     return;
@@ -49,4 +51,5 @@ public sealed class CardSlotsManager : MonoBehaviour
             }
         }
     }
+
 }

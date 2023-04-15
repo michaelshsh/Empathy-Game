@@ -343,6 +343,7 @@ MonoBehaviour:
   - {fileID: 1742410741}
   - {fileID: 1406750581}
   - {fileID: 1020730205}
+  UsedCards: []
 --- !u!4 &301302375
 Transform:
   m_ObjectHideFlags: 0
