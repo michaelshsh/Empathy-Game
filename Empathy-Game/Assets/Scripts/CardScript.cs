@@ -16,6 +16,7 @@ public class CardScript : MonoBehaviour
     public TextMeshPro PersonalPoints;
     public TextMeshPro TeamPoints;
     public TextMeshPro FreeText;
+    public bool Played;
 
     void Start()
     {

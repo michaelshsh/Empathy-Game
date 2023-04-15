@@ -20,9 +20,6 @@ public sealed class GameLogicScript : MonoBehaviour
             Instance = this;
         }
     }
-    public List<CardScript> deck = new List<CardScript>(); //should be moved to class CardManager
-    public Transform[] Slots; // should be moved to class CardManager or create new class - Slot manager
-    public bool[] availableSlot; // should be moved to class CardManager or create new class - Slot manager
     [SerializeField] public GameState gameState { get; private set; }
     public static event Action<GameState> OnStateChange; //can subscribe to it, to get notified when a state is changed
 
@@ -39,27 +36,6 @@ public sealed class GameLogicScript : MonoBehaviour
     {
 
     }
-
-    public void DrawCard()
-    {
-        if (deck.Count >= 1)
-        {
-            CardScript card = deck[UnityEngine.Random.Range(0, deck.Count)];
-
-            for(int i = 0; i < availableSlot.Length; i++)
-            {
-                if(availableSlot[i] == true)
-                {
-                    card.gameObject.SetActive(true);
-                    card.transform.position = Slots[i].position;
-                    availableSlot[i] = false;
-                    deck.Remove(card);
-                    return;
-                }
-            }
-        }
-    }
-
     public void UpdateGameByState(GameState newState)
     {
         gameState = newState;
