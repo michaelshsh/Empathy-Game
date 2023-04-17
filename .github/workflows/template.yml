@@ -13,7 +13,7 @@ jobs:
    strategy:
      matrix:
       projectPath:
-        - /Empathy-Game/
+        - ./Empathy-Game/
    steps:
      - name: Checkout code
        uses: actions/checkout@v2
@@ -45,6 +45,7 @@ jobs:
        id: testRunner
        with:
          testMode: all
+         projectPath: ${{ matrix.projectPath }}
 
      - uses: actions/upload-artifact@v2
        with:
