@@ -13,7 +13,7 @@ jobs:
    strategy:
      matrix:
       projectPath:
-        - ./Empathy-Game/
+        - best-game-ever/Empathy-Game
    steps:
      - name: Checkout code
        uses: actions/checkout@v2
