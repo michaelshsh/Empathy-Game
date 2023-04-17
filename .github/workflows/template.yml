@@ -12,7 +12,7 @@ jobs:
    runs-on: ubuntu-latest
    strategy:
      matrix:
-      projectPath: ["best-game-ever/Empathy-Game"]
+      projectPath: ["./Empathy-Game"]
    steps:
      - name: Checkout code
        uses: actions/checkout@v2
