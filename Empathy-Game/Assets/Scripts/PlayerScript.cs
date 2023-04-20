@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Constants;
 
 public class PlayerScript : MonoBehaviour
 {
-    public TextMeshProUGUI label;
+    public TextMeshProUGUI labelText;
+    private Labels.LabelEnum mylabel;
 
     // Start is called before the first frame update
     void Start()
@@ -18,13 +20,15 @@ public class PlayerScript : MonoBehaviour
     {
         if(state == GameState.RoundStart)
         {
-            label.text = $"#{getRandomLabel()}";
+            //was getAndSetRandomLabel before, now get setted by gameLogicScripts
         }
     }
 
-    private string getRandomLabel()
+    public void getAndSetRandomLabel()
     {
-        return Constants.Labels.HR;
+        mylabel = Labels.GetRandomLabelEnum();
+
+        labelText.text = $"#{Labels.EnumToString(mylabel)}";
     }
 
     // Update is called once per frame

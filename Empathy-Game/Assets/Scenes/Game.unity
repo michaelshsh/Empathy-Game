@@ -2262,6 +2262,10 @@ PrefabInstance:
       propertyPath: label
       value: 
       objectReference: {fileID: 447020082}
+    - target: {fileID: 4638402627306994899, guid: e9104fdcdd2f56a4c884658834c2c920, type: 3}
+      propertyPath: labelText
+      value: 
+      objectReference: {fileID: 447020082}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e9104fdcdd2f56a4c884658834c2c920, type: 3}
 --- !u!1001 &8140470454395775254

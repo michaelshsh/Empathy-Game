@@ -51,6 +51,7 @@ public sealed class GameLogicScript : MonoBehaviour
                 RoundStartHandler();
                 break;
             case GameState.RoundEnd:
+                RoundEndHandler();
                 break;
             case GameState.Victory:
                 break;
@@ -64,26 +65,44 @@ public sealed class GameLogicScript : MonoBehaviour
         OnStateChange?.Invoke(newState);
     }
 
+    private void RoundEndHandler()
+    {
+        //count points
+
+        // kill cards? or not now?
+
+
+
+        //go to post round screen? display it directly?
+    }
+
     private void RoundStartHandler()
     {
+        //start timer
         TimerScript.Instance.StartTimer();
+
+        //draw 4 cards
+        CardSlotsManager.InstanceSlotManager.DrawCard();
+        CardSlotsManager.InstanceSlotManager.DrawCard();
+        CardSlotsManager.InstanceSlotManager.DrawCard();
+        CardSlotsManager.InstanceSlotManager.DrawCard();
+
+        //empty schedule
+        // schedule not implimenteed yet
+
+        //random player label
+        var players = FindObjectsOfType<PlayerScript>();
+        Debug.Log($"found {players.Length} players to give random labels to");
+        foreach (var player in players)
+        {
+            player.getAndSetRandomLabel();
+        }
     }
 
     private void GameStartHandler()
     {
         TimerScript.Instance.SetRoundTime(5);
         RoundNumberScript.Instance.SetUpMaxRounds(6);
-    }
-}
-
-public class Constants
-{
-    public class Labels
-    {
-        public const string Dev = "Developer";
-        public const string IT = "Tech Support";    
-        public const string PM = "Product Manager";
-        public const string HR = "Human Resorces";
     }
 }
 
