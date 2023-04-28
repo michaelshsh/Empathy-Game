@@ -18,6 +18,7 @@ public sealed class CardManager : MonoBehaviour
     }
     public List<CardScript> deck = new List<CardScript>();
     public List<CardScript> UsedCards = new List<CardScript>();
+    public List<CardScript> PlayedCards = new List<CardScript>();
     // Start is called before the first frame update
     void Start()
     {

@@ -101,7 +101,7 @@ public sealed class GameLogicScript : MonoBehaviour
 
     private void GameStartHandler()
     {
-        TimerScript.Instance.SetRoundTime(5);
+        TimerScript.Instance.SetRoundTime(60);
         RoundNumberScript.Instance.SetUpMaxRounds(6);
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public sealed class CardSlotsManager : MonoBehaviour
 {
+    public GameObject dailyScheduleSlot;
     public static CardSlotsManager InstanceSlotManager { get; private set; }
     private void Awake()
     {
@@ -27,7 +28,17 @@ public sealed class CardSlotsManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        // for every CardScript, check if  isCardNearDailyScheduleSlot is true for him
+        foreach(CardScript card in CardManager.InstanceCardManager.PlayedCards)
+        {
+            if(isCardNearDailyScheduleSlot(card, dailyScheduleSlot))
+            {
+                makeCardOnTopDailyScheduleSlot(card, dailyScheduleSlot); break;
+
+
+            }
+        }
+
     }
 
     public void DrawCard()
@@ -46,9 +57,39 @@ public sealed class CardSlotsManager : MonoBehaviour
                     card.Played = false;
                     availableSlot[i] = false;
                     CardManager.InstanceCardManager.deck.Remove(card);
+                    CardManager.InstanceCardManager.PlayedCards.Add(card);
                     return;
                 }
             }
+        }
+    }
+
+    public void makeCardOnTopDailyScheduleSlot(CardScript card, GameObject dailyScheduleSlot) 
+    {
+        // make the card on top of the daily schedule slot
+        // the card should cover all the daily schedule slot
+        card.transform.position = new Vector3(dailyScheduleSlot.transform.position.x, dailyScheduleSlot.transform.position.y, dailyScheduleSlot.transform.position.z - 1);
+        
+    }
+
+    public bool isCardNearDailyScheduleSlot(CardScript card, GameObject dailyScheduleSlot)
+    {
+        // if the card's x,y position is inside the dailyScheduleSlot x,y position then return true
+        if (card.transform.position.x >= dailyScheduleSlot.transform.position.x - 0.5f &&
+                       card.transform.position.x <= dailyScheduleSlot.transform.position.x + 0.5f &&
+                                  card.transform.position.y >= dailyScheduleSlot.transform.position.y - 0.5f &&
+                                             card.transform.position.y <= dailyScheduleSlot.transform.position.y + 0.5f)
+        {
+            Debug.Log("Card is near daily schedule slot");
+            // debug the card's id
+            Debug.Log(card);
+            return true;
+            
+        }
+        else
+        {
+            return false;
+
         }
     }
 
