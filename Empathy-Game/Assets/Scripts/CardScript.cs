@@ -18,6 +18,7 @@ public class CardScript : MonoBehaviour
     public TextMeshPro FreeText;
     public bool Played;
     public int SlotIndex;
+    public GameObject spotInSchedule;
 
     void Start()
     {
@@ -62,12 +63,18 @@ public class CardScript : MonoBehaviour
     {
         drag = true;
         gameObject.transform.position += new Vector3(0, 0, -1);
+        
     }
 
     private void OnMouseUp()
     {
         drag = false;
         gameObject.transform.position += new Vector3(0, 0, 1);
+        if (spotInSchedule != null)
+        {
+            spotInSchedule.tag = "Untagged";
+            spotInSchedule = null;
+        }
         //Invoke("MoveToPlayedCardDeck", 2f);// Launches a MoveToPlayedCardDeck in 2 seconds - for testing needs to be moved
     }
 
