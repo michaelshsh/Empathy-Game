@@ -41,7 +41,7 @@ public sealed class CardSlotsManager : MonoBehaviour
                 if (isCardNearDailyScheduleSlot(card, slot))
                 {
                     makeCardOnTopDailyScheduleSlot(card, slot);
-                    Debug.Log("setting" + card + "on" + slot);
+                    Debug.Log($"setting {card} on  {slot}");
                 }
             }
         }
@@ -77,7 +77,7 @@ public sealed class CardSlotsManager : MonoBehaviour
         // the card should cover all the daily schedule slot
         card.transform.position = new Vector3(dailyScheduleSlot.transform.position.x, dailyScheduleSlot.transform.position.y, dailyScheduleSlot.transform.position.z - 1);
         dailyScheduleSlot.tag = "occupied"; // make the daily schedule slot tag to occupied
-        Debug.Log("Setting Occupied");
+        Debug.Log($"Setting slot {dailyScheduleSlot} Occupied");
         card.spotInSchedule = dailyScheduleSlot;
     }
 
