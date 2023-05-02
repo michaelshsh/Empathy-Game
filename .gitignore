@@ -107,3 +107,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+Empathy-Game/UserSettings/EditorUserSettings.asset
+Empathy-Game/UserSettings/Layouts/default-2021.dwlt
+*.vsidx
+Empathy-Game/.vs/Empathy-Game/FileContentIndex/read.lock

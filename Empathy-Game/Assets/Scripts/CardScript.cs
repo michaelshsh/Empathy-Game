@@ -1,3 +1,4 @@
+using Constants;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,20 +13,37 @@ public class CardScript : MonoBehaviour
     public bool drag;
     private bool draggable;
     public SpriteRenderer mySpritRenderer;
-    public TextMeshPro Time;
-    public TextMeshPro PersonalPoints;
-    public TextMeshPro TeamPoints;
+    public CardTime.TimeEnum time;
+    public TextMeshPro TimeText;
+    public int PersonalPoints;
+    public int TeamPoints;
+    public TextMeshPro PersonalPointsText;
+    public TextMeshPro TeamPointsText;
     public TextMeshPro FreeText;
     public bool Played;
     public int SlotIndex;
 
     void Start()
     {
+        //events
         GameLogicScript.OnStateChange += CardsOnStateChange;
-        Time.text = "1:30";
-        PersonalPoints.text = "+15";
-        TeamPoints.text = "0";
-        FreeText.text = "Hello im a free text let me live";
+
+        //time
+        time = CardTime.GetRandomTimeEnum();
+        TimeText.text = CardTime.EnumToString(time);
+
+        //free text
+        FreeText.text = CardText.GeneralText[UnityEngine.Random.Range(0, CardText.GeneralText.Count)];
+
+
+
+        //points (should add logic, and ints)
+        PersonalPoints = UnityEngine.Random.Range(0, 15);
+        TeamPoints = UnityEngine.Random.Range(0, 15);
+        PersonalPointsText.text = $"+{PersonalPoints}";
+        TeamPointsText.text = $"+{TeamPoints}";
+
+        //drag
         draggable = true;
     }
 
