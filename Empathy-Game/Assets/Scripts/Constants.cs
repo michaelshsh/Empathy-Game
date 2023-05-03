@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using static Constants.PlayerLabels;
 
 namespace Constants
 {
-    public static class Labels
+    public static class PlayerLabels
     {
         public enum LabelEnum
         {
@@ -34,6 +36,47 @@ namespace Constants
         private const string IT = "Tech Support";
         private const string PM = "Product Manager";
         private const string HR = "Human Resorces";
+    }
+
+    public static class CardText
+    {
+        public static List<string> GeneralText = new List<string>
+        {
+            "Finish a PR reveiw",
+            "Talk to my manager about my salary",
+            "Update my Linked-In profile"
+        };
+    }
+
+    public static class CardTime
+    {
+        public enum TimeEnum    
+        {
+            HalfAnHour,
+            OneHour,
+            HourAndaHalf
+        };
+
+        public static string EnumToString(TimeEnum time)
+        {
+            switch (time)
+            {
+                case TimeEnum.HalfAnHour: return HalfAnHour;
+                case TimeEnum.OneHour: return OneHour;
+                case TimeEnum.HourAndaHalf: return HourAndaHalf;
+            }
+            return "";
+        }
+
+        // we might wanna add some logic here, so 2 players cant get the same role same round
+        public static TimeEnum GetRandomTimeEnum() 
+        {
+            return RandomEnum.Of<TimeEnum>();
+        }
+
+        private const string HalfAnHour = "0:30";
+        private const string OneHour = "1:00";
+        private const string HourAndaHalf = "1:30";
     }
 }
 

@@ -8,7 +8,7 @@ using Constants;
 public class PlayerScript : MonoBehaviour
 {
     public TextMeshProUGUI labelText;
-    private Labels.LabelEnum mylabel;
+    private PlayerLabels.LabelEnum mylabel;
 
     // Start is called before the first frame update
     void Start()
@@ -26,9 +26,9 @@ public class PlayerScript : MonoBehaviour
 
     public void getAndSetRandomLabel()
     {
-        mylabel = Labels.GetRandomLabelEnum();
+        mylabel = PlayerLabels.GetRandomLabelEnum();
 
-        labelText.text = $"#{Labels.EnumToString(mylabel)}";
+        labelText.text = $"#{PlayerLabels.EnumToString(mylabel)}";
     }
 
     // Update is called once per frame
