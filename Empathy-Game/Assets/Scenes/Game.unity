@@ -1260,6 +1260,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 583876261}
     m_Modifications:
+    - target: {fileID: 269908231863514089, guid: 65120e1e6c14bc24c833b046cc8fef96, type: 3}
+      propertyPath: m_text
+      value: 09:00
+      objectReference: {fileID: 0}
     - target: {fileID: 3660235340997189312, guid: 65120e1e6c14bc24c833b046cc8fef96, type: 3}
       propertyPath: m_Name
       value: SlotCardInSchedule (1)
@@ -1531,6 +1535,7 @@ MonoBehaviour:
   FreeText: {fileID: 1275910687}
   Played: 0
   SlotIndex: 0
+  slotOnSchedule: {fileID: 0}
 --- !u!1 &410219988
 GameObject:
   m_ObjectHideFlags: 0
@@ -2643,7 +2648,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &641387495
 GameObject:
   m_ObjectHideFlags: 0
@@ -4886,6 +4891,7 @@ MonoBehaviour:
   FreeText: {fileID: 1453383177}
   Played: 0
   SlotIndex: 0
+  slotOnSchedule: {fileID: 0}
 --- !u!1 &1061923156
 GameObject:
   m_ObjectHideFlags: 0
@@ -5462,6 +5468,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 583876261}
     m_Modifications:
+    - target: {fileID: 269908231863514089, guid: 65120e1e6c14bc24c833b046cc8fef96, type: 3}
+      propertyPath: m_text
+      value: 12:00
+      objectReference: {fileID: 0}
     - target: {fileID: 3660235340997189312, guid: 65120e1e6c14bc24c833b046cc8fef96, type: 3}
       propertyPath: m_Name
       value: SlotCardInSchedule
@@ -6408,6 +6418,7 @@ MonoBehaviour:
   FreeText: {fileID: 487198480}
   Played: 0
   SlotIndex: 0
+  slotOnSchedule: {fileID: 0}
 --- !u!61 &1406750582
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6506,7 +6517,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!224 &1427984154
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6551,6 +6562,7 @@ MonoBehaviour:
   FreeText: {fileID: 1757365484}
   Played: 0
   SlotIndex: 0
+  slotOnSchedule: {fileID: 0}
 --- !u!61 &1427984157
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6649,7 +6661,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &1431372786
 GameObject:
   m_ObjectHideFlags: 0
@@ -7974,7 +7986,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &1714218583
 GameObject:
   m_ObjectHideFlags: 0
@@ -8108,6 +8120,7 @@ MonoBehaviour:
   FreeText: {fileID: 398561337}
   Played: 0
   SlotIndex: 0
+  slotOnSchedule: {fileID: 0}
 --- !u!61 &1742410742
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8206,7 +8219,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &1757365482
 GameObject:
   m_ObjectHideFlags: 0
