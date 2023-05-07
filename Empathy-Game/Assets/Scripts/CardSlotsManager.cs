@@ -5,6 +5,12 @@ using UnityEngine;
 public sealed class CardSlotsManager : MonoBehaviour
 {
     public static CardSlotsManager InstanceSlotManager { get; private set; }
+    [SerializeField] private Transform[] slots;
+    public Transform[] Slots { get { return slots; } set { slots = value; } }
+
+    [SerializeField] private bool[] availableSlot;
+    public bool[] AvailableSlot { get { return availableSlot; } set { availableSlot = value; } }
+
     private void Awake()
     {
         if (InstanceSlotManager != null && InstanceSlotManager != this)
@@ -16,8 +22,7 @@ public sealed class CardSlotsManager : MonoBehaviour
             InstanceSlotManager = this;
         }
     }
-    public Transform[] Slots; // should be moved to class CardManager or create new class - Slot manager
-    public bool[] availableSlot; // should be moved to class CardManager or create new class - Slot manager
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -32,9 +37,9 @@ public sealed class CardSlotsManager : MonoBehaviour
 
     public void DrawCard()
     {
-        if (CardManager.InstanceCardManager.deck.Count >= 1)
+        if (CardManager.InstanceCardManager.Deck.Count >= 1)
         {
-            CardScript card = CardManager.InstanceCardManager.deck[UnityEngine.Random.Range(0, CardManager.InstanceCardManager.deck.Count)];
+            CardScript card = CardManager.InstanceCardManager.Deck[UnityEngine.Random.Range(0, CardManager.InstanceCardManager.Deck.Count)];
 
             for (int i = 0; i < availableSlot.Length; i++)
             {
@@ -45,7 +50,7 @@ public sealed class CardSlotsManager : MonoBehaviour
                     card.SlotIndex = i;
                     card.Played = false;
                     availableSlot[i] = false;
-                    CardManager.InstanceCardManager.deck.Remove(card);
+                    CardManager.InstanceCardManager.Deck.Remove(card);
                     return;
                 }
             }

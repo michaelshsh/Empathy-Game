@@ -1014,12 +1014,14 @@ MonoBehaviour:
   drag: 0
   mySpritRenderer: {fileID: 0}
   time: 0
-  TimeText: {fileID: 7541099683985757010}
-  PersonalPointsText: {fileID: 7541099684182942564}
-  TeamPointsText: {fileID: 7541099683411278445}
-  FreeText: {fileID: 7541099684565609498}
-  Played: 0
-  SlotIndex: 0
+  timeText: {fileID: 7541099683985757010}
+  personalPoints: 0
+  teamPoints: 0
+  personalPointsText: {fileID: 7541099684182942564}
+  teamPointsText: {fileID: 7541099683411278445}
+  freeText: {fileID: 7541099684565609498}
+  played: 0
+  slotIndex: 0
 --- !u!61 &7541099684056169192
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1081,7 +1083,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.1590002, y: -2.628}
+  m_AnchoredPosition: {x: -1.159, y: -2.6280003}
   m_SizeDelta: {x: 4.7, y: 1.502}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &7541099684182942565

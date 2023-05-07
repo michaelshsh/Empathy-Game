@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class RoundNumberScript : MonoBehaviour
 {
-    public static RoundNumberScript Instance;
+    public static RoundNumberScript Instance; // pls take a look at this...
     [field: SerializeField]
     public int roundNumber { get; private set; }
     [field: SerializeField]

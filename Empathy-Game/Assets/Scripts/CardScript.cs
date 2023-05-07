@@ -9,20 +9,41 @@ using UnityEngine;
 public class CardScript : MonoBehaviour
 {
     // Start is called before the first frame update 
-
-    public bool drag;
     private bool draggable;
-    public SpriteRenderer mySpritRenderer;
-    public CardTime.TimeEnum time;
-    public TextMeshPro TimeText;
-    public int PersonalPoints;
-    public int TeamPoints;
-    public TextMeshPro PersonalPointsText;
-    public TextMeshPro TeamPointsText;
-    public TextMeshPro FreeText;
-    public bool Played;
-    public int SlotIndex;
+    
+    [SerializeField] private bool drag;
+    public bool Drag { get { return draggable; } set { draggable = value; } }
 
+    [SerializeField] private SpriteRenderer mySpritRenderer;
+    public SpriteRenderer SpriteRenderer { get { return mySpritRenderer; } set { mySpritRenderer = value; } }
+
+    [SerializeField] private CardTime.TimeEnum time;
+    public CardTime.TimeEnum Time {get { return time; } set { time = value; } }
+
+    [SerializeField] private TextMeshPro timeText;
+    public TextMeshPro TimeText { get => timeText; set => timeText = value; }
+    
+    [SerializeField] private int personalPoints;
+    public int PersonalPoints { get { return personalPoints; } set { personalPoints = value; } }
+
+    [SerializeField] private int teamPoints;
+    public int TeamPoints { get { return teamPoints; } set { teamPoints = value; } }
+
+
+    [SerializeField] private TextMeshPro personalPointsText;
+    public TextMeshPro PersonalPointsText { get {  return personalPointsText; } set { personalPointsText = value; } }
+
+    [SerializeField] private TextMeshPro teamPointsText;
+    public TextMeshPro TeamPointsText { get { return teamPointsText; } set {  teamPointsText = value; } }
+
+    [SerializeField] private TextMeshPro freeText;
+    public TextMeshPro FreeText { get { return freeText; } set { freeText = value; } }
+
+    [SerializeField] private bool played;
+    public bool Played { get { return played; } set { played = value; } }
+
+    [SerializeField] private int slotIndex;
+    public int SlotIndex { get { return slotIndex; } set { slotIndex = value; } }
     void Start()
     {
         //events
@@ -30,18 +51,18 @@ public class CardScript : MonoBehaviour
 
         //time
         time = CardTime.GetRandomTimeEnum();
-        TimeText.text = CardTime.EnumToString(time);
+        timeText.text = CardTime.EnumToString(time);
 
         //free text
-        FreeText.text = CardText.GeneralText[UnityEngine.Random.Range(0, CardText.GeneralText.Count)];
+        freeText.text = CardText.GeneralText[UnityEngine.Random.Range(0, CardText.GeneralText.Count)];
 
 
 
         //points (should add logic, and ints)
-        PersonalPoints = UnityEngine.Random.Range(0, 15);
-        TeamPoints = UnityEngine.Random.Range(0, 15);
-        PersonalPointsText.text = $"+{PersonalPoints}";
-        TeamPointsText.text = $"+{TeamPoints}";
+        personalPoints = UnityEngine.Random.Range(0, 15);
+        teamPoints = UnityEngine.Random.Range(0, 15);
+        personalPointsText.text = $"+{personalPoints}";
+        teamPointsText.text = $"+{teamPoints}";
 
         //drag
         draggable = true;
@@ -92,7 +113,7 @@ public class CardScript : MonoBehaviour
     private void MoveToPlayedCardDeck()//not sure if it should be here
     {
         CardManager.InstanceCardManager.UsedCards.Add(this);
-        CardSlotsManager.InstanceSlotManager.availableSlot[SlotIndex] = true;
+        CardSlotsManager.InstanceSlotManager.AvailableSlot[SlotIndex] = true;
         gameObject.SetActive(false);
     }
 }

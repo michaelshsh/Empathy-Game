@@ -9,6 +9,7 @@ public class TimerScript : MonoBehaviour
     [SerializeField] public float timeRemaining { get; private set; }
     [SerializeField] public bool timerIsRunning { get; private set; }
     [SerializeField] private TextMeshProUGUI timeText;
+    public TextMeshProUGUI TimeText { get { return timeText; } set { timeText = value; } }
     void Start()
     {
         Instance = this;

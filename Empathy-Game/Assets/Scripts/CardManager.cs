@@ -5,6 +5,11 @@ using UnityEngine;
 public sealed class CardManager : MonoBehaviour
 {
     public static CardManager InstanceCardManager { get; private set; }
+    [SerializeField] private List<CardScript> deck = new List<CardScript>();
+    public List<CardScript> Deck { get { return deck; } set { deck = value; } }
+
+    [SerializeField] private List<CardScript> usedCards = new List<CardScript>();
+    public List<CardScript> UsedCards { get { return usedCards; } set { usedCards = value; } }
     private void Awake()
     {
         if (InstanceCardManager != null && InstanceCardManager != this)
@@ -16,8 +21,6 @@ public sealed class CardManager : MonoBehaviour
             InstanceCardManager = this;
         }
     }
-    public List<CardScript> deck = new List<CardScript>();
-    public List<CardScript> UsedCards = new List<CardScript>();
     // Start is called before the first frame update
     void Start()
     {
@@ -32,13 +35,13 @@ public sealed class CardManager : MonoBehaviour
 
     public void ReturnUsedCardsToDeck()
     {
-        if(UsedCards.Count >= 1)
+        if(usedCards.Count >= 1)
         {
-            foreach(CardScript card in UsedCards)
+            foreach(CardScript card in usedCards)
             {
                 deck.Add(card);
             }
-            UsedCards.Clear();
+            usedCards.Clear();
         }
     }
 }
