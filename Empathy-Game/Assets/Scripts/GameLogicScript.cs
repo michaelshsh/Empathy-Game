@@ -114,5 +114,6 @@ public enum GameState
     RoundEnd,
     RoundStart,
     Victory,
-    Lose
+    Lose,
+    GameEnd
 }

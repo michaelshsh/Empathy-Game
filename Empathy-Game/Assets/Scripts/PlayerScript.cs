@@ -9,6 +9,10 @@ public class PlayerScript : MonoBehaviour
 {
     public TextMeshProUGUI labelText;
     private PlayerLabels.LabelEnum mylabel;
+    [field: SerializeField]
+    public int PlayerPersonalPoints { get; private set; }
+    [field: SerializeField]
+    public int PlayerTeamPoints { get; private set; }
 
     // Start is called before the first frame update
     void Start()
