@@ -14,10 +14,10 @@ public class SlotScheduleOnTrigger : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         CardScript cardThatHadEnteredSlot = collision.gameObject.GetComponent<CardScript>();
-        if (card == null && mouseDown && cardThatHadEnteredSlot != null && cardThatHadEnteredSlot.slotOnSchedule == null)
+        if (card == null && !mouseDown && cardThatHadEnteredSlot != null && cardThatHadEnteredSlot.slotOnSchedule == null)
         {
-            GameObject gameObjectSlot = slot.gameObject;
-            cardThatHadEnteredSlot.slotOnSchedule = gameObjectSlot;
+            GameObject slotGameObject = slot.gameObject;
+            cardThatHadEnteredSlot.slotOnSchedule = slotGameObject;
             collision.gameObject.SetActive(false);                 
             GameObject parent = collision.gameObject.transform.Find("Text").gameObject; // get parent of FreeText_Var
             GameObject txt = parent.transform.Find("FreeText_Var").gameObject; // get FreeText_Var
