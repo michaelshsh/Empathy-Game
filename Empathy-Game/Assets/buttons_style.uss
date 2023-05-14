@@ -1,0 +1,53 @@
+.game-button-style {
+    height: 60px;
+    width: 125px;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-top-left-radius: 45px;
+    border-bottom-left-radius: 45px;
+    border-top-right-radius: 45px;
+    border-bottom-right-radius: 45px;
+    border-left-color: rgb(49, 92, 253);
+    border-right-color: rgb(49, 92, 253);
+    border-top-color: rgb(49, 92, 253);
+    border-bottom-color: rgb(49, 92, 253);
+    background-color: rgba(255, 255, 255, 255);
+    font-size: 17px;
+    color: rgba(0, 0, 0, 255);
+    -unity-font: initial;
+    -unity-font-style: bold;
+    left: auto;
+    right: 5px;
+    top: auto;
+    bottom: 10px;
+    position: absolute;
+}
+
+.game-button-style:hover {
+    height: 60px;
+    width: 125px;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-top-left-radius: 45px;
+    border-bottom-left-radius: 45px;
+    border-top-right-radius: 45px;
+    border-bottom-right-radius: 45px;
+    border-left-color: rgb(49, 92, 253);
+    border-right-color: rgb(49, 92, 253);
+    border-top-color: rgb(49, 92, 253);
+    border-bottom-color: rgb(49, 92, 253);
+    background-color: rgb(49, 92, 253);
+    font-size: 20px;
+    color: rgb(255, 255, 255);
+    -unity-font: initial;
+    -unity-font-style: bold;
+    left: auto;
+    right: 5px;
+    top: auto;
+    bottom: 10px;
+    position: absolute;
+}
