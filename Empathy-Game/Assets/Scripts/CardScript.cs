@@ -22,7 +22,7 @@ public class CardScript : MonoBehaviour
     public TextMeshPro FreeText;
     public bool Played;
     public int SlotIndex;
-    public GameObject slotOnSchedule = null;
+    public SlotScript slotOnSchedule = null;
 
     void Start()
     {
