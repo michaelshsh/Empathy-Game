@@ -60,6 +60,8 @@ public sealed class GameLogicScript : MonoBehaviour
             case GameState.GameStart:
                 GameStartHandler();
                 break;
+            case GameState.GameEnd:
+                break;
         }
 
         OnStateChange?.Invoke(newState);
@@ -114,5 +116,6 @@ public enum GameState
     RoundEnd,
     RoundStart,
     Victory,
-    Lose
+    Lose,
+    GameEnd
 }
