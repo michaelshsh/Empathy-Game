@@ -10,18 +10,29 @@ public class UiController : MonoBehaviour
     public Button DrawButton;
     public VisualElement SummeryPenal;
     public Button EndGameButton;
+    public Button ContinueButton;
     [SerializeField] private TextMeshProUGUI ScoreText;
+    public Label GroupAndPersonal;
+    public Label BetweenRoundsPersonal;
+    public Label BetweenRoundsGroup;
     // Start is called before the first frame update
     void Start()
     {
         Instance = this;
         var root = GetComponent<UIDocument>().rootVisualElement;
         DrawButton = root.Q<Button>("Draw_BT");
+        ContinueButton = root.Q<Button>("Countinue_BT");
         SummeryPenal = root.Q<VisualElement>("SummeryPanel");
         EndGameButton = root.Q<Button>("EndGame_BT");
+        GroupAndPersonal = root.Q<Label>("GropuAndPersonal_LB");
+        BetweenRoundsPersonal = root.Q<Label>("BetweenRoundsPersonal_LB");
+        BetweenRoundsGroup = root.Q<Label>("BetweenRoundsGroup_LB");
+
 
         DrawButton.clicked += CardSlotsManager.InstanceSlotManager.DrawCard;
+        ContinueButton.clicked += OnContinueClicked;
         GameLogicScript.OnStateChange += Showsummery;
+        
         //EndGameButton.clicked += 
     }
 
@@ -34,7 +45,12 @@ public class UiController : MonoBehaviour
     private void Showsummery(GameState state)
     {
         if (state == GameState.RoundEnd)
+        {
             SummeryPenal.visible = true;
+            GroupAndPersonal.text = SummeryScript.InstanceSummeryManager.RoundComper();
+            BetweenRoundsPersonal.text = SummeryScript.InstanceSummeryManager.RoundBetweenComperPersonal();
+            BetweenRoundsGroup.text = SummeryScript.InstanceSummeryManager.RoundBetweenComperGroup();
+        }
         else
             SummeryPenal.visible = false;
     }
@@ -47,5 +63,10 @@ public class UiController : MonoBehaviour
     private void OnEndGameButtonClick()
     {
 
+    }
+
+    private void OnContinueClicked()
+    {
+        SummeryPenal.visible = false;
     }
 }

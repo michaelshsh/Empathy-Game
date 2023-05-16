@@ -3,7 +3,11 @@
     <ui:VisualElement name="Background" style="height: 316px; background-color: rgba(255, 255, 255, 0); border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; flex-grow: 1; justify-content: flex-end; align-items: flex-end; margin-left: 0; -unity-text-align: upper-left;">
         <ui:Button text="End game" display-tooltip-when-elided="true" name="EndGame_BT" class="game-button-style" style="position: absolute; right: 0; bottom: 274px; align-items: flex-end;" />
         <ui:VisualElement name="SummeryPanel" style="background-color: rgb(209, 209, 180); width: 391px; height: 320px; position: absolute; top: 62px; left: 168px; align-items: center; justify-content: center; border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); display: flex;">
-            <ui:Label text="Round end summary:" display-tooltip-when-elided="true" enable-rich-text="false" style="position: relative; align-items: flex-end; justify-content: flex-start; top: auto; left: auto; bottom: 130px; -unity-font-style: bold;" />
+            <ui:Label text="Round end summary:" display-tooltip-when-elided="true" enable-rich-text="false" name="Title_LB" style="position: relative; align-items: flex-end; justify-content: flex-start; top: auto; left: auto; bottom: 50px; -unity-font-style: bold;" />
+            <ui:Label display-tooltip-when-elided="true" name="GropuAndPersonal_LB" style="bottom: 40px; align-items: flex-start; justify-content: flex-start; position: relative; left: auto;" />
+            <ui:Label display-tooltip-when-elided="true" name="BetweenRoundsPersonal_LB" style="bottom: 15px; align-items: flex-start;" />
+            <ui:Label display-tooltip-when-elided="true" name="BetweenRoundsGroup_LB" style="align-items: flex-start;" />
+            <ui:Button text="Continue" display-tooltip-when-elided="true" name="Countinue_BT" class="game-button-style" style="position: relative; right: auto; bottom: 0;" />
         </ui:VisualElement>
         <ui:Button text="Draw" display-tooltip-when-elided="true" name="Draw_BT" class="game-button-style" style="position: absolute; top: auto; left: auto; right: 0; bottom: 28px; align-items: flex-end;" />
     </ui:VisualElement>
