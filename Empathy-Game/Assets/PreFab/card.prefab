@@ -1015,6 +1015,8 @@ MonoBehaviour:
   mySpritRenderer: {fileID: 0}
   time: 0
   TimeText: {fileID: 7541099683985757010}
+  PersonalPoints: 0
+  TeamPoints: 0
   PersonalPointsText: {fileID: 7541099684182942564}
   TeamPointsText: {fileID: 7541099683411278445}
   FreeText: {fileID: 7541099684565609498}
