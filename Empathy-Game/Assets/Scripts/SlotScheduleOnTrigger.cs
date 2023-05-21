@@ -9,7 +9,7 @@ public class SlotScheduleOnTrigger : MonoBehaviour
     private SlotScript slot;
     [SerializeField]
     private TextMeshPro UIText;
-    private CardScript card = null;
+    public CardScript card = null;
     private bool mouseDown = false;
     private void OnTriggerEnter2D(Collider2D collision)
     {
