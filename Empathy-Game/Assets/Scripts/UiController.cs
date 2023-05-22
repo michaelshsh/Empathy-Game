@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 public class UiController : MonoBehaviour
 {
@@ -50,6 +51,7 @@ public class UiController : MonoBehaviour
             GroupAndPersonal.text = SummeryScript.InstanceSummeryManager.RoundComper();
             BetweenRoundsPersonal.text = SummeryScript.InstanceSummeryManager.RoundBetweenComperPersonal();
             BetweenRoundsGroup.text = SummeryScript.InstanceSummeryManager.RoundBetweenComperGroup();
+            
         }
         else
             SummeryPenal.visible = false;
@@ -68,5 +70,12 @@ public class UiController : MonoBehaviour
     private void OnContinueClicked()
     {
         SummeryPenal.visible = false;
+    }
+
+    public void updateScore(StatsScriptableObject states)
+    {
+        ScoreText.text = $@"Score:
+{states.PersonalPoints} personal
+{states.TeamPoints} team";
     }
 }
