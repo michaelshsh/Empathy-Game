@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class CardScript : MonoBehaviour
 {
@@ -23,6 +24,10 @@ public class CardScript : MonoBehaviour
     public bool Played;
     public int SlotIndex;
     public SlotScript slotOnSchedule = null;
+    // card boundries
+    private Camera MainCamera;
+    private float CardWidth;
+    private float CardHeight;
 
     void Start()
     {
@@ -46,6 +51,28 @@ public class CardScript : MonoBehaviour
 
         //drag
         draggable = true;
+
+
+        //card boundries
+        MainCamera = Camera.main;
+        var spriteRenderer = GetComponent<SpriteRenderer>();
+        CardWidth = spriteRenderer.bounds.size.x / 2f;
+        CardHeight = spriteRenderer.bounds.size.y / 2f;
+    }
+    void LateUpdate()
+    {
+        var cameraHalfWidth = MainCamera.orthographicSize * ((float)Screen.width / Screen.height);
+        var cameraHalfHeight = MainCamera.orthographicSize;
+
+        var xMax = cameraHalfWidth - CardWidth;
+        var xMin = -xMax;
+        var yMax = cameraHalfHeight - CardHeight;
+        var yMin = -yMax;
+
+        var position = transform.position;
+        position.x = Mathf.Clamp(position.x, xMin, xMax);
+        position.y = Mathf.Clamp(position.y, yMin, yMax);
+        transform.position = position;
     }
 
     private void CardsOnStateChange(GameState state)    
