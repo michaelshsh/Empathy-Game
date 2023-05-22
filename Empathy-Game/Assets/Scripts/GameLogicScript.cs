@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -70,6 +71,32 @@ public sealed class GameLogicScript : MonoBehaviour
     private void RoundEndHandler()
     {
         //count points
+        var AllPlayers = FindObjectsOfType<PlayerScript>();
+        foreach(var player in AllPlayers)
+        {
+            var AllSlots = FindObjectsOfType<SlotScheduleOnTrigger>();
+            Debug.Log($"counting points for player");
+            int Ppoints =0, Tpoints =0;
+            foreach (var slot in AllSlots)
+            {
+                if (slot.card != null)
+                {
+                    Ppoints += slot.card.PersonalPoints;
+                    Tpoints += slot.card.TeamPoints;
+                }
+                else
+                {
+                    //Can insert penalty here for unused cards
+                }
+            }
+            //stats "scriptable object"
+            player.Score.PersonalPoints += Ppoints;
+            player.Score.TeamPoints += Tpoints;
+
+            //maybe add invocation of event here to let UI know to update instaed of method?
+            UiController.Instance.updateScore(player.Score);
+            Debug.Log($"adding {Ppoints}P {Tpoints}T points for player {player.name}");
+        }
 
         // kill cards? or not now?
 
@@ -103,7 +130,7 @@ public sealed class GameLogicScript : MonoBehaviour
 
     private void GameStartHandler()
     {
-        TimerScript.Instance.SetRoundTime(60);
+        TimerScript.Instance.SetRoundTime(15);
         RoundNumberScript.Instance.SetUpMaxRounds(6);
     }
 }

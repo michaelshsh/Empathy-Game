@@ -10,16 +10,15 @@ public class PlayerScript : MonoBehaviour
     public TextMeshProUGUI labelText;
     private PlayerLabels.LabelEnum mylabel;
     [field: SerializeField]
-    public int PlayerPersonalPoints { get; private set; }
-    [field: SerializeField]
-    public int PlayerTeamPoints { get; private set; }
-    [field: SerializeField]
-    private StatsScriptableObject Stats;
+    public StatsScriptableObject Score;
 
     // Start is called before the first frame update
     void Start()
     {
         GameLogicScript.OnStateChange += PlayerOnStateChange;
+        Score = StatsScriptableObject.CreateInstance<StatsScriptableObject>();
+        this.Score.PersonalPoints = 0;
+        this.Score.TeamPoints = 0;
     }
 
     private void PlayerOnStateChange(GameState state)   
@@ -27,6 +26,10 @@ public class PlayerScript : MonoBehaviour
         if(state == GameState.RoundStart)
         {
             //was getAndSetRandomLabel before, now get setted by gameLogicScripts
+        }
+        if(state == GameState.RoundEnd)
+        {
+
         }
     }
 

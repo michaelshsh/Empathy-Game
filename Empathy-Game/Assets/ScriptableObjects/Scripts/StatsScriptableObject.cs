@@ -6,5 +6,5 @@ using UnityEngine;
 public class StatsScriptableObject : ScriptableObject
 {
     public int PersonalPoints;
-    public int GroupPoints;
+    public int TeamPoints;
 }
