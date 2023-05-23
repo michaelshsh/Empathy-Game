@@ -13,11 +13,9 @@ public class SlotScheduleOnTrigger : MonoBehaviour
     private bool mouseDown = false;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("OnTriggerEnter2D");
         CardScript cardThatHadEnteredSlot = collision.gameObject.GetComponent<CardScript>();
         if (card == null && !mouseDown && cardThatHadEnteredSlot != null && cardThatHadEnteredSlot.slotOnSchedule == null)
         {
-            Debug.Log("OnTriggerEnter2D if");
             cardThatHadEnteredSlot.slotOnSchedule = slot;
             collision.gameObject.SetActive(false);                 
             GameObject parent = collision.gameObject.transform.Find("Text").gameObject; // get parent of FreeText_Var
@@ -29,19 +27,17 @@ public class SlotScheduleOnTrigger : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Debug.Log("Mouse Down");
         mouseDown = true;
         if (card != null)
         {
-            Debug.Log("Mouse Down if");
             UIText.text = string.Empty;
-            card.gameObject.SetActive(true);
+            card.gameObject.SetActive(true);           
             card.drag = true;
+            card.makeCardIgnoreOtherCards();
             card.slotOnSchedule = null;
             card = null;
         }
     }
-
     private void OnMouseUp()
     {
         mouseDown = false;
