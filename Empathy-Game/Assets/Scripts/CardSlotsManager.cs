@@ -46,6 +46,7 @@ public sealed class CardSlotsManager : MonoBehaviour
                     card.Played = false;
                     availableSlot[i] = false;
                     CardManager.InstanceCardManager.deck.Remove(card);
+                    CardManager.InstanceCardManager.CardsInGame.Add(card);
                     return;
                 }
             }

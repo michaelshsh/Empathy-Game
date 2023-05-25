@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class CardScript : MonoBehaviour
 {
@@ -23,6 +24,11 @@ public class CardScript : MonoBehaviour
     public bool Played;
     public int SlotIndex;
     public SlotScript slotOnSchedule = null;
+    // card boundries
+    private Camera MainCamera;
+    private float CardWidth;
+    private float CardHeight;
+    private float CardReturnSpeed;
 
     void Start()
     {
@@ -46,6 +52,31 @@ public class CardScript : MonoBehaviour
 
         //drag
         draggable = true;
+
+
+        //card boundries
+        MainCamera = Camera.main;
+        var spriteRenderer = GetComponent<SpriteRenderer>();
+        CardWidth = spriteRenderer.bounds.size.x / 2f;
+        CardHeight = spriteRenderer.bounds.size.y / 2f;
+
+        //card return speed
+        CardReturnSpeed = 9f;
+    }
+    void LateUpdate()
+    {
+        var cameraHalfWidth = MainCamera.orthographicSize * ((float)Screen.width / Screen.height);
+        var cameraHalfHeight = MainCamera.orthographicSize;
+
+        var xMax = cameraHalfWidth - CardWidth;
+        var xMin = -xMax;
+        var yMax = cameraHalfHeight - CardHeight;
+        var yMin = -yMax;
+
+        var position = transform.position;
+        position.x = Mathf.Clamp(position.x, xMin, xMax);
+        position.y = Mathf.Clamp(position.y, yMin, yMax);
+        transform.position = position;
     }
 
     private void CardsOnStateChange(GameState state)    
@@ -66,9 +97,12 @@ public class CardScript : MonoBehaviour
             Vector3 mousePos = Input.mousePosition;
             mousePos.z = Camera.main.nearClipPlane;
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
-            worldPosition.z = 0;
-            gameObject.transform.position = (gameObject.transform.position + worldPosition) / 2;
-            
+            worldPosition.z = -0.5f;
+            gameObject.transform.position = (gameObject.transform.position + worldPosition) / 2;            
+        }
+        else
+        {
+            gameObject.transform.position = Vector3.MoveTowards(transform.position, CardSlotsManager.InstanceSlotManager.Slots[SlotIndex].position, CardReturnSpeed*Time.deltaTime);
         }
     }
 
@@ -80,13 +114,13 @@ public class CardScript : MonoBehaviour
     private void OnMouseDown()
     {
         drag = true;
-        gameObject.transform.position += new Vector3(0, 0, -1);
+        gameObject.transform.position += new Vector3(0, 0, 1);
     }
 
     private void OnMouseUp()
     {
         drag = false;
-        gameObject.transform.position += new Vector3(0, 0, 1);
+        gameObject.transform.position += new Vector3(0, 0, -1);
         //Invoke("MoveToPlayedCardDeck", 2f);// Launches a MoveToPlayedCardDeck in 2 seconds - for testing needs to be moved
     }
 
@@ -95,5 +129,12 @@ public class CardScript : MonoBehaviour
         CardManager.InstanceCardManager.UsedCards.Add(this);
         CardSlotsManager.InstanceSlotManager.availableSlot[SlotIndex] = true;
         gameObject.SetActive(false);
+    }
+    public void makeCardIgnoreOtherCards()
+    {
+        for (int i = 0; i < CardManager.InstanceCardManager.CardsInGame.Count; i++)
+        {
+            Physics2D.IgnoreCollision(GetComponent<Collider2D>(), CardManager.InstanceCardManager.CardsInGame[i].GetComponent<Collider2D>());
+        }
     }
 }
