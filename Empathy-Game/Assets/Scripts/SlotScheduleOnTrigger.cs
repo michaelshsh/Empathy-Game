@@ -16,6 +16,7 @@ public class SlotScheduleOnTrigger : MonoBehaviour
         CardScript cardThatHadEnteredSlot = collision.gameObject.GetComponent<CardScript>();
         if (card == null && !mouseDown && cardThatHadEnteredSlot != null && cardThatHadEnteredSlot.slotOnSchedule == null)
         {
+            Debug.Log($"{cardThatHadEnteredSlot} had a collision with slot {slot}");
             cardThatHadEnteredSlot.slotOnSchedule = slot;
             collision.gameObject.SetActive(false);                 
             GameObject parent = collision.gameObject.transform.Find("Text").gameObject; // get parent of FreeText_Var
