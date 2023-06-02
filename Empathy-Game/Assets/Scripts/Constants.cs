@@ -11,7 +11,8 @@ namespace Constants
             Dev,
             IT,
             PM,
-            HR
+            HR,
+            QA
         };
 
         public static string EnumToString(LabelEnum label)
@@ -22,6 +23,7 @@ namespace Constants
                 case LabelEnum.IT: return IT;
                 case LabelEnum.PM: return PM;
                 case LabelEnum.HR: return HR;
+                case LabelEnum.QA: return QA;
             }
             return "";
         }
@@ -36,6 +38,7 @@ namespace Constants
         private const string IT = "Tech Support";
         private const string PM = "Product Manager";
         private const string HR = "Human Resorces";
+        private const string QA = "QA";
     }
 
     public static class CardText
@@ -45,6 +48,36 @@ namespace Constants
             "Finish a PR reveiw",
             "Talk to my manager about my salary",
             "Update my Linked-In profile"
+        };
+        public static List<string> DevReqText = new List<string>
+        {
+            "Get your code review",
+            "Complain about a bug",
+            "Create a new feature",
+        };
+        public static List<string> ITReqText = new List<string>
+        {
+            "Fix a bug",
+            "Install a new software",
+            "Fix the printer",
+            "Fix the computer",
+        };
+        public static List<string> PMReqText = new List<string>
+        {
+            "Meet with a client",
+            "Meeting 1:1",
+            "Retrospective meeting",
+        };
+        public static List<string> HRReqText = new List<string>
+        {
+            "Talk about my vacation",
+            "Talkabout my promotion",
+            "Learn about the company values",
+        };
+        public static List<string> QAReqText = new List<string>
+        {
+            "Test a new feature",
+            "Test a new product",
         };
     }
 
