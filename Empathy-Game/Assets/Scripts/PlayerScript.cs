@@ -4,22 +4,24 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using Constants;
+using Unity.Netcode;
+using Unity.Collections;
 
-public class PlayerScript : MonoBehaviour
+public class PlayerScript : NetworkBehaviour
 {
-    public TextMeshProUGUI labelText;
-    private PlayerLabels.LabelEnum mylabel;
-    [field: SerializeField]
-    public StatsScriptableObject Score;
-    [SerializeField] public string PlayerName { get; private set; }
+    [SerializeField] private TextMeshProUGUI labelText;
+    [SerializeField] public PlayerLabels.LabelEnum mylabel;
+    [field: SerializeField] public StatsScriptableObject Score;
+    [SerializeField] public FixedString128Bytes PlayerName { get; private set; }
 
-    // Start is called before the first frame update
-    void Start()
+    public override void OnNetworkSpawn()
     {
         GameLogicScript.OnStateChange += PlayerOnStateChange;
         Score = StatsScriptableObject.CreateInstance<StatsScriptableObject>();
         this.Score.PersonalPoints = 0;
         this.Score.TeamPoints = 0;
+        labelText = GameObject.Find("PlayerLabel_UI").GetComponent<TextMeshProUGUI>();
+        labelText.text = "Was able to take over!!";
     }
 
     private void PlayerOnStateChange(GameState state)   
