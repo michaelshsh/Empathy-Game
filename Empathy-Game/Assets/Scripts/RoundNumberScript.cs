@@ -24,24 +24,24 @@ public class RoundNumberScript : MonoBehaviour
     {
         if (state == GameState.GameStart)
         {
-            roundNumber = 0; //setting to 0 to start at 1 when invoked with RoundStart
+            roundNumber = 1; //setting to 0 to start at 1 when invoked with RoundStart
         }
         else if (state == GameState.RoundStart)
         {
+            //roundText.enabled = true;
+            roundText.text = $"Round {roundNumber} out of {maximumRounds}";
+        }
+        else if (state == GameState.RoundEnd)
+        {
+            //roundText.enabled = false;
+            roundText.text = $"End of round {roundNumber}";
             roundNumber++;
         }
-        else
+
+        if(roundNumber > maximumRounds)
         {
-            roundText.enabled = false;
+            GameLogicScript.Instance.UpdateGameByState(GameState.GameEnd);
         }
-
-        roundText.text = $"Round {roundNumber} out of {maximumRounds}";
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void SetUpMaxRounds(int maxRounds)

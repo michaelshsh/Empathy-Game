@@ -6,30 +6,40 @@ using UnityEngine;
 public class TimerScript : MonoBehaviour
 {
     public static TimerScript Instance;
-    [SerializeField] public float timeRemaining { get; private set; }
-    [SerializeField] public bool timerIsRunning { get; private set; }
+    [SerializeField] public float RoundTime { get; private set; }
+    [SerializeField] public float TimeRemaining { get; private set; }
+    [SerializeField] public bool TimerIsRunning { get; private set; }
     [SerializeField] private TextMeshProUGUI timeText;
+
     void Start()
     {
         Instance = this;
     }
     void Update()
     {
-        if (timerIsRunning)
+        if (TimerIsRunning)
         {
-            if (timeRemaining > 0)
+            if (TimeRemaining > 0)
             {
-                timeRemaining -= Time.deltaTime;
-                DisplayTime(timeRemaining);
+                TimeRemaining -= Time.deltaTime;
+                DisplayTime(TimeRemaining);
             }
             else
             {
-                timeRemaining = 0;
-                timerIsRunning = false;
+                TimeRemaining = 0;
+                TimerIsRunning = false;
 
                 //change the round to OVER!
-                Debug.Log("TimerScript Calling GameState.RoundEnd");
-                GameLogicScript.Instance.UpdateGameByState(GameState.RoundEnd);
+                if(GameLogicScript.Instance.gameState == GameState.RoundStart) 
+                {
+                    Debug.Log("TimerScript Calling GameState.RoundEnd");
+                    GameLogicScript.Instance.UpdateGameByState(GameState.RoundEnd);
+                }
+                else if(GameLogicScript.Instance.gameState == GameState.RoundEnd)
+                {
+                    Debug.Log("TimerScript Calling GameState.RoundStart");
+                    GameLogicScript.Instance.UpdateGameByState(GameState.RoundStart);
+                }
             }
         }
     }
@@ -42,11 +52,14 @@ public class TimerScript : MonoBehaviour
         timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
-    public void SetRoundTime(int time)
+    public void SetRoundTime(float time)
     {
-        timeRemaining = time;
+        RoundTime = time;
     }
 
     public void StartTimer()
-    { timerIsRunning = true; }
+    {
+        TimeRemaining = RoundTime;
+        TimerIsRunning = true;
+    }
 }

@@ -29,7 +29,6 @@ public sealed class GameLogicScript : MonoBehaviour
     {
         Instance = this;
         UpdateGameByState(GameState.GameStart);
-        UpdateGameByState(GameState.RoundStart);
     }
 
     // Update is called once per frame
@@ -71,12 +70,29 @@ public sealed class GameLogicScript : MonoBehaviour
     private void RoundEndHandler()
     {
         //count points
+        CountPointsForPlayers();
+
+        // kill cards? or not now?
+
+        //go to post round screen? display it directly? // will pop from its own code
+
+        //round number will incrimante alone through its code
+
+        //timer before next round starts
+        var roundTime = TimerScript.Instance.RoundTime;
+        TimerScript.Instance.SetRoundTime(10); // 10 sec to see post game
+        TimerScript.Instance.StartTimer();
+        TimerScript.Instance.SetRoundTime(roundTime); //set round time back for the next round
+    }
+
+    private static void CountPointsForPlayers()
+    {
         var AllPlayers = FindObjectsOfType<PlayerScript>();
-        foreach(var player in AllPlayers)
+        foreach (var player in AllPlayers)
         {
             var AllSlots = FindObjectsOfType<SlotScheduleOnTrigger>();
-            Debug.Log($"counting points for player");
-            int Ppoints =0, Tpoints =0;
+            Debug.Log($"counting points for player named: {player.PlayerName}");
+            int Ppoints = 0, Tpoints = 0;
             foreach (var slot in AllSlots)
             {
                 if (slot.card != null)
@@ -95,29 +111,20 @@ public sealed class GameLogicScript : MonoBehaviour
 
             //maybe add invocation of event here to let UI know to update instaed of method?
             UiController.Instance.updateScore(player.Score);
-            Debug.Log($"adding {Ppoints}P {Tpoints}T points for player {player.name}");
+            Debug.Log($"adding {Ppoints}P {Tpoints}T points for player named:{player.PlayerName}");
         }
-
-        // kill cards? or not now?
-
-
-
-        //go to post round screen? display it directly?
     }
 
     private void RoundStartHandler()
     {
-        //start timer
-        TimerScript.Instance.StartTimer();
+        //empty schedule
+        // schedule not implimenteed yet
 
         //draw 4 cards
         CardSlotsManager.InstanceSlotManager.DrawCard();
         CardSlotsManager.InstanceSlotManager.DrawCard();
         CardSlotsManager.InstanceSlotManager.DrawCard();
         CardSlotsManager.InstanceSlotManager.DrawCard();
-
-        //empty schedule
-        // schedule not implimenteed yet
 
         //random player label
         var players = FindObjectsOfType<PlayerScript>();
@@ -126,12 +133,16 @@ public sealed class GameLogicScript : MonoBehaviour
         {
             player.getAndSetRandomLabel();
         }
+
+        //start timer
+        TimerScript.Instance.StartTimer();
     }
 
     private void GameStartHandler()
     {
         TimerScript.Instance.SetRoundTime(15);
         RoundNumberScript.Instance.SetUpMaxRounds(6);
+        UpdateGameByState(GameState.RoundStart);
     }
 }
 
