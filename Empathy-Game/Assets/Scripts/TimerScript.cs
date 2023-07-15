@@ -1,41 +1,81 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 
-public class TimerScript : MonoBehaviour
+public class TimerScript : NetworkBehaviour
 {
     public static TimerScript Instance;
-    [SerializeField] public float RoundTime { get; private set; }
-    [SerializeField] public float TimeRemaining { get; private set; }
-    [SerializeField] public bool TimerIsRunning { get; private set; }
+    public float RoundTime { get; private set; }
+    public NetworkVariable<float> TimeRemaining = new(99, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public NetworkVariable<bool> TimerIsRunning = new(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField] private TextMeshProUGUI timeText;
 
-    void Start()
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Debug.Log("Destroyed TimerScript");
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+
+    public override void OnNetworkSpawn()
     {
         Instance = this;
+        timeText = GameObject.Find("Timer_var_text").GetComponent<TextMeshProUGUI>();
+        GameLogicScript.Instance.CurrentGameState.OnValueChanged += TimerOnStateChange;
     }
+
+    private void TimerOnStateChange(GameState previousValue, GameState newValue)
+    {
+        if (newValue == GameState.RoundEnd)
+        {
+            //timer for "end of round"
+            var roundTime = RoundTime;
+            SetRoundTime(10); // 10 sec to see post game
+            StartTimer();
+            SetRoundTime(roundTime); //set round time back for the next round
+        }
+    }
+
+    //public void Start()
+    //{
+    //    Instance = this;
+    //}
     void Update()
     {
-        if (TimerIsRunning)
+        if (TimerIsRunning.Value)
         {
-            if (TimeRemaining > 0)
+            if (TimeRemaining.Value > 0)
             {
-                TimeRemaining -= Time.deltaTime;
-                DisplayTime(TimeRemaining);
+                if (IsHost)
+                {
+                    TimeRemaining.Value -= Time.deltaTime;
+                }
+                DisplayTime(TimeRemaining.Value);
             }
             else
             {
-                TimeRemaining = 0;
-                TimerIsRunning = false;
+                if (IsHost)
+                {
+                    TimeRemaining.Value = 0;
+                    TimerIsRunning.Value = false;
+                }
 
                 //change the round to OVER!
-                if(GameLogicScript.Instance.gameState == GameState.RoundStart) 
+                if (GameLogicScript.Instance.CurrentGameState.Value == GameState.RoundStart)
                 {
                     Debug.Log("TimerScript Calling GameState.RoundEnd");
                     GameLogicScript.Instance.UpdateGameByState(GameState.RoundEnd);
                 }
-                else if(GameLogicScript.Instance.gameState == GameState.RoundEnd)
+                else if (GameLogicScript.Instance.CurrentGameState.Value == GameState.RoundEnd)
                 {
                     Debug.Log("TimerScript Calling GameState.RoundStart");
                     GameLogicScript.Instance.UpdateGameByState(GameState.RoundStart);
@@ -59,7 +99,8 @@ public class TimerScript : MonoBehaviour
 
     public void StartTimer()
     {
-        TimeRemaining = RoundTime;
-        TimerIsRunning = true;
+        if (!IsHost) return;
+        TimeRemaining.Value = RoundTime;
+        TimerIsRunning.Value = true;
     }
 }

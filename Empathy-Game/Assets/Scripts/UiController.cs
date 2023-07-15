@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using TMPro;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using System;
 
 public class UiController : MonoBehaviour
 {
@@ -32,26 +33,20 @@ public class UiController : MonoBehaviour
 
         DrawButton.clicked += CardSlotsManager.InstanceSlotManager.DrawCard;
         ContinueButton.clicked += OnContinueClicked;
-        GameLogicScript.OnStateChange += Showsummery;
+        GameLogicScript.Instance.CurrentGameState.OnValueChanged += Showsummery;
         
         //EndGameButton.clicked += 
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Showsummery(GameState previousValue, GameState newValue)
     {
-        
-    }
-
-    private void Showsummery(GameState state)
-    {
-        if (state == GameState.RoundEnd)
+        if (newValue == GameState.RoundEnd)
         {
             SummeryPenal.visible = true;
             GroupAndPersonal.text = SummeryScript.InstanceSummeryManager.RoundComper();
             BetweenRoundsPersonal.text = SummeryScript.InstanceSummeryManager.RoundBetweenComperPersonal();
             BetweenRoundsGroup.text = SummeryScript.InstanceSummeryManager.RoundBetweenComperGroup();
-            
+
         }
         else
             SummeryPenal.visible = false;
@@ -59,7 +54,7 @@ public class UiController : MonoBehaviour
 
     private void OnDestroy()
     {
-        GameLogicScript.OnStateChange -= Showsummery;
+        GameLogicScript.Instance.CurrentGameState.OnValueChanged -= Showsummery;
     }
 
     private void OnEndGameButtonClick()

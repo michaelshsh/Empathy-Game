@@ -2,18 +2,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading;
 using TMPro;
+using Unity.Netcode;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
-public sealed class GameLogicScript : MonoBehaviour
+public sealed class GameLogicScript : NetworkBehaviour
 {
     public static GameLogicScript Instance { get; private set; }
     private void Awake()
     {
-        if(Instance != null && Instance != this)
+        if (Instance != null && Instance != this)
         {
+            Debug.Log("found duplicate of gamelogicscript");
             Destroy(this);
         }
         else
@@ -21,27 +25,28 @@ public sealed class GameLogicScript : MonoBehaviour
             Instance = this;
         }
     }
-    [SerializeField] public GameState gameState { get; private set; }
-    public static event Action<GameState> OnStateChange; //can subscribe to it, to get notified when a state is changed
 
-    // Start is called before the first frame update
-    void Start()
+    //public GameState CurrentGameState { get; private set; } = GameState.GameStart;
+    public NetworkVariable<GameState> CurrentGameState = new(GameState.Lobby, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    //public static event Action<GameState> OnStateChange; //can subscribe to it, to get notified when a state is changed
+
+    public override void OnNetworkSpawn() //void Start()
     {
         Instance = this;
-        UpdateGameByState(GameState.GameStart);
+
+        if(IsServer)
+        {
+            CurrentGameState.Value = GameState.GameStart;
+        }
+        UpdateGameByState(CurrentGameState.Value);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     public void UpdateGameByState(GameState newState)
     {
-        gameState = newState;
+        if (!IsServer) return;
         Debug.Log($"Changing state to: {newState}");
 
-        switch (newState)
+        switch (newState) //before invoking all
         {
             case GameState.MainMenu:
                 break;
@@ -51,7 +56,6 @@ public sealed class GameLogicScript : MonoBehaviour
                 RoundStartHandler();
                 break;
             case GameState.RoundEnd:
-                RoundEndHandler();
                 break;
             case GameState.Victory:
                 break;
@@ -64,76 +68,56 @@ public sealed class GameLogicScript : MonoBehaviour
                 break;
         }
 
-        OnStateChange?.Invoke(newState);
-    }
+        Debug.Log($"Invoking state {newState} to all");
+        CurrentGameState.Value = newState; //this is the invoke! 
 
-    private void RoundEndHandler()
-    {
-        //count points
-        CountPointsForPlayers();
-
-        // kill cards? or not now?
-
-        //go to post round screen? display it directly? // will pop from its own code
-
-        //round number will incrimante alone through its code
-
-        //timer before next round starts
-        var roundTime = TimerScript.Instance.RoundTime;
-        TimerScript.Instance.SetRoundTime(10); // 10 sec to see post game
-        TimerScript.Instance.StartTimer();
-        TimerScript.Instance.SetRoundTime(roundTime); //set round time back for the next round
-    }
-
-    private static void CountPointsForPlayers()
-    {
-        var AllPlayers = FindObjectsOfType<PlayerScript>();
-        foreach (var player in AllPlayers)
+        switch (newState) //after invoking all
         {
-            var AllSlots = FindObjectsOfType<SlotScheduleOnTrigger>();
-            Debug.Log($"counting points for player named: {player.PlayerName}");
-            int Ppoints = 0, Tpoints = 0;
-            foreach (var slot in AllSlots)
-            {
-                if (slot.card != null)
-                {
-                    Ppoints += slot.card.PersonalPoints;
-                    Tpoints += slot.card.TeamPoints;
-                }
-                else
-                {
-                    //Can insert penalty here for unused cards
-                }
-            }
-            //stats "scriptable object"
-            player.Score.PersonalPoints += Ppoints;
-            player.Score.TeamPoints += Tpoints;
+            case GameState.MainMenu:
+                break;
+            case GameState.Lobby:
+                break;
+            case GameState.RoundStart:
 
-            //maybe add invocation of event here to let UI know to update instaed of method?
-            UiController.Instance.updateScore(player.Score);
-            Debug.Log($"adding {Ppoints}P {Tpoints}T points for player named:{player.PlayerName}");
+                break;
+            case GameState.RoundEnd:
+                RoundEndAfterInvoked();
+                break;
+            case GameState.Victory:
+                break;
+            case GameState.Lose:
+                break;
+            case GameState.GameStart:
+                UpdateGameByState(GameState.RoundStart);
+                break;
+            case GameState.GameEnd:
+                break;
         }
+    }
+
+    private void RoundEndAfterInvoked()
+    {
+        if (!IsServer) return;
+
+        //wait for players to count points and kill cards //BUG: players update thier score after! why??
+        var players = FindObjectsOfType<PlayerScript>();
+        foreach (var player in players)
+        {
+            if (player.SyncedToRound.Value != RoundNumberScript.Instance.roundNumber.Value)
+            {
+                Debug.LogError($"Player {player.PlayerName} was not synced! round {player.SyncedToRound.Value} with score of: {player.Score.Value.PersonalPoints}P {player.Score.Value.TeamPoints}T");
+            }
+            else
+                Debug.Log($"player {player.PlayerName} synced to round {player.SyncedToRound.Value} with score of: {player.Score.Value.PersonalPoints}P {player.Score.Value.TeamPoints}T");
+        }
+
+        //go to post round screen? display it directly? // will pop from its own code?
+        //round number will incrimante alone through its code at round start!
+        //timer will count end of round time
     }
 
     private void RoundStartHandler()
     {
-        //empty schedule
-        // schedule not implimenteed yet
-
-        //draw 4 cards
-        CardSlotsManager.InstanceSlotManager.DrawCard();
-        CardSlotsManager.InstanceSlotManager.DrawCard();
-        CardSlotsManager.InstanceSlotManager.DrawCard();
-        CardSlotsManager.InstanceSlotManager.DrawCard();
-
-        //random player label
-        var players = FindObjectsOfType<PlayerScript>();
-        Debug.Log($"found {players.Length} players to give random labels to");
-        foreach (var player in players)
-        {
-            player.getAndSetRandomLabel();
-        }
-
         //start timer
         TimerScript.Instance.StartTimer();
     }
@@ -142,7 +126,6 @@ public sealed class GameLogicScript : MonoBehaviour
     {
         TimerScript.Instance.SetRoundTime(15);
         RoundNumberScript.Instance.SetUpMaxRounds(6);
-        UpdateGameByState(GameState.RoundStart);
     }
 }
 
