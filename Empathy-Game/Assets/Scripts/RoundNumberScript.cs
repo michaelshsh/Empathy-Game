@@ -2,50 +2,75 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Collections.LowLevel.Unsafe;
+using Unity.Netcode;
 using UnityEngine;
 
-public class RoundNumberScript : MonoBehaviour
+public class RoundNumberScript : NetworkBehaviour
 {
     public static RoundNumberScript Instance;
-    [field: SerializeField]
-    public int roundNumber { get; private set; }
-    [field: SerializeField]
-    public int maximumRounds { get; private set; }
+    public NetworkVariable<int> roundNumber = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public NetworkVariable<int> MaximumRounds = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField] private TextMeshProUGUI roundText;
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        roundNumber = 1;
-        Instance = this;
-        GameLogicScript.OnStateChange += RoundNumberOnStateChange;
+        if (Instance != null && Instance != this)
+        {
+            Debug.Log("Destroyed RoundNumberScript");
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
     }
 
-    private void RoundNumberOnStateChange(GameState state)
+    public override void OnNetworkSpawn() //void Start()
     {
-        if (state == GameState.GameStart)
+        Instance = this;
+        GameLogicScript.Instance.CurrentGameState.OnValueChanged += RoundNumberOnStateChange;
+        RoundNumberScript.Instance.roundNumber.OnValueChanged += updateText;
+        updateText(0,roundNumber.Value);
+    }
+
+    private void RoundNumberOnStateChange(GameState oldState, GameState newValue)
+    {
+        if (IsHost)
         {
-            roundNumber = 1; //setting to 0 to start at 1 when invoked with RoundStart
-        }
-        else if (state == GameState.RoundStart)
-        {
-            //roundText.enabled = true;
-            roundText.text = $"Round {roundNumber} out of {maximumRounds}";
-        }
-        else if (state == GameState.RoundEnd)
-        {
-            //roundText.enabled = false;
-            roundText.text = $"End of round {roundNumber}";
-            roundNumber++;
+            if (newValue == GameState.GameStart)
+            {
+                roundNumber.Value = 0; //round start will call ++
+            }
+            else if (newValue == GameState.RoundStart)
+            {
+                ++roundNumber.Value;
+            }
+
+            if (roundNumber.Value > MaximumRounds.Value && newValue != GameState.GameEnd)
+            {
+                GameLogicScript.Instance.UpdateGameByState(GameState.GameEnd);
+            }
         }
 
-        if(roundNumber > maximumRounds)
+        updateText(0, roundNumber.Value); //update text, without the value changing
+    }
+
+    private void updateText(int previousValue, int newValue)
+    {
+        var newState = GameLogicScript.Instance.CurrentGameState.Value;
+        if (newState == GameState.RoundStart)
         {
-            GameLogicScript.Instance.UpdateGameByState(GameState.GameEnd);
+            roundText.text = $"Round {roundNumber.Value} out of {MaximumRounds.Value}";
+        }
+        else if (newState == GameState.RoundEnd)
+        {
+            roundText.text = $"End of round {roundNumber.Value}";
         }
     }
 
     public void SetUpMaxRounds(int maxRounds)
     {
-        maximumRounds = maxRounds;
+        if(!IsServer) { return; }
+        MaximumRounds.Value = maxRounds;
     }
 }

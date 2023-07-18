@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
@@ -33,7 +34,7 @@ public class CardScript : MonoBehaviour
     void Start()
     {
         //events
-        GameLogicScript.OnStateChange += CardsOnStateChange;
+        GameLogicScript.Instance.CurrentGameState.OnValueChanged += CardsOnStateChange;
 
         //time
         time = CardTime.GetRandomTimeEnum();
@@ -51,7 +52,12 @@ public class CardScript : MonoBehaviour
         TeamPointsText.text = $"+{TeamPoints}";
 
         //drag
-        draggable = true;
+        if (GameLogicScript.Instance.CurrentGameState.Value == GameState.RoundStart)
+        {
+            draggable = true;
+        }
+        else
+            draggable = false;
 
 
         //card boundries
@@ -63,6 +69,17 @@ public class CardScript : MonoBehaviour
         //card return speed
         CardReturnSpeed = 9f;
     }
+
+    private void CardsOnStateChange(GameState previousValue, GameState newValue)
+    {
+        if (newValue == GameState.RoundStart)
+        {
+            draggable = true;
+        }
+        else
+            draggable = false;
+    }
+
     void LateUpdate()
     {
         var cameraHalfWidth = MainCamera.orthographicSize * ((float)Screen.width / Screen.height);
@@ -77,16 +94,6 @@ public class CardScript : MonoBehaviour
         position.x = Mathf.Clamp(position.x, xMin, xMax);
         position.y = Mathf.Clamp(position.y, yMin, yMax);
         transform.position = position;
-    }
-
-    private void CardsOnStateChange(GameState state)    
-    {
-        if(state == GameState.RoundStart)
-        {
-            draggable = true;
-        }
-        else
-            draggable = false;
     }
 
     // Update is called once per frame
@@ -108,7 +115,7 @@ public class CardScript : MonoBehaviour
 
     private void OnDestroy()
     {
-        GameLogicScript.OnStateChange -= CardsOnStateChange;
+        GameLogicScript.Instance.CurrentGameState.OnValueChanged -= CardsOnStateChange;
     }
 
     private void OnMouseDown()
