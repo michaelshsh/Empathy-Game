@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.Services.Lobbies.Models;
 using TMPro;
 using System;
+using UnityEngine.SceneManagement;
 
 public class ButtonManagerScript : MonoBehaviour
 {
@@ -14,13 +16,16 @@ public class ButtonManagerScript : MonoBehaviour
     [SerializeField] private Button backButton; // back button
     [SerializeField] private Button joinSpecificGameButton; // join specific game button, at the join menu
     [SerializeField] private Button createSpecificGameButton; // create specific game button, at the create menu
+    [SerializeField] private Button startGameButton; // start game button, at the lobby
     [SerializeField] private GameObject Lobby; // static game lobby
     [SerializeField] private TMP_Dropdown numberOfRounds; // number of rounds in the game, at the create menu
     [SerializeField] private TMP_InputField numberOfPlayers; // number of players in the game, at the create menu
     [SerializeField] private TextMeshProUGUI rulesOfTheGame; // rules of the game, at the rules menu
     [SerializeField] private TMP_InputField gameIdField; // game id field, at the join menu
+    [SerializeField] private TextMeshProUGUI listOfPlayers;
 
-     
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +37,7 @@ public class ButtonManagerScript : MonoBehaviour
         backButton.onClick.AddListener(BackButtonClicked);
         createSpecificGameButton.onClick.AddListener(CreateSpecificGameButtonClicked);
         joinSpecificGameButton.onClick.AddListener(JoinSpecificGameButtonClicked);
+        startGameButton.onClick.AddListener (StartGameButtonClicked);
     }
     private void changeMainMenuObjectsActivness(bool activity)
     {
@@ -64,6 +70,12 @@ public class ButtonManagerScript : MonoBehaviour
         Debug.Log("Join specific game button clicked");
         changeJoinMenuObjectsActiveness(false);
         backButton.gameObject.SetActive(true); // back button is should be active at the lobby
+
+        Debug.Log($"trying to join lobby with code {gameIdField.text}");
+
+        LobbyManager.Instance.JoinLobbyByCode(gameIdField.text);
+
+        LobbyManager.Instance.lobbyActive = true;
         Lobby.SetActive(true);
     }
 
@@ -72,11 +84,24 @@ public class ButtonManagerScript : MonoBehaviour
         Debug.Log("Create specific game button clicked");
         changeCreateMenuObjectsActiveness(false);
         backButton.gameObject.SetActive(true); // back button is should be active at the lobby
+
+        LobbyManager.Instance.CreateLobby(int.Parse(numberOfPlayers.text), numberOfRounds.options[numberOfRounds.value].text);
+        LobbyManager.Instance.lobbyActive = true;
         Lobby.SetActive(true);
+    }
+
+    private void StartGameButtonClicked()
+    {
+        Debug.Log("Start game button clicked");
+        SceneManager.LoadScene("Game");
     }
     private void BackButtonClicked() // every click on back button does this, only show the main menu buttons!!
     {
         Debug.Log("Back button clicked");
+        if (Lobby.activeSelf) // leaving the lobby
+        {
+            LobbyManager.Instance.LeaveLobby();
+        }
         changeMainMenuObjectsActivness(true);
         changeCreateMenuObjectsActiveness(false);
         changeJoinMenuObjectsActiveness(false);
@@ -108,6 +133,14 @@ public class ButtonManagerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (LobbyManager.Instance.lobbyActive && LobbyManager.Instance.joinLobby != null)
+        {
+            listOfPlayers.text = "";
+            foreach (Player player in LobbyManager.Instance.joinLobby.Players)
+            {
+                listOfPlayers.text = listOfPlayers.text + player.Data["PlayerName"].Value + "\n";
+            }
+        }
+        
     }
 }
