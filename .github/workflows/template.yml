@@ -94,7 +94,7 @@ jobs:
           name: build-WebGL
           path: build/WebGL
 
-  buildWindows:
+ buildWindows:
     needs: testRunner
     name: Build for Windows 🖥️
     runs-on: ubuntu-latest
