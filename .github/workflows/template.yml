@@ -132,6 +132,7 @@ jobs:
             Library-
       - uses: webbertakken/unity-builder@v2
         with:
+          projectPath: ${{ matrix.projectPath }}
           targetPlatform: StandaloneWindows64
 
       - uses: actions/upload-artifact@v2
