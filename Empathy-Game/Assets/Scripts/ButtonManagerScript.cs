@@ -65,18 +65,18 @@ public class ButtonManagerScript : MonoBehaviour
         rulesOfTheGame.gameObject.SetActive(activity);
     }
 
-    private void JoinSpecificGameButtonClicked() // every click on join specific game button does this
+    private async void JoinSpecificGameButtonClicked() // every click on join specific game button does this
     {
         Debug.Log("Join specific game button clicked");
         Debug.Log($"trying to join lobby with code {gameIdField.text}");
         try
         {
-            LobbyManager.Instance.JoinLobbyByCode(gameIdField.text);
+            await LobbyManager.Instance.JoinLobbyByCode(gameIdField.text);
+            Debug.Log("did not throw exception");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             Debug.Log($"can not use {gameIdField.text} to join");
-            Debug.LogException(ex);
             return;
         }
         changeJoinMenuObjectsActiveness(false);

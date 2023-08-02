@@ -8,6 +8,7 @@ using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class LobbyManager : MonoBehaviour
 {
@@ -125,7 +126,7 @@ public class LobbyManager : MonoBehaviour
     }
 
     [Command]
-    public async void JoinLobbyByCode(string lobbyCode)
+    public async Task JoinLobbyByCode(string lobbyCode)
     {
         try
         {
@@ -140,10 +141,10 @@ public class LobbyManager : MonoBehaviour
             Debug.Log($"Joined lobby with code {lobbyCode}");
             PrintPlayers(lobby);
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            Debug.LogException(e);
-            throw new Exception("could not join lobby");        
+            Debug.Log("could not join lobby");
+            throw;        
         }
     }
 
