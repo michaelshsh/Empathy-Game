@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.Services.Lobbies.Models;
 using TMPro;
-using System;
 using UnityEngine.SceneManagement;
 
 public class ButtonManagerScript : MonoBehaviour
@@ -68,12 +68,19 @@ public class ButtonManagerScript : MonoBehaviour
     private void JoinSpecificGameButtonClicked() // every click on join specific game button does this
     {
         Debug.Log("Join specific game button clicked");
+        Debug.Log($"trying to join lobby with code {gameIdField.text}");
+        try
+        {
+            LobbyManager.Instance.JoinLobbyByCode(gameIdField.text);
+        }
+        catch (Exception ex)
+        {
+            Debug.Log($"can not use {gameIdField.text} to join");
+            Debug.LogException(ex);
+            return;
+        }
         changeJoinMenuObjectsActiveness(false);
         backButton.gameObject.SetActive(true); // back button is should be active at the lobby
-
-        Debug.Log($"trying to join lobby with code {gameIdField.text}");
-
-        LobbyManager.Instance.JoinLobbyByCode(gameIdField.text);
 
         LobbyManager.Instance.lobbyActive = true;
         Lobby.SetActive(true);
@@ -81,6 +88,20 @@ public class ButtonManagerScript : MonoBehaviour
 
     private void CreateSpecificGameButtonClicked() // every click on create specific game button does this
     {
+        try
+        {
+            int max_players = int.Parse(numberOfPlayers.text);
+            if (max_players < 2 || max_players > 4) // only max 4 players for now
+            {
+                throw new Exception("Number of players must be between 2 and 4");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogException(ex);
+            return;
+        }
+
         Debug.Log("Create specific game button clicked");
         changeCreateMenuObjectsActiveness(false);
         backButton.gameObject.SetActive(true); // back button is should be active at the lobby
@@ -100,6 +121,7 @@ public class ButtonManagerScript : MonoBehaviour
         Debug.Log("Back button clicked");
         if (Lobby.activeSelf) // leaving the lobby
         {
+            Debug.Log("Leaving lobby");
             LobbyManager.Instance.LeaveLobby();
         }
         changeMainMenuObjectsActivness(true);

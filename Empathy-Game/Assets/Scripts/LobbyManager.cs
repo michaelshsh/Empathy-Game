@@ -1,4 +1,6 @@
 using QFSW.QC;
+using UnityEngine.SceneManagement;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Services.Authentication;
@@ -138,9 +140,10 @@ public class LobbyManager : MonoBehaviour
             Debug.Log($"Joined lobby with code {lobbyCode}");
             PrintPlayers(lobby);
         }
-        catch (LobbyServiceException e)
+        catch (Exception e)
         {
-            Debug.Log(e);
+            Debug.LogException(e);
+            throw new Exception("could not join lobby");        
         }
     }
 
@@ -208,6 +211,8 @@ public class LobbyManager : MonoBehaviour
         try
         {
             await LobbyService.Instance.RemovePlayerAsync(joinLobby.Id, AuthenticationService.Instance.PlayerId);
+            joinLobby = null;
+            hostLobby = null;
         }
         catch (LobbyServiceException e)
         {
