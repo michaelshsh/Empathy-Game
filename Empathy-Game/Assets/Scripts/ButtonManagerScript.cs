@@ -6,8 +6,9 @@ using UnityEngine.UI;
 using Unity.Services.Lobbies.Models;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Unity.Netcode;
 
-public class ButtonManagerScript : MonoBehaviour
+public class ButtonManagerScript : NetworkBehaviour
 {
     public ButtonManagerScript Instance; // singleton
     [SerializeField] private Button createButton; // create button at the main menu
@@ -114,6 +115,7 @@ public class ButtonManagerScript : MonoBehaviour
     private void StartGameButtonClicked()
     {
         Debug.Log("Start game button clicked");
+        LobbyManager.Instance.UpdateLobbyStartGameOption("true");
         SceneManager.LoadScene("Game");
     }
     private void BackButtonClicked() // every click on back button does this, only show the main menu buttons!!
@@ -161,6 +163,10 @@ public class ButtonManagerScript : MonoBehaviour
             foreach (Player player in LobbyManager.Instance.joinLobby.Players)
             {
                 listOfPlayers.text = listOfPlayers.text + player.Data["PlayerName"].Value + "\n";
+            }
+            if (LobbyManager.Instance.joinLobby.Data["GameStarted"].Value == "true")
+            {
+                SceneManager.LoadScene("Game");
             }
         }
         

@@ -48,6 +48,7 @@ public class LobbyManager : MonoBehaviour
                 Player = GetPlayer(),
                 Data = new Dictionary<string, DataObject>
                 {
+                    { "GameStarted", new DataObject(DataObject.VisibilityOptions.Public, "false") },
                     { "PlayersNum", new DataObject(DataObject.VisibilityOptions.Public, $"{maxPlayers}") },
                     { "Length", new DataObject(DataObject.VisibilityOptions.Public, length) } 
                 }
@@ -207,11 +208,31 @@ public class LobbyManager : MonoBehaviour
     }
 
     [Command]
+    public async void UpdateLobbyStartGameOption(string startGameString)
+    {
+        try
+        {
+            await LobbyService.Instance.UpdateLobbyAsync(joinLobby.Id, new UpdateLobbyOptions
+            {
+                Data = new Dictionary<string, DataObject>
+                {
+                 { "GameStarted", new DataObject(DataObject.VisibilityOptions.Public, startGameString) }
+            }
+            });
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.Log(e);
+        }
+    }
+
+    [Command]
     public async void LeaveLobby()
     {
         try
         {
             await LobbyService.Instance.RemovePlayerAsync(joinLobby.Id, AuthenticationService.Instance.PlayerId);
+            UpdateLobbyStartGameOption("false");
             joinLobby = null;
             hostLobby = null;
         }
@@ -220,19 +241,6 @@ public class LobbyManager : MonoBehaviour
             Debug.Log(e);
         }
     }
-
-    /*[Command]
-    private async void KickPlayer() commented, should be here if we want to implement kick player mechanisem
-    {
-        try
-        {
-            await LobbyService.Instance.RemovePlayerAsync(joinLobby.Id, joinLobby.Players[1].Id);
-        }
-        catch (LobbyServiceException e)
-        {
-            Debug.Log(e);
-        }
-    }*/
 
     /*[Command]
     private async void KickPlayer() commented, should be here if we want to implement kick player mechanisem
