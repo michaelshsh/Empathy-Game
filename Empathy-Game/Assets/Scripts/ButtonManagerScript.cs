@@ -112,9 +112,17 @@ public class ButtonManagerScript : NetworkBehaviour
         Lobby.SetActive(true);
     }
 
+
     private void StartGameButtonClicked()
     {
         Debug.Log("Start game button clicked");
+        int playerNum = int.Parse(LobbyManager.Instance.joinLobby.Data["PlayersNum"].Value);
+        if (LobbyManager.Instance.joinLobby.Players.Count < playerNum)
+        {
+            Debug.Log("Not enough players to start the game");
+            Debug.Log($"{playerNum} are needed, only have {LobbyManager.Instance.joinLobby.Players.Count} now");
+            return;
+        }
         LobbyManager.Instance.UpdateLobbyStartGameOption("true");
         SceneManager.LoadScene("Game");
     }
