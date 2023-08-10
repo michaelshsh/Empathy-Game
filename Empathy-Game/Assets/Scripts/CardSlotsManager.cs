@@ -32,23 +32,40 @@ public sealed class CardSlotsManager : MonoBehaviour
 
     public void DrawCard()
     {
-        if (CardManager.InstanceCardManager.deck.Count >= 1)
-        {
-            CardScript card = CardManager.InstanceCardManager.deck[UnityEngine.Random.Range(0, CardManager.InstanceCardManager.deck.Count)];
+        /*********delete if there are no problems*****/
+        //if (CardManager.InstanceCardManager.deck.Count >= 1)
+        //{
+        //    CardScript card = CardManager.InstanceCardManager.deck[UnityEngine.Random.Range(0, CardManager.InstanceCardManager.deck.Count)];
 
-            for (int i = 0; i < availableSlot.Length; i++)
+        //    for (int i = 0; i < availableSlot.Length; i++)
+        //    {
+        //        if (availableSlot[i] == true)
+        //        {
+        //            card.gameObject.SetActive(true);
+        //            card.transform.position = Slots[i].position;
+        //            card.SlotIndex = i;
+        //            card.Played = false;
+        //            availableSlot[i] = false;
+        //            CardManager.InstanceCardManager.deck.Remove(card);
+        //            CardManager.InstanceCardManager.CardsInGame.Add(card);
+        //            return;
+        //        }
+        //    }
+        //}
+        /**********************************************/
+
+        for (int i = 0; i < availableSlot.Length; i++)//Dynamically drawing a card
+        {
+            if (availableSlot[i] == true)
             {
-                if (availableSlot[i] == true)
-                {
-                    card.gameObject.SetActive(true);
-                    card.transform.position = Slots[i].position;
-                    card.SlotIndex = i;
-                    card.Played = false;
-                    availableSlot[i] = false;
-                    CardManager.InstanceCardManager.deck.Remove(card);
-                    CardManager.InstanceCardManager.CardsInGame.Add(card);
-                    return;
-                }
+                CardScript newCard = Instantiate(CardManager.InstanceCardManager.CardPrefab, Slots[i].position, Quaternion.identity).GetComponent<CardScript>();
+                Debug.Log("New card was created in slot " + i);
+                availableSlot[i] = false;
+                newCard.transform.position = Slots[i].position;
+                newCard.SlotIndex = i;
+                newCard.Played = false;
+                CardManager.InstanceCardManager.CardsInGame.Add(newCard);
+                break;
             }
         }
     }

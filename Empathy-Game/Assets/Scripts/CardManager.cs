@@ -19,6 +19,7 @@ public sealed class CardManager : MonoBehaviour
     public List<CardScript> deck = new List<CardScript>();
     public List<CardScript> CardsInGame = new List<CardScript>();
     public List<CardScript> UsedCards = new List<CardScript>();
+    public GameObject CardPrefab;
     // Start is called before the first frame update
     void Start()
     {
@@ -52,5 +53,10 @@ public sealed class CardManager : MonoBehaviour
                 Physics2D.IgnoreCollision(deck[i].GetComponent<Collider2D>(), deck[j].GetComponent<Collider2D>());
             }
         }
+    }
+
+    public void OnDrawClick()
+    {
+        Instantiate(CardPrefab, CardSlotsManager.InstanceSlotManager.Slots[0].position, Quaternion.identity);
     }
 }

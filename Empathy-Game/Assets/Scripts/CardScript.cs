@@ -25,6 +25,7 @@ public class CardScript : MonoBehaviour
     public bool Played;
     public int SlotIndex;
     public SlotScript slotOnSchedule = null;
+    public GameObject CardObj;
     // card boundries
     private Camera MainCamera;
     private float CardWidth;
@@ -109,7 +110,7 @@ public class CardScript : MonoBehaviour
         }
         else
         {
-            gameObject.transform.position = Vector3.MoveTowards(transform.position, CardSlotsManager.InstanceSlotManager.Slots[SlotIndex].position, CardReturnSpeed*Time.deltaTime);
+           gameObject.transform.position = Vector3.MoveTowards(transform.position, CardSlotsManager.InstanceSlotManager.Slots[SlotIndex].position, CardReturnSpeed*Time.deltaTime);
         }
     }
 
@@ -128,7 +129,7 @@ public class CardScript : MonoBehaviour
     {
         drag = false;
         gameObject.transform.position += new Vector3(0, 0, -1);
-        //Invoke("MoveToPlayedCardDeck", 2f);// Launches a MoveToPlayedCardDeck in 2 seconds - for testing needs to be moved
+        Invoke("MoveToPlayedCardDeck", 2f);// Launches a MoveToPlayedCardDeck in 2 seconds - for testing needs to be moved
     }
 
     private void MoveToPlayedCardDeck()//not sure if it should be here
