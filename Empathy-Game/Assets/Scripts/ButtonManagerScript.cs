@@ -24,6 +24,7 @@ public class ButtonManagerScript : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI rulesOfTheGame; // rules of the game, at the rules menu
     [SerializeField] private TMP_InputField gameIdField; // game id field, at the join menu
     [SerializeField] private TextMeshProUGUI listOfPlayers;
+    [SerializeField] private TextMeshProUGUI gamePrompt;
 
 
 
@@ -85,9 +86,10 @@ public class ButtonManagerScript : NetworkBehaviour
 
         LobbyManager.Instance.lobbyActive = true;
         Lobby.SetActive(true);
+        gamePrompt.text = LobbyManager.Instance.joinLobby.LobbyCode;
     }
 
-    private void CreateSpecificGameButtonClicked() // every click on create specific game button does this
+    private async void CreateSpecificGameButtonClicked() // every click on create specific game button does this
     {
         try
         {
@@ -107,9 +109,11 @@ public class ButtonManagerScript : NetworkBehaviour
         changeCreateMenuObjectsActiveness(false);
         backButton.gameObject.SetActive(true); // back button is should be active at the lobby
 
-        LobbyManager.Instance.CreateLobby(int.Parse(numberOfPlayers.text), numberOfRounds.options[numberOfRounds.value].text);
+        await LobbyManager.Instance.CreateLobby(int.Parse(numberOfPlayers.text), numberOfRounds.options[numberOfRounds.value].text);
         LobbyManager.Instance.lobbyActive = true;
         Lobby.SetActive(true);
+        Debug.Log(LobbyManager.Instance.joinLobby.LobbyCode);
+        gamePrompt.text = LobbyManager.Instance.joinLobby.LobbyCode;
     }
 
 
@@ -131,6 +135,7 @@ public class ButtonManagerScript : NetworkBehaviour
         Debug.Log("Back button clicked");
         if (Lobby.activeSelf) // leaving the lobby
         {
+            gamePrompt.text = string.Empty;
             Debug.Log("Leaving lobby");
             LobbyManager.Instance.LeaveLobby();
         }

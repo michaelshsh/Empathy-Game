@@ -37,7 +37,7 @@ public class LobbyManager : MonoBehaviour
 
 
     [Command]
-    public async void CreateLobby(int maxPlayers, string length)
+    public async Task CreateLobby(int maxPlayers, string length)
     {
         try
         {
