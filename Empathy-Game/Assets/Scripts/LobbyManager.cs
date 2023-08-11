@@ -1,4 +1,3 @@
-using QFSW.QC;
 using UnityEngine.SceneManagement;
 using System;
 using System.Collections;
@@ -36,7 +35,6 @@ public class LobbyManager : MonoBehaviour
     }
 
 
-    [Command]
     public async Task CreateLobby(int maxPlayers, string length)
     {
         try
@@ -66,7 +64,6 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
-    [Command]
     public async void ListLobbies()
     {
         try
@@ -126,7 +123,6 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
-    [Command]
     public async Task JoinLobbyByCode(string lobbyCode)
     {
         try
@@ -149,7 +145,6 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
-    [Command]
     public async void QuickJoinLobby() // works only if the lobby is not created in private (see CreateLobby function)
     {
         try
@@ -171,7 +166,6 @@ public class LobbyManager : MonoBehaviour
             Debug.Log($"player id: {player.Id}, player name: {player.Data["PlayerName"].Value}");
         }
     }
-    [Command]
     public void PrintPlayers()
     {
         PrintPlayers(joinLobby);
@@ -188,7 +182,6 @@ public class LobbyManager : MonoBehaviour
         };
     }
 
-    [Command]
     public async void UpdatePlayerName(string newPlayerName)
     {
         try
@@ -207,7 +200,6 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
-    [Command]
     public async void UpdateLobbyStartGameOption(string startGameString)
     {
         try
@@ -226,7 +218,6 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
-    [Command]
     public async void LeaveLobby()
     {
         try
@@ -254,8 +245,6 @@ public class LobbyManager : MonoBehaviour
             Debug.Log(e);
         }
     }*/
-
-    [Command]
     public async void DeleteLobby()
     {
         try
