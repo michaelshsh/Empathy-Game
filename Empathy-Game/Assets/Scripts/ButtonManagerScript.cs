@@ -8,9 +8,9 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using Unity.Netcode;
 
-public class ButtonManagerScript : NetworkBehaviour
+public class ButtonManagerScript : MonoBehaviour
 {
-    public ButtonManagerScript Instance; // singleton
+    public static ButtonManagerScript Instance; // singleton
     [SerializeField] private Button createButton; // create button at the main menu
     [SerializeField] private Button joinButton; // join button at the main menu
     [SerializeField] private Button rulesButton; // rules button at the main menu
