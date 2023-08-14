@@ -120,6 +120,13 @@ public class ButtonManagerScript : MonoBehaviour
     private void StartGameButtonClicked()
     {
         Debug.Log("Start game button clicked");
+
+        if(LobbyManager.Instance.hostLobby == null)
+        {
+            Debug.Log("Not the host, can not start the game");
+            return;
+        }
+
         int playerNum = int.Parse(LobbyManager.Instance.joinLobby.Data["PlayersNum"].Value);
         if (LobbyManager.Instance.joinLobby.Players.Count < playerNum)
         {

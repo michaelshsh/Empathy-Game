@@ -204,7 +204,7 @@ public class LobbyManager : MonoBehaviour
     {
         try
         {
-            await LobbyService.Instance.UpdateLobbyAsync(joinLobby.Id, new UpdateLobbyOptions
+            hostLobby = await LobbyService.Instance.UpdateLobbyAsync(joinLobby.Id, new UpdateLobbyOptions
             {
                 Data = new Dictionary<string, DataObject>
                 {
