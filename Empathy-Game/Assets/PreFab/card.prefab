@@ -250,10 +250,10 @@ RectTransform:
   m_Father: {fileID: 7541099682883073197}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.159, y: -1.906}
-  m_SizeDelta: {x: 4.7, y: 1.502}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 48.841, y: 48.094}
+  m_SizeDelta: {x: 4.700001, y: 1.5019989}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &7541099683309812739
 MeshRenderer:
@@ -422,10 +422,10 @@ RectTransform:
   m_Father: {fileID: 7541099682883073197}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.331, y: -2.597}
-  m_SizeDelta: {x: 4.7, y: 1.502}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -48.669, y: 47.403}
+  m_SizeDelta: {x: 4.700001, y: 1.5019989}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &7541099683411278446
 MeshRenderer:
@@ -594,10 +594,10 @@ RectTransform:
   m_Father: {fileID: 7541099682883073197}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.1, y: 2.449}
-  m_SizeDelta: {x: 4.7, y: 1.502}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 48.9, y: -47.551003}
+  m_SizeDelta: {x: 4.700001, y: 1.5019989}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &7541099683666198184
 MeshRenderer:
@@ -768,10 +768,10 @@ RectTransform:
   m_Father: {fileID: 7541099682883073197}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.133, y: 2.449}
-  m_SizeDelta: {x: 4.7, y: 1.502}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -48.867, y: -47.551003}
+  m_SizeDelta: {x: 4.700001, y: 1.5019989}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &7541099683985757008
 MeshRenderer:
@@ -1023,6 +1023,7 @@ MonoBehaviour:
   Played: 0
   SlotIndex: 0
   slotOnSchedule: {fileID: 0}
+  CardObj: {fileID: 0}
 --- !u!61 &7541099684056169192
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1082,10 +1083,10 @@ RectTransform:
   m_Father: {fileID: 7541099682883073197}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.1590002, y: -2.628}
-  m_SizeDelta: {x: 4.7, y: 1.502}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 48.841, y: 47.372}
+  m_SizeDelta: {x: 4.700001, y: 1.5019989}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &7541099684182942565
 MeshRenderer:
