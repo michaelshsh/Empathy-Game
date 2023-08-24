@@ -112,6 +112,11 @@ public class CardScript : MonoBehaviour
         {
            gameObject.transform.position = Vector3.MoveTowards(transform.position, CardSlotsManager.InstanceSlotManager.Slots[SlotIndex].position, CardReturnSpeed*Time.deltaTime);
         }
+        if (GameLogicScript.Instance.CurrentGameState.Value == GameState.RoundEnd)
+        {
+            MoveToPlayedCardDeck();
+        }    
+
     }
 
     private void OnDestroy()
@@ -129,7 +134,6 @@ public class CardScript : MonoBehaviour
     {
         drag = false;
         gameObject.transform.position += new Vector3(0, 0, -1);
-        Invoke("MoveToPlayedCardDeck", 2f);// Launches a MoveToPlayedCardDeck in 2 seconds - for testing needs to be moved
     }
 
     private void MoveToPlayedCardDeck()//not sure if it should be here

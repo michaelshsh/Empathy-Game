@@ -13,6 +13,7 @@ public class SlotScheduleOnTrigger : MonoBehaviour
     private bool mouseDown = false;
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log("had a collision");
         CardScript cardThatHadEnteredSlot = collision.gameObject.GetComponent<CardScript>();
         if (card == null && !mouseDown && cardThatHadEnteredSlot != null && cardThatHadEnteredSlot.slotOnSchedule == null)
         {
