@@ -81,7 +81,7 @@ public sealed class GameLogicScript : NetworkBehaviour
 
                 break;
             case GameState.RoundEnd:
-                RoundEndAfterInvoked();
+                StartCoroutine(RoundEndAfterInvoked());
                 break;
             case GameState.Victory:
                 break;
@@ -95,21 +95,24 @@ public sealed class GameLogicScript : NetworkBehaviour
         }
     }
 
-    private void RoundEndAfterInvoked()
+    private IEnumerator RoundEndAfterInvoked()
     {
-        if (!IsServer) return;
+        if (!IsServer) yield break;
 
-        //wait for players to count points and kill cards //BUG: players update thier score after! why??
+        //wait for players to count points and kill cards
         var players = FindObjectsOfType<PlayerScript>();
         foreach (var player in players)
         {
-            if (player.SyncedToRound.Value != RoundNumberScript.Instance.roundNumber.Value)
+            while (player.SyncedToRound.Value != RoundNumberScript.Instance.roundNumber.Value)
             {
-                Debug.LogError($"Player {player.PlayerName} was not synced! round {player.SyncedToRound.Value} with score of: {player.Score.Value.PersonalPoints}P {player.Score.Value.TeamPoints}T");
+                Debug.LogWarning($"Player {player.PlayerName} was not synced! round {player.SyncedToRound.Value} with score of: {player.Score.Value.PersonalPoints}P {player.Score.Value.TeamPoints}T");
+                Debug.Log("Waiting a frame");
+                yield return 0;
             }
-            else
-                Debug.Log($"player {player.PlayerName} synced to round {player.SyncedToRound.Value} with score of: {player.Score.Value.PersonalPoints}P {player.Score.Value.TeamPoints}T");
+            
+            Debug.Log($"player {player.PlayerName} synced to round {player.SyncedToRound.Value} with score of: {player.Score.Value.PersonalPoints}P {player.Score.Value.TeamPoints}T");
         }
+        //if we got here, all players are synced
 
         //go to post round screen? display it directly? // will pop from its own code?
         //round number will incrimante alone through its code at round start!
