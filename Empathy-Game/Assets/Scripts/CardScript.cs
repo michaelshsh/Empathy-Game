@@ -41,12 +41,7 @@ public class CardScript : MonoBehaviour
         GameLogicScript.Instance.CurrentGameState.OnValueChanged += CardsOnStateChange;
 
         //drag
-        if (GameLogicScript.Instance.CurrentGameState.Value == GameState.RoundStart)
-        {
-            draggable = true;
-        }
-        else
-            draggable = false;
+        CardsOnStateChange(GameLogicScript.Instance.CurrentGameState.Value, GameLogicScript.Instance.CurrentGameState.Value);
 
         //card boundries
         MainCamera = Camera.main;

@@ -7,6 +7,7 @@ using Constants;
 using Unity.Netcode;
 using Unity.Collections;
 using static Constants.PlayerLabels;
+using Unity.VisualScripting;
 
 public struct PlayerScore : INetworkSerializable
 {
@@ -39,16 +40,25 @@ public class PlayerScript : NetworkBehaviour
         GameLogicScript.Instance.CurrentGameState.OnValueChanged += PlayerOnStateChange;
         labelText = GameObject.Find("PlayerLabel_UI").GetComponent<TextMeshProUGUI>();
         PlayerName = $"UnNamed-{OwnerClientId}";
-        PlayerOnStateChange(GameState.MainMenu, GameLogicScript.Instance.CurrentGameState.Value); //act now
+
+        if(GameLogicScript.Instance.CurrentGameState.Value==GameState.GameStart)
+        {
+            PlayerOnStateChange(GameState.MainMenu, GameState.SetupPhase); //setup if loaded mid game
+        }
+        PlayerOnStateChange(GameState.MainMenu, GameLogicScript.Instance.CurrentGameState.Value);
+
     }
 
     private void PlayerOnStateChange(GameState previousValue, GameState newValue)
     {
+        Debug.LogWarning($"entering playerstatecahnge with {newValue}");
         if (!IsOwner) return;
-        if (newValue == GameState.RoundStart)
+        if(newValue == GameState.SetupPhase)
         {
             GetAndSetRandomLabel();
-
+        }
+        else if (newValue == GameState.RoundStart)
+        {
             CardSlotsManager.InstanceSlotManager.DrawCard();
             CardSlotsManager.InstanceSlotManager.DrawCard();
             CardSlotsManager.InstanceSlotManager.DrawCard();
@@ -57,13 +67,23 @@ public class PlayerScript : NetworkBehaviour
         if (newValue == GameState.RoundEnd)
         {
             CountMyPoints();
-            //kill cards
+            KillCards();
         }
 
         SyncedToRound.Value = RoundNumberScript.Instance.roundNumber.Value; //let server know we are synced
     }
 
-    public void GetAndSetRandomLabel()
+    private void KillCards()
+    {
+        var AllCards = FindObjectsOfType<CardScript>();
+        foreach (var card in AllCards)
+        {
+            CardSlotsManager.InstanceSlotManager.availableSlot[card.SlotIndex] = true;
+            Destroy(card.gameObject);
+        }
+    }
+
+    private void GetAndSetRandomLabel()
     {
 
         mylabel.Value = PlayerLabels.GetRandomLabelEnum();
