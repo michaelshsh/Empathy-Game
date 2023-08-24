@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public sealed class CardSlotsManager : MonoBehaviour
@@ -59,7 +60,9 @@ public sealed class CardSlotsManager : MonoBehaviour
             if (availableSlot[i] == true)
             {
                 CardScript newCard = Instantiate(CardManager.InstanceCardManager.CardPrefab, Slots[i].position, Quaternion.identity).GetComponent<CardScript>();
-                Debug.Log("New card was created in slot " + i);
+                CardManager.InstanceCardManager.InitOrCreateACoopCard(newCard);
+
+                Debug.Log($"New {((newCard.isCoopCard)?("Co-op"):("Solo"))} card was created in slot " + i);
                 availableSlot[i] = false;
                 newCard.transform.position = Slots[i].position;
                 newCard.SlotIndex = i;

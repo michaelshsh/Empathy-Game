@@ -26,31 +26,19 @@ public class CardScript : MonoBehaviour
     public int SlotIndex;
     public SlotScript slotOnSchedule = null;
     public GameObject CardObj;
+    public PlayerLabels.LabelEnum requiredLabel;
+    public bool isCoopCard = false;
     // card boundries
     private Camera MainCamera;
     private float CardWidth;
     private float CardHeight;
     private float CardReturnSpeed;
 
+
     void Start()
     {
         //events
         GameLogicScript.Instance.CurrentGameState.OnValueChanged += CardsOnStateChange;
-
-        //time
-        time = CardTime.GetRandomTimeEnum();
-        TimeText.text = CardTime.EnumToString(time);
-
-        //free text
-        FreeText.text = CardText.GeneralText[UnityEngine.Random.Range(0, CardText.GeneralText.Count)];
-
-
-
-        //points (should add logic, and ints)
-        PersonalPoints = UnityEngine.Random.Range(0, 15);
-        TeamPoints = UnityEngine.Random.Range(0, 15);
-        PersonalPointsText.text = $"+{PersonalPoints}";
-        TeamPointsText.text = $"+{TeamPoints}";
 
         //drag
         if (GameLogicScript.Instance.CurrentGameState.Value == GameState.RoundStart)
@@ -59,7 +47,6 @@ public class CardScript : MonoBehaviour
         }
         else
             draggable = false;
-
 
         //card boundries
         MainCamera = Camera.main;
@@ -138,6 +125,7 @@ public class CardScript : MonoBehaviour
         CardSlotsManager.InstanceSlotManager.availableSlot[SlotIndex] = true;
         gameObject.SetActive(false);
     }
+
     public void makeCardIgnoreOtherCards()
     {
         for (int i = 0; i < CardManager.InstanceCardManager.CardsInGame.Count; i++)

@@ -79,6 +79,19 @@ namespace Constants
             "Test a new feature",
             "Test a new product",
         };
+
+        public static List<string> EnumToTextList(LabelEnum label)
+        {
+            switch (label)
+            {
+                case LabelEnum.Dev: return DevReqText;
+                case LabelEnum.IT: return ITReqText;
+                case LabelEnum.PM: return PMReqText;
+                case LabelEnum.HR: return HRReqText;
+                case LabelEnum.QA: return QAReqText;
+            }
+            return null;
+        }
     }
 
     public static class CardTime
@@ -94,9 +107,9 @@ namespace Constants
         {
             switch (time)
             {
-                case TimeEnum.HalfAnHour: return HalfAnHour;
-                case TimeEnum.OneHour: return OneHour;
-                case TimeEnum.HourAndaHalf: return HourAndaHalf;
+                case TimeEnum.HalfAnHour: return HalfAnHourString;
+                case TimeEnum.OneHour: return OneHourString;
+                case TimeEnum.HourAndaHalf: return HourAndaHalfString;
             }
             return "";
         }
@@ -107,9 +120,9 @@ namespace Constants
             return RandomEnum.Of<TimeEnum>();
         }
 
-        private const string HalfAnHour = "0:30";
-        private const string OneHour = "1:00";
-        private const string HourAndaHalf = "1:30";
+        private const string HalfAnHourString = "0:30";
+        private const string OneHourString = "1:00";
+        private const string HourAndaHalfString = "1:30";
     }
 }
 

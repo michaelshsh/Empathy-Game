@@ -47,13 +47,12 @@ public class PlayerScript : NetworkBehaviour
         if (!IsOwner) return;
         if (newValue == GameState.RoundStart)
         {
-            CardSlotsManager.InstanceSlotManager.DrawCard();
-            CardSlotsManager.InstanceSlotManager.DrawCard();
-            CardSlotsManager.InstanceSlotManager.DrawCard();
-            CardSlotsManager.InstanceSlotManager.DrawCard();
-
-            //was getAndSetRandomLabel before, now get setted by gameLogicScripts
             GetAndSetRandomLabel();
+
+            CardSlotsManager.InstanceSlotManager.DrawCard();
+            CardSlotsManager.InstanceSlotManager.DrawCard();
+            CardSlotsManager.InstanceSlotManager.DrawCard();
+            CardSlotsManager.InstanceSlotManager.DrawCard();          
         }
         if (newValue == GameState.RoundEnd)
         {
