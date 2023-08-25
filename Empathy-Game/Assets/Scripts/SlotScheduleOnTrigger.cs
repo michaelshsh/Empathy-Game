@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -43,5 +44,18 @@ public class SlotScheduleOnTrigger : MonoBehaviour
     private void OnMouseUp()
     {
         mouseDown = false;
+    }
+    private void Update()
+    {
+        if (GameLogicScript.Instance.CurrentGameState.Value == GameState.RoundEnd)
+        {
+            RemoveTakenSlots();
+        }
+    }
+
+    private void RemoveTakenSlots()
+    {
+        UIText.text = "";
+        card = null;
     }
 }
