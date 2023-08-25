@@ -48,12 +48,14 @@ public class LobbyManager : MonoBehaviour
                 {
                     { "GameStarted", new DataObject(DataObject.VisibilityOptions.Public, "false") },
                     { "PlayersNum", new DataObject(DataObject.VisibilityOptions.Public, $"{maxPlayers}") },
-                    { "Length", new DataObject(DataObject.VisibilityOptions.Public, length) } 
+                    { "Length", new DataObject(DataObject.VisibilityOptions.Public, length) } ,
+                    { "StartGame_RelayCode", new DataObject(DataObject.VisibilityOptions.Member, "0") }
                 }
             };
             Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
             hostLobby = lobby;
             joinLobby = hostLobby;
+            // OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby});
 
             Debug.Log($"Lobby was created: max players-{lobby.MaxPlayers}, Code-{lobby.LobbyCode}");
             PrintPlayers(hostLobby);
@@ -61,6 +63,25 @@ public class LobbyManager : MonoBehaviour
         catch (LobbyServiceException e)
         {
             Debug.Log(e);
+        }
+    }
+
+    public async Task StartGame()
+    {
+        try
+        {
+            string relayCode = await RelayManager.Instance.CreateRelay();
+            Lobby lobby = await Lobbies.Instance.UpdateLobbyAsync(joinLobby.Id, new UpdateLobbyOptions
+            {
+                Data = new Dictionary<string, DataObject> {
+                { "StartGame_RelayCode", new DataObject(DataObject.VisibilityOptions.Member, relayCode) }
+            }
+            });
+            joinLobby = lobby;
+        }
+        catch (LobbyServiceException ex)
+        {
+            Debug.Log(ex);
         }
     }
 
@@ -119,6 +140,17 @@ public class LobbyManager : MonoBehaviour
 
                 Lobby lobby = await LobbyService.Instance.GetLobbyAsync(joinLobby.Id);
                 joinLobby = lobby;
+                // OnJoinedLobbyUpdate?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby});
+
+                if (joinLobby.Data["StartGame_RelayCode"].Value != "0")
+                {
+                    if (hostLobby == null)
+                    {
+                        RelayManager.Instance.JoinRelay(joinLobby.Data["StartGame_RelayCode"].Value);
+                    }
+                    joinLobby = null;
+                    //OnGameStarted?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
     }
