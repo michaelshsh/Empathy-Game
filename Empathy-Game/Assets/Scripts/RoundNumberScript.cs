@@ -48,7 +48,7 @@ public class RoundNumberScript : NetworkBehaviour
 
             if (roundNumber.Value > MaximumRounds.Value && newValue != GameState.GameEnd)
             {
-                GameLogicScript.Instance.UpdateGameByState(GameState.GameEnd);
+                StartCoroutine(GameLogicScript.Instance.UpdateGameByState(GameState.GameEnd));
             }
         }
 
