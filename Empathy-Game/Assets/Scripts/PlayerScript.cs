@@ -68,6 +68,7 @@ public class PlayerScript : NetworkBehaviour
         {
             CountMyPoints();
             KillCards();
+            ResetSlotsCards();
         }
 
         SyncedToRound.Value = RoundNumberScript.Instance.roundNumber.Value; //let server know we are synced
@@ -83,7 +84,17 @@ public class PlayerScript : NetworkBehaviour
         }
     }
 
-    private void GetAndSetRandomLabel()
+    private void ResetSlotsCards()
+    {
+        var AllSlots = FindObjectsOfType<SlotScheduleOnTrigger>();
+        foreach (var slot in AllSlots)
+        {
+            slot.UIText.text = "";
+            slot.card = null;
+        }
+    }
+
+    public void GetAndSetRandomLabel()
     {
 
         mylabel.Value = PlayerLabels.GetRandomLabelEnum();

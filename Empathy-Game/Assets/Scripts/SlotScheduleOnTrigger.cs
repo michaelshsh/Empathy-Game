@@ -6,10 +6,8 @@ using UnityEngine;
 
 public class SlotScheduleOnTrigger : MonoBehaviour
 {
-    [SerializeField]
-    private SlotScript slot;
-    [SerializeField]
-    private TextMeshPro UIText;
+    public SlotScript slot;
+    public TextMeshPro UIText;
     public CardScript card = null;
     private bool mouseDown = false;
     private void OnTriggerEnter2D(Collider2D collision)
@@ -47,15 +45,7 @@ public class SlotScheduleOnTrigger : MonoBehaviour
     }
     private void Update()
     {
-        if (GameLogicScript.Instance.CurrentGameState.Value == GameState.RoundEnd)
-        {
-            RemoveTakenSlots();
-        }
+        
     }
 
-    private void RemoveTakenSlots()
-    {
-        UIText.text = "";
-        card = null;
-    }
 }
