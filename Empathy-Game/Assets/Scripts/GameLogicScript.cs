@@ -38,12 +38,12 @@ public sealed class GameLogicScript : NetworkBehaviour
         {
             CurrentGameState.Value = GameState.GameStart;
         }
-        UpdateGameByState(CurrentGameState.Value);
+        StartCoroutine(UpdateGameByState(CurrentGameState.Value));
     }
 
-    public void UpdateGameByState(GameState newState)
+    public IEnumerator UpdateGameByState(GameState newState)
     {
-        if (!IsServer) return;
+        if (!IsServer) yield break;
         Debug.Log($"Changing state to: {newState}");
 
         switch (newState) //before invoking all
@@ -54,6 +54,8 @@ public sealed class GameLogicScript : NetworkBehaviour
                 break;
             case GameState.RoundStart:
                 RoundStartHandler();
+                break;
+            case GameState.SetupPhase:
                 break;
             case GameState.RoundEnd:
                 break;
@@ -70,6 +72,7 @@ public sealed class GameLogicScript : NetworkBehaviour
 
         Debug.Log($"Invoking state {newState} to all");
         CurrentGameState.Value = newState; //this is the invoke! 
+        yield return 0;
 
         switch (newState) //after invoking all
         {
@@ -78,7 +81,9 @@ public sealed class GameLogicScript : NetworkBehaviour
             case GameState.Lobby:
                 break;
             case GameState.RoundStart:
-
+                break;
+            case GameState.SetupPhase:
+                StartCoroutine(UpdateGameByState(GameState.RoundStart));
                 break;
             case GameState.RoundEnd:
                 StartCoroutine(RoundEndAfterInvoked());
@@ -88,7 +93,7 @@ public sealed class GameLogicScript : NetworkBehaviour
             case GameState.Lose:
                 break;
             case GameState.GameStart:
-                UpdateGameByState(GameState.RoundStart);
+                StartCoroutine(UpdateGameByState(GameState.SetupPhase));
                 break;
             case GameState.GameEnd:
                 break;
@@ -137,6 +142,7 @@ public enum GameState
     MainMenu,
     Lobby,
     GameStart,
+    SetupPhase,
     RoundEnd,
     RoundStart,
     Victory,
