@@ -70,6 +70,7 @@ public class LobbyManager : MonoBehaviour
     {
         try
         {
+            Debug.Log("Entered to StartGame()");
             string relayCode = await RelayManager.Instance.CreateRelay();
             Lobby lobby = await Lobbies.Instance.UpdateLobbyAsync(joinLobby.Id, new UpdateLobbyOptions
             {
@@ -78,6 +79,7 @@ public class LobbyManager : MonoBehaviour
             }
             });
             joinLobby = lobby;
+            Debug.Log("Exiting StartGame()");
         }
         catch (LobbyServiceException ex)
         {
