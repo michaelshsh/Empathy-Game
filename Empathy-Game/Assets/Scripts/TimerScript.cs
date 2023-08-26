@@ -28,7 +28,7 @@ public class TimerScript : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        Instance = this;
+        Instance = this;    
         timeText = GameObject.Find("Timer_var_text").GetComponent<TextMeshProUGUI>();
         GameLogicScript.Instance.CurrentGameState.OnValueChanged += TimerOnStateChange;
     }

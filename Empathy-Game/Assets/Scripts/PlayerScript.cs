@@ -37,6 +37,7 @@ public class PlayerScript : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        Debug.Log($"Current scene: {UnityEngine.SceneManagement.SceneManager.GetActiveScene().name}");
         GameLogicScript.Instance.CurrentGameState.OnValueChanged += PlayerOnStateChange;
         labelText = GameObject.Find("PlayerLabel_UI").GetComponent<TextMeshProUGUI>();
         PlayerName = $"UnNamed-{OwnerClientId}";
