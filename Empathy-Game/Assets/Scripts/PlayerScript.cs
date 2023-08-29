@@ -67,14 +67,14 @@ public class PlayerScript : NetworkBehaviour
         if (newValue == GameState.RoundEnd)
         {
             CountMyPoints();
-            KillCards();
-            ResetSlotsCards();
+            KillUnplayedCards();
+            KillPlayedCards();
         }
 
         SyncedToRound.Value = RoundNumberScript.Instance.roundNumber.Value; //let server know we are synced
     }
 
-    private void KillCards()
+    private void KillUnplayedCards()
     {
         var AllCards = FindObjectsOfType<CardScript>();
         foreach (var card in AllCards)
@@ -84,13 +84,18 @@ public class PlayerScript : NetworkBehaviour
         }
     }
 
-    private void ResetSlotsCards()
+    private void KillPlayedCards()
     {
         var AllSlots = FindObjectsOfType<SlotScheduleOnTrigger>();
         foreach (var slot in AllSlots)
         {
             slot.UIText.text = "";
-            slot.card = null;
+            if(slot.card != null)
+            {
+                CardSlotsManager.InstanceSlotManager.availableSlot[slot.card.SlotIndex] = true;
+                Destroy(slot.card.gameObject);
+                slot.card = null;
+            }
         }
     }
 
