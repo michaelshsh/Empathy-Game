@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
+using System.Threading.Tasks;
 using TMPro;
 using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
@@ -40,12 +41,13 @@ public sealed class GameLogicScript : NetworkBehaviour
         {
             CurrentGameState.Value = GameState.GameStart;
         }
-        StartCoroutine(UpdateGameByState(CurrentGameState.Value));
+
+        UpdateGameByState(CurrentGameState.Value);
     }
 
-    public IEnumerator UpdateGameByState(GameState newState)
+    public async void UpdateGameByState(GameState newState)
     {
-        if (!IsServer) yield break;
+        if (!IsServer) return;
         Debug.Log($"Changing state to: {newState}");
 
         switch (newState) //before invoking all
@@ -55,7 +57,7 @@ public sealed class GameLogicScript : NetworkBehaviour
             case GameState.Lobby:
                 break;
             case GameState.RoundStart:
-                RoundStartHandler();
+                RoundStartHandlerBeforeInvoke();
                 break;
             case GameState.SetupPhase:
                 break;
@@ -66,7 +68,7 @@ public sealed class GameLogicScript : NetworkBehaviour
             case GameState.Lose:
                 break;
             case GameState.GameStart:
-                GameStartHandler();
+                GameStartHandlerBeforeInvoke();
                 break;
             case GameState.GameEnd:
                 break;
@@ -74,7 +76,7 @@ public sealed class GameLogicScript : NetworkBehaviour
 
         Debug.Log($"Invoking state {newState} to all");
         CurrentGameState.Value = newState; //this is the invoke! 
-        yield return 0;
+        await AwaitPlayerSync();
 
         switch (newState) //after invoking all
         {
@@ -85,47 +87,38 @@ public sealed class GameLogicScript : NetworkBehaviour
             case GameState.RoundStart:
                 break;
             case GameState.SetupPhase:
-                StartCoroutine(UpdateGameByState(GameState.RoundStart));
+                UpdateGameByState(GameState.RoundStart);
                 break;
             case GameState.RoundEnd:
-                StartCoroutine(RoundEndAfterInvoked());
+                RoundEndAfterInvoked();
                 break;
             case GameState.Victory:
                 break;
             case GameState.Lose:
                 break;
             case GameState.GameStart:
-                StartCoroutine(UpdateGameByState(GameState.SetupPhase));
+                UpdateGameByState(GameState.SetupPhase);
                 break;
             case GameState.GameEnd:
-                FinishGame();
+                FinishGameAfterInvoke();
                 break;
         }
     }
 
-    private void FinishGame()
+    private void FinishGameAfterInvoke()
     {
         LobbyManager.Instance.LeaveLobby();
         // to finish the game through a button from the roundEnd window?
         // SceneManager.LoadScene("MainMenu");
     }
 
-    private IEnumerator RoundEndAfterInvoked()
+    private void RoundEndAfterInvoked()
     {
-        if (!IsServer) yield break;
-
-        //wait for players to count points and kill cards
+        if (!IsServer) return;
         var players = FindObjectsOfType<PlayerScript>();
         foreach (var player in players)
         {
-            while (player.SyncedToRound.Value != RoundNumberScript.Instance.roundNumber.Value)
-            {
-                Debug.LogWarning($"Player {player.PlayerName} was not synced! round {player.SyncedToRound.Value} with score of: {player.Score.Value.PersonalPoints}P {player.Score.Value.TeamPoints}T");
-                Debug.Log("Waiting a frame");
-                yield return 0;
-            }
-            
-            Debug.Log($"player {player.PlayerName} synced to round {player.SyncedToRound.Value} with score of: {player.Score.Value.PersonalPoints}P {player.Score.Value.TeamPoints}T");
+            Debug.Log($"player {player.PlayerName} synced. score of: {player.Score.Value.PersonalPoints}P {player.Score.Value.TeamPoints}T");
         }
         //if we got here, all players are synced
 
@@ -134,20 +127,37 @@ public sealed class GameLogicScript : NetworkBehaviour
         //timer will count end of round time
     }
 
-    private void RoundStartHandler()
+    public async Task AwaitPlayerSync()
+    {
+        var players = FindObjectsOfType<PlayerScript>();
+        foreach (var player in players)
+        {
+            while (player.SyncedToState.Value != CurrentGameState.Value)
+            {
+                Debug.Log($"wating 50 for player {player.PlayerName}");
+                await Task.Delay(50); //(player.SyncedToState.Value == CurrentGameState.Value);
+            }
+
+            Debug.Log($"player {player.PlayerName} synced.");
+        }
+
+        Debug.Log($"All players are synced");
+    }
+
+    private void RoundStartHandlerBeforeInvoke()
     {
         //start timer
         TimerScript.Instance.StartTimer();
     }
 
-    private void GameStartHandler()
+    private void GameStartHandlerBeforeInvoke()
     {
         TimerScript.Instance.SetRoundTime(15);
         RoundNumberScript.Instance.SetUpMaxRounds(6);
     }
 }
 
-public enum GameState
+public enum GameState 
 {
     MainMenu,
     Lobby,
