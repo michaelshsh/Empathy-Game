@@ -6,38 +6,50 @@ using UnityEngine;
 
 public class SlotScheduleOnTrigger : MonoBehaviour
 {
-    public SlotScript slot;
     public TextMeshPro UIText;
-    public CardScript card = null;
-    private bool mouseDown = false;
+    public CardScript TaskCard = null;
+    public int IndexInList;
+    public bool IsAvilableForCard => TaskCard == null;
+    private bool mouseDown;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("had a collision");
+        Debug.Log("collided");
         CardScript cardThatHadEnteredSlot = collision.gameObject.GetComponent<CardScript>();
-        if (card == null && !mouseDown && cardThatHadEnteredSlot != null && cardThatHadEnteredSlot.slotOnSchedule == null)
+        if (TaskCard == null && cardThatHadEnteredSlot != null && !mouseDown && !cardThatHadEnteredSlot.InsertedToASlot)
         {
-            Debug.Log($"{cardThatHadEnteredSlot} had a collision with slot {slot}");
-            cardThatHadEnteredSlot.slotOnSchedule = slot;
-            collision.gameObject.SetActive(false);                 
-            GameObject parent = collision.gameObject.transform.Find("Text").gameObject; // get parent of FreeText_Var
-            GameObject txt = parent.transform.Find("FreeText_Var").gameObject; // get FreeText_Var
-            UIText.text = txt.GetComponent<TextMeshPro>().text;
-            card = cardThatHadEnteredSlot;
+            Debug.Log($"{cardThatHadEnteredSlot} had a collision with slot in index {IndexInList}");
+            ScheduleSlotsManagerScript.Instance.TryToInsertCardAt(cardThatHadEnteredSlot, IndexInList);
         }
+    }
+
+    public bool InsertCard(CardScript card)
+    {
+        if(!IsAvilableForCard)
+            return false;
+        TaskCard = card;
+        GameObject parent = card.gameObject.transform.Find("Text").gameObject; // get parent of FreeText_Var
+        GameObject txt = parent.transform.Find("FreeText_Var").gameObject; // get FreeText_Var
+        UIText.text = txt.GetComponent<TextMeshPro>().text;
+        return true;
+    }
+
+    public bool RemoveCard()
+    {
+        if (TaskCard == null)
+            return false;
+
+        UIText.text = string.Empty;
+        TaskCard = null;
+        
+        return true;
     }
 
     private void OnMouseDown()
     {
         mouseDown = true;
-        if (card != null)
-        {
-            UIText.text = string.Empty;
-            card.gameObject.SetActive(true);           
-            card.drag = true;
-            card.makeCardIgnoreOtherCards();
-            card.slotOnSchedule = null;
-            card = null;
-        }
+        if (TaskCard != null)
+            ScheduleSlotsManagerScript.Instance.RemoveCardFromAllItsSlots(this, this.TaskCard);
     }
     private void OnMouseUp()
     {
