@@ -127,7 +127,7 @@ public sealed class GameLogicScript : NetworkBehaviour
         //timer will count end of round time
     }
 
-    public async Task AwaitPlayerSync()
+    private async Task AwaitPlayerSync()
     {
         var players = FindObjectsOfType<PlayerScript>();
         foreach (var player in players)
