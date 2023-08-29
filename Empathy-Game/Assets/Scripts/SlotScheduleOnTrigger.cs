@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -5,10 +6,8 @@ using UnityEngine;
 
 public class SlotScheduleOnTrigger : MonoBehaviour
 {
-    [SerializeField]
-    private SlotScript slot;
-    [SerializeField]
-    private TextMeshPro UIText;
+    public SlotScript slot;
+    public TextMeshPro UIText;
     public CardScript card = null;
     private bool mouseDown = false;
     private void OnTriggerEnter2D(Collider2D collision)
@@ -44,4 +43,9 @@ public class SlotScheduleOnTrigger : MonoBehaviour
     {
         mouseDown = false;
     }
+    private void Update()
+    {
+        
+    }
+
 }

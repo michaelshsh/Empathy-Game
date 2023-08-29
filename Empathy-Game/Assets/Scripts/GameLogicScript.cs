@@ -5,9 +5,11 @@ using System.ComponentModel;
 using System.Threading;
 using TMPro;
 using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public sealed class GameLogicScript : NetworkBehaviour
@@ -96,8 +98,16 @@ public sealed class GameLogicScript : NetworkBehaviour
                 StartCoroutine(UpdateGameByState(GameState.SetupPhase));
                 break;
             case GameState.GameEnd:
+                FinishGame();
                 break;
         }
+    }
+
+    private void FinishGame()
+    {
+        LobbyManager.Instance.LeaveLobby();
+        // to finish the game through a button from the roundEnd window?
+        // SceneManager.LoadScene("MainMenu");
     }
 
     private IEnumerator RoundEndAfterInvoked()
