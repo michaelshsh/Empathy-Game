@@ -142,8 +142,6 @@ public class LobbyManager : MonoBehaviour
 
                 Lobby lobby = await LobbyService.Instance.GetLobbyAsync(joinLobby.Id);
                 joinLobby = lobby;
-                Debug.Log(joinLobby.Data["StartGame_RelayCode"].Value);
-
                 if (joinLobby.Data["StartGame_RelayCode"].Value != "0")
                 {
                     Debug.Log($"value - {joinLobby.Data["StartGame_RelayCode"].Value}");
