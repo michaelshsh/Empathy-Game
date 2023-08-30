@@ -91,11 +91,11 @@ public class PlayerScript : NetworkBehaviour
         foreach (var slot in AllSlots)
         {
             slot.UIText.text = "";
-            if(slot.card != null)
+            if(slot.TaskCard != null)
             {
-                CardSlotsManager.InstanceSlotManager.availableSlot[slot.card.SlotIndex] = true;
-                Destroy(slot.card.gameObject);
-                slot.card = null;
+                CardSlotsManager.InstanceSlotManager.availableSlot[slot.TaskCard.SlotIndex] = true;
+                Destroy(slot.TaskCard.gameObject);
+                slot.TaskCard = null;
             }
         }
     }
@@ -113,10 +113,10 @@ public class PlayerScript : NetworkBehaviour
         int Ppoints = 0, Tpoints = 0;
         foreach (var slot in AllSlots)
         {
-            if (slot.card != null)
+            if (slot.TaskCard != null)
             {
-                Ppoints += slot.card.PersonalPoints;
-                Tpoints += slot.card.TeamPoints;
+                Ppoints += slot.TaskCard.PersonalPoints;
+                Tpoints += slot.TaskCard.TeamPoints;
             }
             else
             {
