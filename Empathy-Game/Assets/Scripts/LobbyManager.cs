@@ -142,7 +142,6 @@ public class LobbyManager : MonoBehaviour
 
                 Lobby lobby = await LobbyService.Instance.GetLobbyAsync(joinLobby.Id);
                 joinLobby = lobby;
-                // OnJoinedLobbyUpdate?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby});
                 Debug.Log(joinLobby.Data["StartGame_RelayCode"].Value);
 
                 if (joinLobby.Data["StartGame_RelayCode"].Value != "0")
@@ -156,7 +155,6 @@ public class LobbyManager : MonoBehaviour
                         Debug.Log("joined relay");
                     }
                     joinLobby = null;
-                    //OnGameStarted?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
@@ -175,8 +173,7 @@ public class LobbyManager : MonoBehaviour
             joinLobby = lobby;
 
             Debug.Log($"Joined lobby with code {lobbyCode}");
-            Debug.Log(hostLobby);
-            //PrintPlayers(lobby);
+            PrintPlayers(lobby);
         }
         catch (Exception)
         {

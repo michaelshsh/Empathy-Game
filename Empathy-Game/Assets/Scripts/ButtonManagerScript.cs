@@ -189,10 +189,6 @@ public class ButtonManagerScript : MonoBehaviour
             {
                 listOfPlayers.text = listOfPlayers.text + player.Data["PlayerName"].Value + "\n";
             }
-            /*if (LobbyManager.Instance.joinLobby.Data["GameStarted"].Value == "true")
-            {
-                SceneManager.LoadScene("Game");
-            }*/
         }
         
     }
