@@ -135,11 +135,12 @@ public class ButtonManagerScript : MonoBehaviour
             Debug.Log($"{playerNum} are needed, only have {LobbyManager.Instance.joinLobby.Players.Count} now");
             return;
         }
+        
+        LobbyManager.Instance.UpdateLobbyStartGameOption("true");
+        SceneManager.LoadScene("Game");
         Debug.Log("trying to start the game");
         await LobbyManager.Instance.StartGame();
         Debug.Log("StartGame run ok");
-        LobbyManager.Instance.UpdateLobbyStartGameOption("true");
-        SceneManager.LoadScene("Game");
     }
     private void BackButtonClicked() // every click on back button does this, only show the main menu buttons!!
     {
@@ -188,10 +189,10 @@ public class ButtonManagerScript : MonoBehaviour
             {
                 listOfPlayers.text = listOfPlayers.text + player.Data["PlayerName"].Value + "\n";
             }
-            if (LobbyManager.Instance.joinLobby.Data["GameStarted"].Value == "true")
+            /*if (LobbyManager.Instance.joinLobby.Data["GameStarted"].Value == "true")
             {
                 SceneManager.LoadScene("Game");
-            }
+            }*/
         }
         
     }

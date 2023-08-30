@@ -143,12 +143,17 @@ public class LobbyManager : MonoBehaviour
                 Lobby lobby = await LobbyService.Instance.GetLobbyAsync(joinLobby.Id);
                 joinLobby = lobby;
                 // OnJoinedLobbyUpdate?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby});
+                Debug.Log(joinLobby.Data["StartGame_RelayCode"].Value);
 
                 if (joinLobby.Data["StartGame_RelayCode"].Value != "0")
                 {
+                    Debug.Log($"value - {joinLobby.Data["StartGame_RelayCode"].Value}");
                     if (hostLobby == null)
                     {
+                        Debug.Log("trying to join relay");
+                        SceneManager.LoadScene("Game");
                         RelayManager.Instance.JoinRelay(joinLobby.Data["StartGame_RelayCode"].Value);
+                        Debug.Log("joined relay");
                     }
                     joinLobby = null;
                     //OnGameStarted?.Invoke(this, EventArgs.Empty);
@@ -170,7 +175,8 @@ public class LobbyManager : MonoBehaviour
             joinLobby = lobby;
 
             Debug.Log($"Joined lobby with code {lobbyCode}");
-            PrintPlayers(lobby);
+            Debug.Log(hostLobby);
+            //PrintPlayers(lobby);
         }
         catch (Exception)
         {
