@@ -23,6 +23,11 @@ public class SlotScheduleOnTrigger : MonoBehaviour
             GameObject txt = parent.transform.Find("FreeText_Var").gameObject; // get FreeText_Var
             UIText.text = txt.GetComponent<TextMeshPro>().text;
             card = cardThatHadEnteredSlot;
+
+            if(card.isSpecial)
+            {
+                //triger notification
+            }
         }
     }
 

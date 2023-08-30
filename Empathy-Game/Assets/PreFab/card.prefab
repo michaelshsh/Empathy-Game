@@ -1025,6 +1025,9 @@ MonoBehaviour:
   SlotIndex: 0
   slotOnSchedule: {fileID: 0}
   CardObj: {fileID: 0}
+  requiredLabel: 0
+  isCoopCard: 0
+  isSpecial: 0
 --- !u!61 &7541099684056169192
 BoxCollider2D:
   m_ObjectHideFlags: 0

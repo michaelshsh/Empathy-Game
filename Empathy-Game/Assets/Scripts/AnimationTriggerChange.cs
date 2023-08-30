@@ -1,34 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class AnimationTriggerChange : MonoBehaviour
 {
     private Animator animator;
-    private Image image;
-    public Sprite upImg;
-    public Sprite downImg;
+    private bool isOpend = true;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        animator = GetComponent<Animator>();
-        image = GetComponent<Image>();
+        animator = gameObject.GetComponent<Animator>();
     }
-
-    private void OnTriggerEnter2D(Collider2D other)
+    public void OnClicked()
     {
-        if(other.CompareTag("opend"))
+        
+        if (isOpend)
         {
+            Debug.Log("trigger Open");
+            animator.ResetTrigger("Close");
             animator.SetTrigger("Open");
-            image.sprite = downImg;
+            isOpend = false;
         }
         else
         {
+            Debug.Log("trigger Close");
+            animator.ResetTrigger("Open");
             animator.SetTrigger("Close");
-            image.sprite = upImg;
+            isOpend = true;
         }
+       
 
     }
 }

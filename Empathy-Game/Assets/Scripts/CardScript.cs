@@ -28,6 +28,7 @@ public class CardScript : MonoBehaviour
     public GameObject CardObj;
     public PlayerLabels.LabelEnum requiredLabel;
     public bool isCoopCard = false;
+    public bool isSpecial = false;
     // card boundries
     private Camera MainCamera;
     private float CardWidth;
