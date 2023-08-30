@@ -30,22 +30,23 @@ public class PlayerScript : NetworkBehaviour
     public NetworkVariable<PlayerScore> Score = new (new PlayerScore { PersonalPoints = 0, TeamPoints=0 }, 
                                                     NetworkVariableReadPermission.Everyone,
                                                     NetworkVariableWritePermission.Owner);
-    public NetworkVariable<int> SyncedToRound = new (0,
+    public NetworkVariable<GameState> SyncedToState = new (GameState.MainMenu,
                                                     NetworkVariableReadPermission.Everyone,
                                                     NetworkVariableWritePermission.Owner);
     [field: SerializeField] public FixedString128Bytes PlayerName { get; private set; }
 
     public override void OnNetworkSpawn()
     {
+        if (!IsOwner) return;
         GameLogicScript.Instance.CurrentGameState.OnValueChanged += PlayerOnStateChange;
         labelText = GameObject.Find("PlayerLabel_UI").GetComponent<TextMeshProUGUI>();
         PlayerName = $"UnNamed-{OwnerClientId}";
 
         if(GameLogicScript.Instance.CurrentGameState.Value==GameState.GameStart)
         {
-            PlayerOnStateChange(GameState.MainMenu, GameState.SetupPhase); //setup if loaded mid game
+            PlayerOnStateChange(SyncedToState.Value, GameState.SetupPhase); //setup if loaded mid game
         }
-        PlayerOnStateChange(GameState.MainMenu, GameLogicScript.Instance.CurrentGameState.Value);
+        PlayerOnStateChange(SyncedToState.Value, GameLogicScript.Instance.CurrentGameState.Value);
 
     }
 
@@ -71,7 +72,7 @@ public class PlayerScript : NetworkBehaviour
             KillPlayedCards();
         }
 
-        SyncedToRound.Value = RoundNumberScript.Instance.roundNumber.Value; //let server know we are synced
+        SyncedToState.Value = newValue; //let server know we are synced
     }
 
     private void KillUnplayedCards()
@@ -101,7 +102,6 @@ public class PlayerScript : NetworkBehaviour
 
     public void GetAndSetRandomLabel()
     {
-
         mylabel.Value = PlayerLabels.GetRandomLabelEnum();
 
         labelText.text = $"#{PlayerLabels.EnumToString(mylabel.Value)}";
