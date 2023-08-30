@@ -30,25 +30,23 @@ public class PlayerScript : NetworkBehaviour
     public NetworkVariable<PlayerScore> Score = new (new PlayerScore { PersonalPoints = 0, TeamPoints=0 }, 
                                                     NetworkVariableReadPermission.Everyone,
                                                     NetworkVariableWritePermission.Owner);
-    public NetworkVariable<int> SyncedToRound = new (0,
+    public NetworkVariable<GameState> SyncedToState = new (GameState.MainMenu,
                                                     NetworkVariableReadPermission.Everyone,
                                                     NetworkVariableWritePermission.Owner);
     [field: SerializeField] public FixedString128Bytes PlayerName { get; private set; }
 
     public override void OnNetworkSpawn()
     {
-        Debug.Log($"Current scene: {UnityEngine.SceneManagement.SceneManager.GetActiveScene().name}");
-        // Debog log the player name from LobbyManager
-        Debug.Log($"Player name: {LobbyManager.Instance.playerName}");
+        if (!IsOwner) return;
         GameLogicScript.Instance.CurrentGameState.OnValueChanged += PlayerOnStateChange;
         labelText = GameObject.Find("PlayerLabel_UI").GetComponent<TextMeshProUGUI>();
         PlayerName = $"UnNamed-{OwnerClientId}";
 
         if(GameLogicScript.Instance.CurrentGameState.Value==GameState.GameStart)
         {
-            PlayerOnStateChange(GameState.MainMenu, GameState.SetupPhase); //setup if loaded mid game
+            PlayerOnStateChange(SyncedToState.Value, GameState.SetupPhase); //setup if loaded mid game
         }
-        PlayerOnStateChange(GameState.MainMenu, GameLogicScript.Instance.CurrentGameState.Value);
+        PlayerOnStateChange(SyncedToState.Value, GameLogicScript.Instance.CurrentGameState.Value);
 
     }
 
@@ -70,13 +68,14 @@ public class PlayerScript : NetworkBehaviour
         if (newValue == GameState.RoundEnd)
         {
             CountMyPoints();
-            KillCards();
+            KillUnplayedCards();
+            KillPlayedCards();
         }
 
-        SyncedToRound.Value = RoundNumberScript.Instance.roundNumber.Value; //let server know we are synced
+        SyncedToState.Value = newValue; //let server know we are synced
     }
 
-    private void KillCards()
+    private void KillUnplayedCards()
     {
         var AllCards = FindObjectsOfType<CardScript>();
         foreach (var card in AllCards)
@@ -86,9 +85,23 @@ public class PlayerScript : NetworkBehaviour
         }
     }
 
-    private void GetAndSetRandomLabel()
+    private void KillPlayedCards()
     {
+        var AllSlots = FindObjectsOfType<SlotScheduleOnTrigger>();
+        foreach (var slot in AllSlots)
+        {
+            slot.UIText.text = "";
+            if(slot.TaskCard != null)
+            {
+                CardSlotsManager.InstanceSlotManager.availableSlot[slot.TaskCard.SlotIndex] = true;
+                Destroy(slot.TaskCard.gameObject);
+                slot.TaskCard = null;
+            }
+        }
+    }
 
+    public void GetAndSetRandomLabel()
+    {
         mylabel.Value = PlayerLabels.GetRandomLabelEnum();
 
         labelText.text = $"#{PlayerLabels.EnumToString(mylabel.Value)}";
@@ -100,10 +113,10 @@ public class PlayerScript : NetworkBehaviour
         int Ppoints = 0, Tpoints = 0;
         foreach (var slot in AllSlots)
         {
-            if (slot.card != null)
+            if (slot.TaskCard != null)
             {
-                Ppoints += slot.card.PersonalPoints;
-                Tpoints += slot.card.TeamPoints;
+                Ppoints += slot.TaskCard.PersonalPoints;
+                Tpoints += slot.TaskCard.TeamPoints;
             }
             else
             {
