@@ -24,7 +24,7 @@ public class CardScript : MonoBehaviour
     public TextMeshPro FreeText;
     public bool Played;
     public int SlotIndex;
-    public SlotScript slotOnSchedule = null;
+    //public SlotScript slotOnSchedule = null;
     public GameObject CardObj;
     public PlayerLabels.LabelEnum requiredLabel;
     public bool isCoopCard = false;
@@ -35,6 +35,7 @@ public class CardScript : MonoBehaviour
     private float CardHeight;
     private float CardReturnSpeed;
 
+    public bool InsertedToASlot { get; set; }
 
     void Start()
     {
@@ -100,6 +101,11 @@ public class CardScript : MonoBehaviour
             MoveToPlayedCardDeck();
         }    
 
+    }
+
+    public void EnableCollider()
+    {
+        this.GetComponent<Collider2D>().enabled = true;
     }
 
     private void OnDestroy()

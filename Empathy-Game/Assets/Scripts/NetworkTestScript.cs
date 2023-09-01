@@ -13,7 +13,7 @@ public class NetworkTestScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        HostButton.onClick.AddListener(() =>
+        /*HostButton.onClick.AddListener(() =>
         {
             Debug.Log("Host button");
             NetworkManager.Singleton.StartHost();
@@ -22,7 +22,7 @@ public class NetworkTestScript : MonoBehaviour
         {
             Debug.Log("Client button");
             NetworkManager.Singleton.StartClient();
-        });
+        });*/
     }
 
     // Update is called once per frame

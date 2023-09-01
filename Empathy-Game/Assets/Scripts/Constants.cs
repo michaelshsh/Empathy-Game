@@ -98,18 +98,18 @@ namespace Constants
     {
         public enum TimeEnum    
         {
-            HalfAnHour,
             OneHour,
-            HourAndaHalf
+            TwoHours,
+            ThreeHours
         };
 
         public static string EnumToString(TimeEnum time)
         {
             switch (time)
             {
-                case TimeEnum.HalfAnHour: return HalfAnHourString;
-                case TimeEnum.OneHour: return OneHourString;
-                case TimeEnum.HourAndaHalf: return HourAndaHalfString;
+                case TimeEnum.OneHour: return OneHoursString;
+                case TimeEnum.TwoHours: return TwoHoursString;
+                case TimeEnum.ThreeHours: return ThreeHoursString;
             }
             return "";
         }
@@ -120,9 +120,9 @@ namespace Constants
             return RandomEnum.Of<TimeEnum>();
         }
 
-        private const string HalfAnHourString = "0:30";
-        private const string OneHourString = "1:00";
-        private const string HourAndaHalfString = "1:30";
+        private const string OneHoursString = "1:00";
+        private const string TwoHoursString = "2:00";
+        private const string ThreeHoursString = "3:00";
     }
 }
 
