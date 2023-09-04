@@ -2,58 +2,69 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
+using System;
+using Unity.Netcode;
+using System.Linq;
 
-public class SummeryScript : MonoBehaviour
+public class SummeryScript : NetworkBehaviour
 {
-    public static SummeryScript InstanceSummeryManager { get; private set; }
-    [field: SerializeField]
-    private List<int> PersonalPointsPerRound;
-    [field: SerializeField]
-    private List<int> GroupPointsPerRound;
-    [field: SerializeField]
-    private int round;
+    public static SummeryScript Instance { get; private set; }
+
+    public NetworkVariable<Dictionary<ulong, List<PlayerRoundStatistics>>>  ScoreList = 
+        new(new Dictionary<ulong, List<PlayerRoundStatistics>>(), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private void Awake()
     {
-        if (InstanceSummeryManager != null && InstanceSummeryManager != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(this);
         }
         else
         {
-            InstanceSummeryManager = this;
+            Instance = this;
         }
     }
 
-    private void UpdatePersonalPoints(int point)
+    public void UpdateAllPlayersStatistics()
     {
-        PersonalPointsPerRound[round] = PersonalPointsPerRound[round] + point;
+        if(!IsServer) return;
+
+        var players = FindObjectsOfType<PlayerScript>();
+        foreach (var player in players)
+        {
+            
+            ScoreList.Value.TryGetValue(player.OwnerClientId, out var score);
+            if (score == null)
+            {
+                ScoreList.Value[player.OwnerClientId] = new List<PlayerRoundStatistics>();
+            }
+
+            ScoreList.Value[player.OwnerClientId].Add(player.RoundStatistics.Value);
+        }
     }
 
-    private void UpdateGroupPoints(int point)
+    public List<PlayerRoundStatistics> GetPlayerScore(ulong OwnerClientId)
     {
-        GroupPointsPerRound[round] = GroupPointsPerRound[round] + point;
+        return ScoreList.Value[OwnerClientId];
     }
 
-    private void StartRound()
-    {
-        PersonalPointsPerRound.Add(25);
-        GroupPointsPerRound.Add(10);
-        PersonalPointsPerRound.Add(20);
-        GroupPointsPerRound.Add(20);
-        round = PersonalPointsPerRound.Count - 1;
-    }
+    public List<PlayerRoundStatistics> GetPlayerScore(PlayerScript PlayerScript) 
+        => GetPlayerScore(PlayerScript.OwnerClientId);
+
+
     //comparing this round with privious
     public string RoundComper()
     {
+        int roundIndex = RoundNumberScript.Instance.roundNumber.Value - 1;
+        var myStats = GetPlayerScore(this.OwnerClientId);
         StringBuilder text = new StringBuilder("");
 
-        if (PersonalPointsPerRound[round] > GroupPointsPerRound[round])
+        if (myStats[roundIndex].PersonalPoints > myStats[roundIndex].TeamPoints)
         {
             text.AppendLine("You colleted more personal pointes then group points.\n" +
-                "Try to collect more group points int the next round");
+                "Try to collect more group points in the next round");
         }
-        else if (PersonalPointsPerRound[round] == GroupPointsPerRound[round])
+        else if (myStats[roundIndex].PersonalPoints == myStats[roundIndex].TeamPoints)
         {
             text.AppendLine("You have a good balance between your group points\nand personal points, keep this up!!!");
         }
@@ -68,16 +79,18 @@ public class SummeryScript : MonoBehaviour
 
     public string RoundBetweenComperPersonal()
     {
+        int roundIndex = RoundNumberScript.Instance.roundNumber.Value - 1;
+        var myStats = GetPlayerScore(this.OwnerClientId);
         StringBuilder text = new StringBuilder("");
-        if (round != 0)
+        if (roundIndex != 0)
         {
-            if (PersonalPointsPerRound[round] > PersonalPointsPerRound[round - 1])
+            if (myStats[roundIndex].PersonalPoints > myStats[roundIndex-1].PersonalPoints)
             {
                 text.AppendLine("You collected more personal points\nin this round compeared to the previous round.");
             }
-            else if (PersonalPointsPerRound[round] == PersonalPointsPerRound[round - 1])
+            else if (myStats[roundIndex].PersonalPoints == myStats[roundIndex - 1].PersonalPoints)
             {
-                text.AppendLine("You collected the same amount of personal points\nin the previous round to");
+                text.AppendLine("You collected the same amount of personal points\nin the previous round too");
             }
             else
             {
@@ -88,39 +101,40 @@ public class SummeryScript : MonoBehaviour
         return text.ToString();
     }
 
-    public string RoundBetweenComperGroup()
+    public string RoundBetweenComperTeam()
     {
+        int roundIndex = RoundNumberScript.Instance.roundNumber.Value - 1;
+        var myStats = GetPlayerScore(this.OwnerClientId);
         StringBuilder text = new StringBuilder("");
-        if (round != 0)
+        if (roundIndex != 0)
         {
-            if (GroupPointsPerRound[round] > GroupPointsPerRound[round - 1])
+            if (myStats[roundIndex].TeamPoints > myStats[roundIndex - 1].TeamPoints)
             {
-                text.AppendLine("You collected more group points\nin this round compeared to the previous round.");
+                text.AppendLine("You collected more team points\nin this round compeared to the previous round.");
             }
-            else if (GroupPointsPerRound[round] == GroupPointsPerRound[round - 1])
+            else if (myStats[roundIndex].TeamPoints == myStats[roundIndex - 1].TeamPoints)
             {
-                text.AppendLine("You collected the same amount of group points\nin the previous round to");
+                text.AppendLine("You collected the same amount of team points\nin the previous round too");
             }
             else
             {
-                text.AppendLine("You collected more group points in the previous round\ncompeared to this round.");
+                text.AppendLine("You collected more team points\nin the previous round compeared to this round.");
             }
         }
 
         return text.ToString();
     }
 
-    
-    // Start is called before the first frame update
-    void Start()
+    public string EndOfGameSumm()
     {
-        InstanceSummeryManager = this;
-        StartRound();
-    }
+        var myStats = GetPlayerScore(this.OwnerClientId);
+        StringBuilder text = new StringBuilder("");
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        text.AppendLine($"You collected {myStats.Sum(x=>x.TeamPoints)} team points this game!");
+        text.AppendLine($"You collected {myStats.Sum(x => x.PersonalPoints)} personal points this game!");
+        text.AppendLine($"You missed {myStats.Sum(x => x.unusedSlots)} hours of work !");
+        text.AppendLine($"You didnt play {myStats.Sum(x => x.UnPlayedCardsCount)} card that you had in your hand!");
+
+        return text.ToString();
     }
 }

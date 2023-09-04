@@ -120,7 +120,8 @@ public sealed class GameLogicScript : NetworkBehaviour
         {
             Debug.Log($"player {player.PlayerName} synced. score of: {player.Score.Value.PersonalPoints}P {player.Score.Value.TeamPoints}T");
         }
-        //if we got here, all players are synced
+        SummeryScript.Instance.UpdateAllPlayersStatistics();
+
 
         //go to post round screen? display it directly? // will pop from its own code?
         //round number will incrimante alone through its code at round start!

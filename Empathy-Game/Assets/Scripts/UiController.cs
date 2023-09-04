@@ -43,9 +43,9 @@ public class UiController : MonoBehaviour
         if (newValue == GameState.RoundEnd)
         {
             SummeryPenal.visible = true;
-            GroupAndPersonal.text = SummeryScript.InstanceSummeryManager.RoundComper();
-            BetweenRoundsPersonal.text = SummeryScript.InstanceSummeryManager.RoundBetweenComperPersonal();
-            BetweenRoundsGroup.text = SummeryScript.InstanceSummeryManager.RoundBetweenComperGroup();
+            GroupAndPersonal.text = SummeryScript.Instance.RoundComper();
+            BetweenRoundsPersonal.text = SummeryScript.Instance.RoundBetweenComperPersonal();
+            BetweenRoundsGroup.text = SummeryScript.Instance.RoundBetweenComperTeam();
 
         }
         else
