@@ -21,6 +21,11 @@ public sealed class CardManager : MonoBehaviour
     public List<CardScript> CardsInGame = new List<CardScript>();
     public List<CardScript> UsedCards = new List<CardScript>();
     public GameObject CardPrefab;
+
+    public int ChanceToDrawCoopCard = 50;   
+    public int ChanceToDrawSoloCard = 50;
+    private NonRepeatingTextGetter textGetter = new();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -80,8 +85,7 @@ public sealed class CardManager : MonoBehaviour
         if(playerLabels.Count != 0) //if no labels, fallback to solo card
         {
             var randomLabel = playerLabels[Random.Range(0, playerLabels.Count)];
-            var textList = Constants.CardText.EnumToTextList(randomLabel);
-            var randomText = textList[Random.Range(0, textList.Count)];
+            var randomText = textGetter.NonReapetingTextByLabel(randomLabel);
 
             //coop only revelent fields
             coopCard.isCoopCard = true;
@@ -95,7 +99,7 @@ public sealed class CardManager : MonoBehaviour
     public CardScript InitOrCreateASoloCard(CardScript optinalCardToinit = null)
     {
         CardScript card = optinalCardToinit ?? new CardScript();
-        card.FreeText.text = CardText.GeneralText[UnityEngine.Random.Range(0, CardText.GeneralText.Count)];
+        card.FreeText.text = textGetter.NonReapetingTextGeneral();
 
         //time
         card.time = CardTime.GetRandomTimeEnum();
@@ -108,5 +112,24 @@ public sealed class CardManager : MonoBehaviour
         card.TeamPointsText.text = $"+{card.TeamPoints}";
 
         return card;
+    }
+
+    public CardScript InitARandomCard(CardScript card)
+    {
+        CardScript newCard = card ?? new CardScript();
+
+        int totalChances = ChanceToDrawCoopCard + ChanceToDrawSoloCard;
+        int rndCardChange = Random.Range(0, totalChances);
+
+        if(rndCardChange < ChanceToDrawCoopCard)
+        {
+            InitOrCreateACoopCard(newCard);
+        }
+        else
+        {
+            InitOrCreateASoloCard(newCard);
+        }
+
+        return newCard;
     }
 }

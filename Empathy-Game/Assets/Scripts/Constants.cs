@@ -47,13 +47,21 @@ namespace Constants
         {
             "Finish a PR reveiw",
             "Talk to my manager about my salary",
-            "Update my Linked-In profile"
+            "Update my Linked-In profile",
+            "Mentor an intern",
+            "Create technical documentation",
+            "Write reports",
+            "Conduct market research",
+            "Prioritize tasks and create to-do lists",
+            "Research and explore new areas of interest",
+            "Prioritize tasks and create to-do lists"
         };
         public static List<string> DevReqText = new List<string>
         {
             "Get your code review",
             "Complain about a bug",
-            "Create a new feature",
+            "Help to create a new feature",
+            "Ask to assist with implementing a security update"
         };
         public static List<string> ITReqText = new List<string>
         {
@@ -61,23 +69,34 @@ namespace Constants
             "Install a new software",
             "Fix the printer",
             "Fix the computer",
+            "Request assistance in setting up a new software application",
+            "Request a backup of your important files",
+            "Ask for training on using a new software tool"
         };
         public static List<string> PMReqText = new List<string>
         {
             "Meet with a client",
             "Meeting 1:1",
             "Retrospective meeting",
+            "Brainstorming session",
+            "Meet to discuss feature priorities",
+            "Request feedback on your product improvements"
         };
         public static List<string> HRReqText = new List<string>
         {
             "Talk about my vacation",
-            "Talkabout my promotion",
+            "Ask for assistance in administering payroll and benefits",
             "Learn about the company values",
+            "Request input on implementing diversity and inclusion initiatives",
+            "Request assistance in conducting interviews and the hiring process",
+            "Seek guidance in developing and updating HR policies and procedures"
         };
         public static List<string> QAReqText = new List<string>
         {
-            "Test a new feature",
+            "Request a review of your test plans and test cases",
             "Test a new product",
+            "Seek input on continuous improvement of testing processes and methodologies",
+            "Ask for assistance in reporting and tracking software defects"
         };
 
         public static List<string> EnumToTextList(LabelEnum label)
