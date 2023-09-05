@@ -21,20 +21,21 @@ public class PlayerScript : NetworkBehaviour
     public NetworkVariable<GameState> SyncedToState = new (GameState.MainMenu,
                                                     NetworkVariableReadPermission.Everyone,
                                                     NetworkVariableWritePermission.Owner);
-    public NetworkVariable<PlayerRoundStatistics> RoundStatistics = new(new PlayerRoundStatistics(),
+    public NetworkVariable<RoundStatistics> RoundStatistics = new(new RoundStatistics(),
                                                     NetworkVariableReadPermission.Everyone,
                                                     NetworkVariableWritePermission.Owner);
 
     [field: SerializeField] public FixedString128Bytes PlayerName { get; private set; }
 
+    private RoundStatistics localStats;
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) return;
         GameLogicScript.Instance.CurrentGameState.OnValueChanged += PlayerOnStateChange;
-        labelText = GameObject.Find("PlayerLabel_UI").GetComponent<TextMeshProUGUI>();
         PlayerName = $"UnNamed-{OwnerClientId}";
+        labelText = GameObject.Find("PlayerLabel_UI").GetComponent<TextMeshProUGUI>();
 
-        if(GameLogicScript.Instance.CurrentGameState.Value==GameState.GameStart)
+        if (GameLogicScript.Instance.CurrentGameState.Value==GameState.GameStart)
         {
             PlayerOnStateChange(SyncedToState.Value, GameState.SetupPhase); //setup if loaded mid game
         }
@@ -44,12 +45,11 @@ public class PlayerScript : NetworkBehaviour
 
     private void PlayerOnStateChange(GameState previousValue, GameState newValue)
     {
-        Debug.LogWarning($"entering playerstatecahnge with {newValue}");
         if (!IsOwner) return;
         if(newValue == GameState.SetupPhase)
         {
             GetAndSetRandomLabel();
-            RoundStatistics.Value = new PlayerRoundStatistics();
+            localStats = new RoundStatistics();
         }
         else if (newValue == GameState.RoundStart)
         {
@@ -63,6 +63,7 @@ public class PlayerScript : NetworkBehaviour
             CountMyPoints();
             KillPlayedCards();
             KillUnplayedCards();
+            RoundStatistics.Value = localStats;
         }
 
         SyncedToState.Value = newValue; //let server know we are synced
@@ -75,7 +76,7 @@ public class PlayerScript : NetworkBehaviour
         {
             CardSlotsManager.InstanceSlotManager.availableSlot[card.SlotIndex] = true;
             Destroy(card.gameObject);
-            RoundStatistics.Value.UnPlayedCardsCount++;
+            localStats.UnPlayedCardsCount++;
         }
     }
 
@@ -118,9 +119,9 @@ public class PlayerScript : NetworkBehaviour
             }
         }
 
-        RoundStatistics.Value.TeamPoints = Tpoints;
-        RoundStatistics.Value.PersonalPoints = Ppoints;
-        RoundStatistics.Value.unusedSlots = unusedSlots;
+        localStats.TeamPoints = Tpoints;
+        localStats.PersonalPoints = Ppoints;
+        localStats.unusedSlots = unusedSlots;
 
         //stats "scriptable object"
         var temp = new PlayerScore()

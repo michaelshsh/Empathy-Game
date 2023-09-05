@@ -6,12 +6,12 @@ using System;
 using Unity.Netcode;
 using System.Linq;
 
-public class SummeryScript : NetworkBehaviour
+public class StatisticsScript : NetworkBehaviour
 {
-    public static SummeryScript Instance { get; private set; }
+    public static StatisticsScript Instance { get; private set; }
 
-    public NetworkVariable<Dictionary<ulong, List<PlayerRoundStatistics>>>  ScoreList = 
-        new(new Dictionary<ulong, List<PlayerRoundStatistics>>(), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public NetworkVariable<Dictionary<ulong, List<RoundStatistics>>>  PlayerStats = 
+        new(new Dictionary<ulong, List<RoundStatistics>>(), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private void Awake()
     {
@@ -27,28 +27,26 @@ public class SummeryScript : NetworkBehaviour
 
     public void UpdateAllPlayersStatistics()
     {
-        if(!IsServer) return;
-
         var players = FindObjectsOfType<PlayerScript>();
         foreach (var player in players)
         {
             
-            ScoreList.Value.TryGetValue(player.OwnerClientId, out var score);
+            PlayerStats.Value.TryGetValue(player.OwnerClientId, out var score);
             if (score == null)
             {
-                ScoreList.Value[player.OwnerClientId] = new List<PlayerRoundStatistics>();
+                PlayerStats.Value[player.OwnerClientId] = new List<RoundStatistics>();
             }
 
-            ScoreList.Value[player.OwnerClientId].Add(player.RoundStatistics.Value);
+            PlayerStats.Value[player.OwnerClientId].Add(player.RoundStatistics.Value);
         }
     }
 
-    public List<PlayerRoundStatistics> GetPlayerScore(ulong OwnerClientId)
+    public List<RoundStatistics> GetPlayerScore(ulong OwnerClientId)
     {
-        return ScoreList.Value[OwnerClientId];
+        return PlayerStats.Value[OwnerClientId];
     }
 
-    public List<PlayerRoundStatistics> GetPlayerScore(PlayerScript PlayerScript) 
+    public List<RoundStatistics> GetPlayerScore(PlayerScript PlayerScript) 
         => GetPlayerScore(PlayerScript.OwnerClientId);
 
 
