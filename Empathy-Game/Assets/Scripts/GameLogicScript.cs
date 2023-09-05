@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
@@ -120,7 +121,18 @@ public sealed class GameLogicScript : NetworkBehaviour
         {
             Debug.Log($"player {player.PlayerName} synced. score of: {player.Score.Value.PersonalPoints}P {player.Score.Value.TeamPoints}T");
         }
-        //if we got here, all players are synced
+        StatisticsScript.Instance.UpdateAllPlayersStatistics();
+
+        foreach (var player in players)
+        {
+            var stats = StatisticsScript.Instance.GetPlayerScore(player)[RoundNumberScript.Instance.roundNumber.Value-1];
+
+            Debug.Log($"{player.PlayerName}: Stats:" +
+                $"\n{stats.PersonalPoints}: Personal" +
+                $"\n{stats.TeamPoints}: Team" +
+                $"\n{stats.UnPlayedCardsCount}: UnPlayedCardsCount" +
+                $"\n{stats.unusedSlots}: unusedSlots");
+        }
 
         //go to post round screen? display it directly? // will pop from its own code?
         //round number will incrimante alone through its code at round start!
@@ -134,7 +146,7 @@ public sealed class GameLogicScript : NetworkBehaviour
         {
             while (player.SyncedToState.Value != CurrentGameState.Value)
             {
-                Debug.Log($"wating 50 for player {player.PlayerName}");
+                //Debug.Log($"wating 50 for player {player.PlayerName}");
                 await Task.Delay(50); //(player.SyncedToState.Value == CurrentGameState.Value);
             }
 

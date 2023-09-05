@@ -40,16 +40,22 @@ public class UiController : MonoBehaviour
 
     private void Showsummery(GameState previousValue, GameState newValue)
     {
-        if (newValue == GameState.RoundEnd)
-        {
-            SummeryPenal.visible = true;
-            GroupAndPersonal.text = SummeryScript.InstanceSummeryManager.RoundComper();
-            BetweenRoundsPersonal.text = SummeryScript.InstanceSummeryManager.RoundBetweenComperPersonal();
-            BetweenRoundsGroup.text = SummeryScript.InstanceSummeryManager.RoundBetweenComperGroup();
 
-        }
-        else
-            SummeryPenal.visible = false;
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // instead of using subscribe, please call the relevent methods in currect timing trough gameLogicScripts !!
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        //if (newValue == GameState.RoundEnd)
+        //{
+            //SummeryPenal.visible = true;
+            //GroupAndPersonal.text = Statistics.Instance.RoundComper();
+            //BetweenRoundsPersonal.text = Statistics.Instance.RoundBetweenComperPersonal();
+            //BetweenRoundsGroup.text = Statistics.Instance.RoundBetweenComperTeam();
+
+        //}
+        //else
+        //    SummeryPenal.visible = false;
     }
 
     private void OnDestroy()

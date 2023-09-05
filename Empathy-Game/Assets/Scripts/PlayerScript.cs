@@ -9,18 +9,6 @@ using Unity.Collections;
 using static Constants.PlayerLabels;
 using Unity.VisualScripting;
 
-public struct PlayerScore : INetworkSerializable
-{
-    public int PersonalPoints;
-    public int TeamPoints;
-
-    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-    {
-        serializer.SerializeValue(ref PersonalPoints);
-        serializer.SerializeValue(ref TeamPoints);
-    }
-}
-
 public class PlayerScript : NetworkBehaviour
 {
     [SerializeField] private TextMeshProUGUI labelText;
@@ -33,16 +21,21 @@ public class PlayerScript : NetworkBehaviour
     public NetworkVariable<GameState> SyncedToState = new (GameState.MainMenu,
                                                     NetworkVariableReadPermission.Everyone,
                                                     NetworkVariableWritePermission.Owner);
+    public NetworkVariable<RoundStatistics> RoundStatistics = new(new RoundStatistics(),
+                                                    NetworkVariableReadPermission.Everyone,
+                                                    NetworkVariableWritePermission.Owner);
+
     [field: SerializeField] public FixedString128Bytes PlayerName { get; private set; }
 
+    private RoundStatistics localStats;
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) return;
         GameLogicScript.Instance.CurrentGameState.OnValueChanged += PlayerOnStateChange;
-        labelText = GameObject.Find("PlayerLabel_UI").GetComponent<TextMeshProUGUI>();
         PlayerName = $"UnNamed-{OwnerClientId}";
+        labelText = GameObject.Find("PlayerLabel_UI").GetComponent<TextMeshProUGUI>();
 
-        if(GameLogicScript.Instance.CurrentGameState.Value==GameState.GameStart)
+        if (GameLogicScript.Instance.CurrentGameState.Value==GameState.GameStart)
         {
             PlayerOnStateChange(SyncedToState.Value, GameState.SetupPhase); //setup if loaded mid game
         }
@@ -52,11 +45,11 @@ public class PlayerScript : NetworkBehaviour
 
     private void PlayerOnStateChange(GameState previousValue, GameState newValue)
     {
-        Debug.LogWarning($"entering playerstatecahnge with {newValue}");
         if (!IsOwner) return;
         if(newValue == GameState.SetupPhase)
         {
             GetAndSetRandomLabel();
+            localStats = new RoundStatistics();
         }
         else if (newValue == GameState.RoundStart)
         {
@@ -68,8 +61,9 @@ public class PlayerScript : NetworkBehaviour
         if (newValue == GameState.RoundEnd)
         {
             CountMyPoints();
-            KillUnplayedCards();
             KillPlayedCards();
+            KillUnplayedCards();
+            RoundStatistics.Value = localStats;
         }
 
         SyncedToState.Value = newValue; //let server know we are synced
@@ -82,6 +76,7 @@ public class PlayerScript : NetworkBehaviour
         {
             CardSlotsManager.InstanceSlotManager.availableSlot[card.SlotIndex] = true;
             Destroy(card.gameObject);
+            localStats.UnPlayedCardsCount++;
         }
     }
 
@@ -110,7 +105,7 @@ public class PlayerScript : NetworkBehaviour
     private void CountMyPoints()
     {
         var AllSlots = FindObjectsOfType<SlotScheduleOnTrigger>();
-        int Ppoints = 0, Tpoints = 0;
+        int Ppoints = 0, Tpoints = 0, unusedSlots = 0;
         foreach (var slot in AllSlots)
         {
             if (slot.TaskCard != null)
@@ -120,9 +115,14 @@ public class PlayerScript : NetworkBehaviour
             }
             else
             {
-                //Can insert penalty here for unused cards
+                unusedSlots++;
             }
         }
+
+        localStats.TeamPoints = Tpoints;
+        localStats.PersonalPoints = Ppoints;
+        localStats.unusedSlots = unusedSlots;
+
         //stats "scriptable object"
         var temp = new PlayerScore()
         {
@@ -131,6 +131,7 @@ public class PlayerScript : NetworkBehaviour
         };
         Score.Value = temp;
 
+        
         Debug.Log($"adding {Ppoints}P {Tpoints}T points for player named:{PlayerName}");
     }
 
