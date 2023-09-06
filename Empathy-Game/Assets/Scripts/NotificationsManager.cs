@@ -29,6 +29,7 @@ public class NotificationsManager : NetworkBehaviour
     {
         Notification N = Instantiate(notification, NotificationWindow.transform);
         N.SetText(msg);
+        PopUpWindow.Singleton.Addqueue("You received an invitation to schedule an appointment");
     }
 
     [ServerRpc(RequireOwnership = false)]

@@ -5,12 +5,18 @@ using TMPro;
 
 public class PopUpWindow : MonoBehaviour
 {
+    public static PopUpWindow Singleton;
+
     public TMP_Text popupText;
     private GameObject window;
     private Animator popupAnimator;
     private Queue<string> popupQueue;// for diffrent msg
     private Coroutine queueChecker;
 
+    private void Awake()
+    {
+        PopUpWindow.Singleton = this;
+    }
 
     private void Start()
     {
