@@ -17,25 +17,26 @@ public class NotificationsManager : NetworkBehaviour
         NotificationsManager.Singleton = this;
     }
 
-    public void SendNotification(string msg, string _from, string _to)
+    public void SendNotification(string msg, string scheduleSlotName,  string _from, string _to)
     {
         Debug.Log("entered send notification");
+        Debug.Log($"on SendNotification, msg - {msg} scheduleSlotName - {scheduleSlotName}");
         if (string.IsNullOrWhiteSpace(msg)) return;
 
         string N = _from + " " +  msg;
-        SendNotificationServerRpc(N, _to);
+        SendNotificationServerRpc(N, scheduleSlotName, _to);
     }
 
-    void AddNotification(string msg)
+    void AddNotification(string msg, string scheduleSlotName)
     {
         Debug.Log("added notification");
         Notification N = Instantiate(notification, NotificationWindow.transform);
-        N.SetText(msg);
+        N.SetText(msg, scheduleSlotName);
         PopUpWindow.Singleton.Addqueue("You received an invitation to schedule an appointment");
     }
 
     [ServerRpc(RequireOwnership = false)]
-    void SendNotificationServerRpc(string msg, string _to)
+    void SendNotificationServerRpc(string msg, string scheduleSlotName, string _to)
     {
         Debug.Log("in server");
         var Players = FindObjectsOfType<PlayerScript>();
@@ -50,13 +51,13 @@ public class NotificationsManager : NetworkBehaviour
                 ids.Add(player.OwnerClientId);
             }
         }
-        ReceiveNotificationClientRpc(msg, new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new List<ulong>(ids) } });//sending to the server list of clients IDs that need to get notification.
+        ReceiveNotificationClientRpc(msg, scheduleSlotName,  new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new List<ulong>(ids) } });//sending to the server list of clients IDs that need to get notification.
     }
 
     [ClientRpc]
-    void ReceiveNotificationClientRpc(string msg, ClientRpcParams clientRpcParams = default)//only the clients that the id in the params
+    void ReceiveNotificationClientRpc(string msg, string scheduleSlotName,  ClientRpcParams clientRpcParams = default)//only the clients that the id in the params
     {
-        NotificationsManager.Singleton.AddNotification(msg);
+        NotificationsManager.Singleton.AddNotification(msg, scheduleSlotName);
     }
 
 }

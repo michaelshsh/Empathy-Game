@@ -24,7 +24,7 @@ public class SlotScheduleOnTrigger : MonoBehaviour
         }
         if (cardThatHadEnteredSlot.isCoopCard)
         {
-            NotificationsManager.Singleton.SendNotification("wants to meet with you", "QA", Constants.PlayerLabels.EnumToString(cardThatHadEnteredSlot.requiredLabel));
+            NotificationsManager.Singleton.SendNotification("wants to meet with you", gameObject.name,  "QA", Constants.PlayerLabels.EnumToString(cardThatHadEnteredSlot.requiredLabel));
         }
     }
 
