@@ -11,4 +11,14 @@ public class Notification : MonoBehaviour
     {
         msg.text = str;
     }
+
+    public void RemoveNotification()
+    {
+        gameObject.SetActive(false);
+    }
+
+    private void OnDisable()
+    {
+        Destroy(gameObject);
+    }
 }
