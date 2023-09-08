@@ -228,6 +228,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   msg: {fileID: 7987908620603076430}
+  accept: {fileID: 3657685845285215066}
 --- !u!1 &5401372773346346467
 GameObject:
   m_ObjectHideFlags: 0

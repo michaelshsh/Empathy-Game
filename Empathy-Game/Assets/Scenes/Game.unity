@@ -3790,6 +3790,16 @@ MonoBehaviour:
   - {fileID: 2090830950}
   - {fileID: 1138855316}
   availableSlot: 0101010101
+  slotsScheduleOnTrigger:
+  - {fileID: 660049254}
+  - {fileID: 1017380372}
+  - {fileID: 1390822983}
+  - {fileID: 1198772150}
+  - {fileID: 2077554807}
+  - {fileID: 1803088106}
+  - {fileID: 1764994068}
+  - {fileID: 1927968666}
+  - {fileID: 1604758804}
 --- !u!4 &1148069234
 Transform:
   m_ObjectHideFlags: 0

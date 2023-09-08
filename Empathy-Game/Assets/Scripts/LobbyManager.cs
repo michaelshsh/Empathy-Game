@@ -35,7 +35,7 @@ public class LobbyManager : MonoBehaviour
     }
 
 
-    public async Task CreateLobby(int maxPlayers, string length)
+    public async Task CreateLobby(int maxPlayers)
     {
         try
         {
@@ -48,7 +48,6 @@ public class LobbyManager : MonoBehaviour
                 {
                     { "GameStarted", new DataObject(DataObject.VisibilityOptions.Public, "false") },
                     { "PlayersNum", new DataObject(DataObject.VisibilityOptions.Public, $"{maxPlayers}") },
-                    { "Length", new DataObject(DataObject.VisibilityOptions.Public, length) } ,
                     { "StartGame_RelayCode", new DataObject(DataObject.VisibilityOptions.Member, "0") }
                 }
             };
@@ -194,7 +193,7 @@ public class LobbyManager : MonoBehaviour
 
     public void PrintPlayers(Lobby lobby)
     {
-        Debug.Log($"players in lobby {lobby.Name}, Num of players {lobby.Data["PlayersNum"].Value}, Length {lobby.Data["Length"].Value}");
+        Debug.Log($"players in lobby {lobby.Name}, Num of players {lobby.Data["PlayersNum"].Value}");
 
         foreach(Player player in lobby.Players)
         {

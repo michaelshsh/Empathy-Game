@@ -10,7 +10,8 @@ public class SlotScheduleOnTrigger : MonoBehaviour
     public TextMeshPro UIText;
     public CardScript TaskCard = null;
     public int IndexInList;
-    public bool IsAvilableForCard => TaskCard == null;
+    public bool isUsedAsCoopCard = false;
+    public bool IsAvilableForCard => (TaskCard == null && !isUsedAsCoopCard);
     private bool mouseDown;
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -24,7 +25,7 @@ public class SlotScheduleOnTrigger : MonoBehaviour
         }
         if (cardThatHadEnteredSlot.isCoopCard)
         {
-            NotificationsManager.Singleton.SendNotification("wants to meet with you", "QA", Constants.PlayerLabels.EnumToString(cardThatHadEnteredSlot.requiredLabel));
+            NotificationsManager.Singleton.SendNotification("wants to meet with you", gameObject.name, cardThatHadEnteredSlot.time,  "QA", Constants.PlayerLabels.EnumToString(cardThatHadEnteredSlot.requiredLabel));
         }
     }
 
@@ -36,6 +37,11 @@ public class SlotScheduleOnTrigger : MonoBehaviour
         GameObject parent = card.gameObject.transform.Find("Text").gameObject; // get parent of FreeText_Var
         GameObject txt = parent.transform.Find("FreeText_Var").gameObject; // get FreeText_Var
         UIText.text = txt.GetComponent<TextMeshPro>().text;
+        if (card.isCoopCard)
+        {
+            isUsedAsCoopCard = true;
+            Debug.Log("isUsedAsCoopCard = true");
+        }
         return true;
     }
 
@@ -49,11 +55,15 @@ public class SlotScheduleOnTrigger : MonoBehaviour
         
         return true;
     }
-
+    public void SetTextOnSlot(string msg)
+    {
+        UIText.text = msg;
+        isUsedAsCoopCard = true;
+    }
     private void OnMouseDown()
     {
         mouseDown = true;
-        if (TaskCard != null)
+        if (TaskCard != null && !isUsedAsCoopCard)
             ScheduleSlotsManagerScript.Instance.RemoveCardFromAllItsSlots(this, this.TaskCard);
     }
     private void OnMouseUp()
