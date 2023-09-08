@@ -10,15 +10,17 @@ public class Notification : MonoBehaviour
     [SerializeField] TextMeshProUGUI msg;
     string scheduleSlotName;
     [SerializeField] Button accept;
+    Constants.CardTime.TimeEnum time;
     void Start()
     {
         accept.onClick.AddListener(AcceptClicked);
     }
-    public void SetText(string str, string _scheduleSlotName)
+    public void SetText(string str, string _scheduleSlotName, Constants.CardTime.TimeEnum _time)
     {
         msg.text = str;
         scheduleSlotName = _scheduleSlotName;
-        Debug.Log($"in SetText()  -  msg.txt - {msg.text}, scheduleSlotName - {scheduleSlotName} ");
+        time = _time;
+        Debug.Log($"in SetText()  -  msg.txt - {msg.text}, scheduleSlotName - {scheduleSlotName}, time - {time}");
     }
 
     public void RemoveNotification()
@@ -31,6 +33,8 @@ public class Notification : MonoBehaviour
         Debug.Log("Accept Button clicked");
         SlotScheduleOnTrigger slot = extractScheduleSlot(ScheduleSlotsManagerScript.Instance.slotsList, scheduleSlotName);
         Debug.Log($"slot name - {slot.name}");
+        ScheduleSlotsManagerScript.Instance.TryToInsertCoopCardAt(time, msg, slot.IndexInList);
+        // slot.SetTextOnSlot(msg.text);
     }
 
     private SlotScheduleOnTrigger extractScheduleSlot(List<SlotScheduleOnTrigger> slotsScheduleOnTrigger, string scheduleSlotName)

@@ -96,6 +96,7 @@ public class PlayerScript : NetworkBehaviour
                 CardSlotsManager.InstanceSlotManager.availableSlot[slot.TaskCard.SlotIndex] = true;
                 Destroy(slot.TaskCard.gameObject);
                 slot.TaskCard = null;
+                slot.isUsedAsCoopCard = false;
             }
         }
     }

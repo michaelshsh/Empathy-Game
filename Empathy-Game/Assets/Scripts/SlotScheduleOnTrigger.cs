@@ -25,7 +25,7 @@ public class SlotScheduleOnTrigger : MonoBehaviour
         }
         if (cardThatHadEnteredSlot.isCoopCard)
         {
-            NotificationsManager.Singleton.SendNotification("wants to meet with you", gameObject.name,  "QA", Constants.PlayerLabels.EnumToString(cardThatHadEnteredSlot.requiredLabel));
+            NotificationsManager.Singleton.SendNotification("wants to meet with you", gameObject.name, cardThatHadEnteredSlot.time,  "QA", Constants.PlayerLabels.EnumToString(cardThatHadEnteredSlot.requiredLabel));
         }
     }
 
@@ -50,7 +50,11 @@ public class SlotScheduleOnTrigger : MonoBehaviour
         
         return true;
     }
-
+    public void SetTextOnSlot(string msg)
+    {
+        UIText.text = msg;
+        isUsedAsCoopCard = true;
+    }
     private void OnMouseDown()
     {
         mouseDown = true;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ScheduleSlotsManagerScript : MonoBehaviour
@@ -44,6 +45,44 @@ public class ScheduleSlotsManagerScript : MonoBehaviour
             }
             card.InsertedToASlot = true;
             card.gameObject.SetActive(false);
+        }
+    }
+
+    public void TryToInsertCoopCardAt(Constants.CardTime.TimeEnum time, TextMeshProUGUI msg, int indexInList)
+    {
+        Debug.Log("Entered TryToInsertCoopCardAt");
+        Debug.Log($"time: {time}, msg: {msg}, indexInList: {indexInList}");
+        bool canInsert = false;
+        List<SlotScheduleOnTrigger> slotsToInsert = new();
+
+        if (time == Constants.CardTime.TimeEnum.OneHour)
+        {
+            canInsert = slotsList[indexInList].IsAvilableForCard;
+            slotsToInsert.Add(slotsList[indexInList]);
+        }
+        else if (time == Constants.CardTime.TimeEnum.TwoHours && indexInList + 1 < slotsList.Count)
+        {
+            canInsert = slotsList[indexInList].IsAvilableForCard;
+            canInsert &= slotsList[indexInList + 1].IsAvilableForCard;
+            slotsToInsert.Add(slotsList[indexInList]);
+            slotsToInsert.Add(slotsList[indexInList + 1]);
+        }
+        else if (time == Constants.CardTime.TimeEnum.ThreeHours && indexInList + 2 < slotsList.Count)
+        {
+            canInsert = slotsList[indexInList].IsAvilableForCard;
+            canInsert &= slotsList[indexInList + 1].IsAvilableForCard;
+            canInsert &= slotsList[indexInList + 2].IsAvilableForCard;
+            slotsToInsert.Add(slotsList[indexInList]);
+            slotsToInsert.Add(slotsList[indexInList + 1]);
+            slotsToInsert.Add(slotsList[indexInList + 2]);
+        }
+
+        if (canInsert)
+        {
+            foreach (var slot in slotsToInsert)
+            {
+                slot.SetTextOnSlot(msg.text);
+            }
         }
     }
 
