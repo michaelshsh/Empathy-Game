@@ -37,6 +37,11 @@ public class SlotScheduleOnTrigger : MonoBehaviour
         GameObject parent = card.gameObject.transform.Find("Text").gameObject; // get parent of FreeText_Var
         GameObject txt = parent.transform.Find("FreeText_Var").gameObject; // get FreeText_Var
         UIText.text = txt.GetComponent<TextMeshPro>().text;
+        if (card.isCoopCard)
+        {
+            isUsedAsCoopCard = true;
+            Debug.Log("isUsedAsCoopCard = true");
+        }
         return true;
     }
 
@@ -58,7 +63,7 @@ public class SlotScheduleOnTrigger : MonoBehaviour
     private void OnMouseDown()
     {
         mouseDown = true;
-        if (TaskCard != null)
+        if (TaskCard != null && !isUsedAsCoopCard)
             ScheduleSlotsManagerScript.Instance.RemoveCardFromAllItsSlots(this, this.TaskCard);
     }
     private void OnMouseUp()
