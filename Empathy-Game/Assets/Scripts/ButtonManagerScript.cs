@@ -20,7 +20,6 @@ public class ButtonManagerScript : MonoBehaviour
     [SerializeField] private Button createSpecificGameButton; // create specific game button, at the create menu
     [SerializeField] private Button startGameButton; // start game button, at the lobby
     [SerializeField] private GameObject Lobby; // static game lobby
-    [SerializeField] private TMP_Dropdown numberOfRounds; // number of rounds in the game, at the create menu
     [SerializeField] private TMP_InputField numberOfPlayers; // number of players in the game, at the create menu
     [SerializeField] private TextMeshProUGUI rulesOfTheGame; // rules of the game, at the rules menu
     [SerializeField] private TMP_InputField gameIdField; // game id field, at the join menu
@@ -58,7 +57,6 @@ public class ButtonManagerScript : MonoBehaviour
     private void changeCreateMenuObjectsActiveness(bool activity)
     {
         backButton.gameObject.SetActive(activity);
-        numberOfRounds.gameObject.SetActive(activity);
         numberOfPlayers.gameObject.SetActive(activity);
         createSpecificGameButton.gameObject.SetActive(activity);
     }
@@ -110,7 +108,7 @@ public class ButtonManagerScript : MonoBehaviour
         changeCreateMenuObjectsActiveness(false);
         backButton.gameObject.SetActive(true); // back button is should be active at the lobby
 
-        await LobbyManager.Instance.CreateLobby(int.Parse(numberOfPlayers.text), numberOfRounds.options[numberOfRounds.value].text);
+        await LobbyManager.Instance.CreateLobby(int.Parse(numberOfPlayers.text));
         LobbyManager.Instance.lobbyActive = true;
         Lobby.SetActive(true);
         Debug.Log(LobbyManager.Instance.joinLobby.LobbyCode);
