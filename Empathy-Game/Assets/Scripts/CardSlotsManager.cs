@@ -19,6 +19,7 @@ public sealed class CardSlotsManager : MonoBehaviour
     }
     public Transform[] Slots; // should be moved to class CardManager or create new class - Slot manager
     public bool[] availableSlot; // should be moved to class CardManager or create new class - Slot manager
+    public SlotScheduleOnTrigger[] slotsScheduleOnTrigger;
     // Start is called before the first frame update
     void Start()
     {
