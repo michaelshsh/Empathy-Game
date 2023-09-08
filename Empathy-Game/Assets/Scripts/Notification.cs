@@ -29,11 +29,11 @@ public class Notification : MonoBehaviour
     public void AcceptClicked()
     {
         Debug.Log("Accept Button clicked");
-        SlotScheduleOnTrigger slot = extractScheduleSlot(CardSlotsManager.InstanceSlotManager.slotsScheduleOnTrigger, scheduleSlotName);
+        SlotScheduleOnTrigger slot = extractScheduleSlot(ScheduleSlotsManagerScript.Instance.slotsList, scheduleSlotName);
         Debug.Log($"slot name - {slot.name}");
     }
 
-    private SlotScheduleOnTrigger extractScheduleSlot(SlotScheduleOnTrigger[] slotsScheduleOnTrigger, string scheduleSlotName)
+    private SlotScheduleOnTrigger extractScheduleSlot(List<SlotScheduleOnTrigger> slotsScheduleOnTrigger, string scheduleSlotName)
     {
         int slotNumber;
         // Assuming location will always be in the format "slot X" where X is a number.
@@ -45,7 +45,7 @@ public class Notification : MonoBehaviour
                 return slotsScheduleOnTrigger[slotNumber - 9];
             }
         }
-        throw new ArgumentException("Invalid location provided.");
+        throw new ArgumentException($"Invalid location provided, scheduleSlotName - {scheduleSlotName}");
     }
 
     private void OnDisable()

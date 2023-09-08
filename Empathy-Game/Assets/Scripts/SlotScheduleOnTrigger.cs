@@ -10,7 +10,8 @@ public class SlotScheduleOnTrigger : MonoBehaviour
     public TextMeshPro UIText;
     public CardScript TaskCard = null;
     public int IndexInList;
-    public bool IsAvilableForCard => TaskCard == null;
+    public bool isUsedAsCoopCard = false;
+    public bool IsAvilableForCard => (TaskCard == null && !isUsedAsCoopCard);
     private bool mouseDown;
 
     private void OnTriggerEnter2D(Collider2D collision)

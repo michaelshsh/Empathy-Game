@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ScheduleSlotsManagerScript : MonoBehaviour
 {
-    [SerializeField] List<SlotScheduleOnTrigger> slotsList;
+    public List<SlotScheduleOnTrigger> slotsList;
     // Start is called before the first frame update
     public static ScheduleSlotsManagerScript Instance { get; private set; }
 
