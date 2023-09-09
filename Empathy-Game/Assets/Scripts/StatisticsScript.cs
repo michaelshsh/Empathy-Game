@@ -151,5 +151,6 @@ public class StatisticsScript : NetworkBehaviour
         text.AppendLine(RoundComper());
         text.AppendLine("Number of unplayed cards this round: " + roundStatistics[roundIndex].UnPlayedCardsCount + "\n");
         text.AppendLine("Number of unused slots in your schedule this round: " + roundStatistics[roundIndex].unusedSlots + "\n");
+        SummeryText.text = text.ToString();
     }
 }

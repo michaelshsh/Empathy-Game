@@ -16,6 +16,8 @@ public class SummeryAnimation : MonoBehaviour
     }
     public void OnOpeningWindow()
     {
+        summeryGroup.SetActive(true);
+
         background.alpha = 0;
         background.LeanAlpha(1, 0.5f);
 
