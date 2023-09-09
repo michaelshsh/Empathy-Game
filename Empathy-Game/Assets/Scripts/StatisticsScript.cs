@@ -151,6 +151,28 @@ public class StatisticsScript : NetworkBehaviour
         text.AppendLine(RoundComper());
         text.AppendLine("Number of unplayed cards this round: " + roundStatistics[roundIndex].UnPlayedCardsCount + "\n");
         text.AppendLine("Number of unused slots in your schedule this round: " + roundStatistics[roundIndex].unusedSlots + "\n");
+
+        if (DidPassTheLimitScore())
+            text.AppendLine("You and your team have passed the team score limit.\n");
+        else
+            text.AppendLine("You and your team didn't pass the team score limit.\n ");
         SummeryText.text = text.ToString();
+    }
+
+    private bool DidPassTheLimitScore()
+    {
+        int amount = 0;
+        float limit = 0;
+        int roundIndex = RoundNumberScript.Instance.roundNumber.Value - 1;
+
+        var players = NetworkManager.ConnectedClientsIds;
+        foreach(var player in players)
+        {
+            List<RoundStatistics> roundStatistics = PlayerStats.Value[player];
+            amount += roundStatistics[roundIndex].TeamPoints;
+            limit += roundStatistics[0].TeamPoints;
+        }
+        limit = limit * (float)0.1 * (roundIndex * 2);
+        return amount >= limit;//returna true if the team points of the team higher of the limit
     }
 }
