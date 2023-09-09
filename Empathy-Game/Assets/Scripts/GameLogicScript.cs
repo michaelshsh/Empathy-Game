@@ -91,7 +91,10 @@ public sealed class GameLogicScript : NetworkBehaviour
                 UpdateGameByState(GameState.RoundStart);
                 break;
             case GameState.RoundEnd:
-                RoundEndAfterInvoked();
+                {
+                    RoundEndAfterInvoked();
+                    ShowPlayerSummery();
+                }
                 break;
             case GameState.Victory:
                 break;
@@ -166,6 +169,13 @@ public sealed class GameLogicScript : NetworkBehaviour
     {
         TimerScript.Instance.SetRoundTime(15);
         RoundNumberScript.Instance.SetUpMaxRounds(6);
+        SummeryAnimation.Singelton.OnClosingWindow();
+    }
+
+    private void ShowPlayerSummery()
+    {
+        StatisticsScript.Instance.WriteStatsInSummery();
+        SummeryAnimation.Singelton.OnOpeningWindow();
     }
 }
 

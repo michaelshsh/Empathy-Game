@@ -5,6 +5,8 @@ using System.Text;
 using System;
 using Unity.Netcode;
 using System.Linq;
+using TMPro;
+using UnityEngine.UI;
 
 public class StatisticsScript : NetworkBehaviour
 {
@@ -12,6 +14,7 @@ public class StatisticsScript : NetworkBehaviour
 
     public NetworkVariable<Dictionary<ulong, List<RoundStatistics>>>  PlayerStats = 
         new(new Dictionary<ulong, List<RoundStatistics>>(), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public TextMeshProUGUI SummeryText;
 
     private void Awake()
     {
@@ -134,5 +137,19 @@ public class StatisticsScript : NetworkBehaviour
         text.AppendLine($"You didnt play {myStats.Sum(x => x.UnPlayedCardsCount)} card that you had in your hand!");
 
         return text.ToString();
+    }
+
+    public void WriteStatsInSummery()
+    {
+        int roundIndex = RoundNumberScript.Instance.roundNumber.Value - 1;
+        List<RoundStatistics> roundStatistics = PlayerStats.Value[OwnerClientId];
+        StringBuilder text = new StringBuilder("");
+        text.AppendLine("You personal points this round: " + roundStatistics[roundIndex].PersonalPoints + "\n");
+        text.AppendLine(RoundBetweenComperPersonal());
+        text.AppendLine("You team points this round: " + roundStatistics[roundIndex].TeamPoints + "\n");
+        text.AppendLine(RoundBetweenComperTeam());
+        text.AppendLine(RoundComper());
+        text.AppendLine("Number of unplayed cards this round: " + roundStatistics[roundIndex].UnPlayedCardsCount + "\n");
+        text.AppendLine("Number of unused slots in your schedule this round: " + roundStatistics[roundIndex].unusedSlots + "\n");
     }
 }

@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class SummeryAnimation : MonoBehaviour
 {
+    public static SummeryAnimation Singelton;
+
     public Transform box;
     public CanvasGroup background;
     public GameObject summeryGroup;
 
+    private void Awake()
+    {
+        SummeryAnimation.Singelton = this;
+    }
     public void OnOpeningWindow()
     {
         background.alpha = 0;
