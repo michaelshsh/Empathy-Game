@@ -61,7 +61,7 @@ public class PlayerScript : NetworkBehaviour
         }
         if (newValue == GameState.RoundEnd)
         {
-            CountMyPoints();
+            CountMyPointsAndKillUsedCards();
             KillPlayedCards();
             KillUnplayedCards();
             RoundStatistics.Value = localStats;
@@ -87,13 +87,7 @@ public class PlayerScript : NetworkBehaviour
         foreach (var slot in AllSlots)
         {
             slot.UIText.text = "";
-            if(slot.TaskCard != null)
-            {
-                CardSlotsManager.InstanceSlotManager.availableSlot[slot.TaskCard.SlotIndex] = true;
-                Destroy(slot.TaskCard.gameObject);
-                slot.TaskCard = null;
-                slot.isUsedAsCoopCard = false;
-            }
+            
         }
     }
 
@@ -104,21 +98,36 @@ public class PlayerScript : NetworkBehaviour
         labelText.text = $"#{PlayerLabels.EnumToString(mylabel.Value)}";
     }
 
-    private void CountMyPoints()
+    private void CountMyPointsAndKillUsedCards()
     {
         var AllSlots = FindObjectsOfType<SlotScheduleOnTrigger>();
         int Ppoints = 0, Tpoints = 0, unusedSlots = 0;
+        List<SlotScheduleOnTrigger> SlotsWithCardsToCount = new();
+
         foreach (var slot in AllSlots)
         {
             if (slot.TaskCard != null)
             {
-                Ppoints += slot.TaskCard.PersonalPoints;
-                Tpoints += slot.TaskCard.TeamPoints;
+                SlotsWithCardsToCount.Add(slot);
             }
             else
             {
                 unusedSlots++;
             }
+        }
+
+        foreach (var slot in SlotsWithCardsToCount)
+        {
+            if (slot.TaskCard != null)
+            {
+                var card = slot.TaskCard;
+                Ppoints += card.PersonalPoints;
+                Tpoints += card.TeamPoints;
+                ScheduleSlotsManagerScript.Instance.RemoveCardFromAllItsSlots(slot, card);
+                CardSlotsManager.InstanceSlotManager.availableSlot[card.SlotIndex] = true;
+                Destroy(card.gameObject);
+            }
+            slot.isUsedAsCoopCard = false;
         }
 
         localStats.TeamPoints = Tpoints;
@@ -132,7 +141,6 @@ public class PlayerScript : NetworkBehaviour
             PersonalPoints = Score.Value.PersonalPoints + Ppoints,
         };
         Score.Value = temp;
-
         
         Debug.Log($"adding {Ppoints}P {Tpoints}T points for player named:{PlayerName}");
     }
