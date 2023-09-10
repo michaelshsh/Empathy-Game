@@ -31,11 +31,12 @@ public class PlayerScript : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) return;
+
         GameLogicScript.Instance.CurrentGameState.OnValueChanged += PlayerOnStateChange;
         PlayerName = $"UnNamed-{OwnerClientId}";
         labelText = GameObject.Find("PlayerLabel_UI").GetComponent<TextMeshProUGUI>();
 
-        if (GameLogicScript.Instance.CurrentGameState.Value==GameState.GameStart)
+        if (GameLogicScript.Instance.CurrentGameState.Value==GameState.GameStart || GameLogicScript.Instance.CurrentGameState.Value == GameState.RoundStart)
         {
             PlayerOnStateChange(SyncedToState.Value, GameState.SetupPhase); //setup if loaded mid game
         }
