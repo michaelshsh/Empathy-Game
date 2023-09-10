@@ -62,7 +62,6 @@ public class PlayerScript : NetworkBehaviour
         if (newValue == GameState.RoundEnd)
         {
             CountMyPointsAndKillUsedCards();
-            KillPlayedCards();
             KillUnplayedCards();
             RoundStatistics.Value = localStats;
         }
@@ -78,16 +77,6 @@ public class PlayerScript : NetworkBehaviour
             CardSlotsManager.InstanceSlotManager.availableSlot[card.SlotIndex] = true;
             Destroy(card.gameObject);
             localStats.UnPlayedCardsCount++;
-        }
-    }
-
-    private void KillPlayedCards()
-    {
-        var AllSlots = FindObjectsOfType<SlotScheduleOnTrigger>();
-        foreach (var slot in AllSlots)
-        {
-            slot.UIText.text = "";
-            
         }
     }
 
