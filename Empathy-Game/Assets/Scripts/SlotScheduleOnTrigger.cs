@@ -22,10 +22,10 @@ public class SlotScheduleOnTrigger : MonoBehaviour
         {
             Debug.Log($"{cardThatHadEnteredSlot} had a collision with slot in index {IndexInList}");
             ScheduleSlotsManagerScript.Instance.TryToInsertCardAt(cardThatHadEnteredSlot, IndexInList);
-        }
-        if (cardThatHadEnteredSlot.isCoopCard)
-        {
-            NotificationsManager.Singleton.SendNotification("wants to meet with you", gameObject.name, cardThatHadEnteredSlot.time,  "QA", Constants.PlayerLabels.EnumToString(cardThatHadEnteredSlot.requiredLabel));
+            if (cardThatHadEnteredSlot.isCoopCard)
+            {
+                NotificationsManager.Singleton.SendNotification("wants to meet with you", gameObject.name, cardThatHadEnteredSlot.time, "QA", Constants.PlayerLabels.EnumToString(cardThatHadEnteredSlot.requiredLabel));
+            }
         }
     }
 
