@@ -4096,6 +4096,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1038190948}
   - component: {fileID: 1038190947}
+  - component: {fileID: 1038190949}
   m_Layer: 0
   m_Name: SummeryManager
   m_TagString: Untagged
@@ -4115,7 +4116,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fdeba96d4a04dc4c9aa3f12d8bbcf5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SummeryText: {fileID: 0}
 --- !u!4 &1038190948
 Transform:
   m_ObjectHideFlags: 0
@@ -4131,6 +4131,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1038190949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1038190946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3401660049
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &1067470935
 GameObject:
   m_ObjectHideFlags: 0
@@ -4482,6 +4498,7 @@ MonoBehaviour:
   box: {fileID: 1015333707}
   background: {fileID: 516273843}
   summeryGroup: {fileID: 1968012591}
+  SummeryText: {fileID: 762893183}
 --- !u!1001 &1106194518
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5792,7 +5809,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -18.9, y: -19.4}
+  m_AnchoredPosition: {x: -18.899994, y: -19.399994}
   m_SizeDelta: {x: 38.97, y: 37.51001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1425626633

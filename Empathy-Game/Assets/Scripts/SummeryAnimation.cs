@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class SummeryAnimation : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class SummeryAnimation : MonoBehaviour
     public Transform box;
     public CanvasGroup background;
     public GameObject summeryGroup;
+    public TextMeshProUGUI SummeryText;
 
     private void Awake()
     {

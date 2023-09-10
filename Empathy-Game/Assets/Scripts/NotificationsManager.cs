@@ -60,4 +60,12 @@ public class NotificationsManager : NetworkBehaviour
         NotificationsManager.Singleton.AddNotification(msg, scheduleSlotName, time);
     }
 
+    public void ClearNotifications()
+    {
+        foreach (Transform item in NotificationWindow.transform)
+        {
+            Destroy(item.gameObject);
+        }
+    }
+
 }

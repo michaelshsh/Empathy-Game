@@ -17,17 +17,18 @@ public class ScoreboardManegar : MonoBehaviour
         ScoreboardManegar.Singelton = this;
     }
 
-    public void SetScoreboared(ref PlayerScript[] Players)
+    public void SetScoreboared(PlayerScript[] Players)
     {
         foreach(Transform item in RowParent)
         {
             Destroy(item.gameObject);
         }
 
-        GameObject newGo = Instantiate(RowPrefab, RowParent);
-        TextMeshProUGUI[] texts = newGo.GetComponentsInChildren<TextMeshProUGUI>();
-        foreach(var player in Players)
+        foreach (var player in Players)
         {
+            GameObject newGo = Instantiate(RowPrefab, RowParent);
+        TextMeshProUGUI[] texts = newGo.GetComponentsInChildren<TextMeshProUGUI>();
+        
             texts[0].text = player.PlayerName.ToString();
             texts[1].text = player.Score.Value.PersonalPoints.ToString();
             texts[2].text = player.Score.Value.TeamPoints.ToString();

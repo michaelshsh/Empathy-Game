@@ -7,14 +7,15 @@ using Unity.Netcode;
 using System.Linq;
 using TMPro;
 using UnityEngine.UI;
+using static Constants.RandomConsts;
 
 public class StatisticsScript : NetworkBehaviour
 {
     public static StatisticsScript Instance { get; private set; }
 
-    public NetworkVariable<Dictionary<ulong, List<RoundStatistics>>>  PlayerStats = 
-        new(new Dictionary<ulong, List<RoundStatistics>>(), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    public TextMeshProUGUI SummeryText;
+    //public Dictionary<ulong, List<RoundStatistics>>  PlayerStats = 
+    //    new Dictionary<ulong, List<RoundStatistics>>();
+    
 
     private void Awake()
     {
@@ -28,44 +29,49 @@ public class StatisticsScript : NetworkBehaviour
         }
     }
 
-    public void UpdateAllPlayersStatistics()
+    public override void OnNetworkSpawn()
     {
-        var players = FindObjectsOfType<PlayerScript>();
-        foreach (var player in players)
-        {
+        Instance = this;
+    }
+
+    //public void UpdateAllPlayersStatistics()
+    //{
+    //    var players = FindObjectsOfType<PlayerScript>();
+    //    foreach (var player in players)
+    //    {
             
-            PlayerStats.Value.TryGetValue(player.OwnerClientId, out var score);
-            if (score == null)
-            {
-                PlayerStats.Value[player.OwnerClientId] = new List<RoundStatistics>();
-            }
+    //        PlayerStats.TryGetValue(player.OwnerClientId, out var score);
+    //        if (score == null)
+    //        {
+    //            PlayerStats[player.OwnerClientId] = new List<RoundStatistics>();
+    //        }
 
-            PlayerStats.Value[player.OwnerClientId].Add(player.RoundStatistics.Value);
-        }
-    }
+    //        PlayerStats.Value[player.OwnerClientId].Add(player.RoundStatistics.Value);
+    //    }
+    //}
 
-    public List<RoundStatistics> GetPlayerScore(ulong OwnerClientId)
-    {
-        return PlayerStats.Value[OwnerClientId];
-    }
+    //public List<RoundStatistics> GetPlayerScore(ulong OwnerClientId)
+    //{
+    //    return PlayerStats.Value[OwnerClientId];
+    //}
 
-    public List<RoundStatistics> GetPlayerScore(PlayerScript PlayerScript) 
-        => GetPlayerScore(PlayerScript.OwnerClientId);
+    //public List<RoundStatistics> GetPlayerScore(PlayerScript PlayerScript) 
+    //    => GetPlayerScore(PlayerScript.OwnerClientId);
 
 
     //comparing this round with privious
-    public string RoundComper()
+    public string RoundComper(RoundStatistics myStats)
     {
         int roundIndex = RoundNumberScript.Instance.roundNumber.Value - 1;
-        var myStats = GetPlayerScore(this.OwnerClientId);
+        //var myStats = GetPlayerScore(this.OwnerClientId);
         StringBuilder text = new StringBuilder("");
 
-        if (myStats[roundIndex].PersonalPoints > myStats[roundIndex].TeamPoints)
+        if (myStats.PersonalPoints > myStats.TeamPoints)
         {
             text.AppendLine("You colleted more personal pointes then group points.\n" +
                 "Try to collect more group points in the next round");
         }
-        else if (myStats[roundIndex].PersonalPoints == myStats[roundIndex].TeamPoints)
+        else if (myStats.PersonalPoints == myStats.TeamPoints)
         {
             text.AppendLine("You have a good balance between your group points\nand personal points, keep this up!!!");
         }
@@ -78,10 +84,10 @@ public class StatisticsScript : NetworkBehaviour
         return text.ToString();
     }
 
-    public string RoundBetweenComperPersonal()
+    public string RoundBetweenComperPersonal(List<RoundStatistics> myStats)
     {
         int roundIndex = RoundNumberScript.Instance.roundNumber.Value - 1;
-        var myStats = GetPlayerScore(this.OwnerClientId);
+        //var myStats = GetPlayerScore(this.OwnerClientId);
         StringBuilder text = new StringBuilder("");
         if (roundIndex != 0)
         {
@@ -102,10 +108,10 @@ public class StatisticsScript : NetworkBehaviour
         return text.ToString();
     }
 
-    public string RoundBetweenComperTeam()
+    public string RoundBetweenComperTeam(List<RoundStatistics> myStats)
     {
         int roundIndex = RoundNumberScript.Instance.roundNumber.Value - 1;
-        var myStats = GetPlayerScore(this.OwnerClientId);
+        //var myStats = GetPlayerScore(this.OwnerClientId);
         StringBuilder text = new StringBuilder("");
         if (roundIndex != 0)
         {
@@ -126,53 +132,50 @@ public class StatisticsScript : NetworkBehaviour
         return text.ToString();
     }
 
-    public string EndOfGameSumm()
-    {
-        var myStats = GetPlayerScore(this.OwnerClientId);
-        StringBuilder text = new StringBuilder("");
+    //public string EndOfGameSumm()
+    //{
+    //    var myStats = GetPlayerScore(this.OwnerClientId);
+    //    StringBuilder text = new StringBuilder("");
 
-        text.AppendLine($"You collected {myStats.Sum(x=>x.TeamPoints)} team points this game!");
-        text.AppendLine($"You collected {myStats.Sum(x => x.PersonalPoints)} personal points this game!");
-        text.AppendLine($"You missed {myStats.Sum(x => x.unusedSlots)} hours of work !");
-        text.AppendLine($"You didnt play {myStats.Sum(x => x.UnPlayedCardsCount)} card that you had in your hand!");
+    //    text.AppendLine($"You collected {myStats.Sum(x=>x.TeamPoints)} team points this game!");
+    //    text.AppendLine($"You collected {myStats.Sum(x => x.PersonalPoints)} personal points this game!");
+    //    text.AppendLine($"You missed {myStats.Sum(x => x.unusedSlots)} hours of work !");
+    //    text.AppendLine($"You didnt play {myStats.Sum(x => x.UnPlayedCardsCount)} card that you had in your hand!");
 
-        return text.ToString();
-    }
+    //    return text.ToString();
+    //}
 
-    public void WriteStatsInSummery()
+    public void WriteStatsInSummery(List<RoundStatistics> Stats)
     {
         int roundIndex = RoundNumberScript.Instance.roundNumber.Value - 1;
-        List<RoundStatistics> roundStatistics = PlayerStats.Value[OwnerClientId];
+        //List<RoundStatistics> roundStatistics = Instance.PlayerStats.Value[id];
         StringBuilder text = new StringBuilder("");
-        text.AppendLine("You personal points this round: " + roundStatistics[roundIndex].PersonalPoints + "\n");
-        text.AppendLine(RoundBetweenComperPersonal());
-        text.AppendLine("You team points this round: " + roundStatistics[roundIndex].TeamPoints + "\n");
-        text.AppendLine(RoundBetweenComperTeam());
-        text.AppendLine(RoundComper());
-        text.AppendLine("Number of unplayed cards this round: " + roundStatistics[roundIndex].UnPlayedCardsCount + "\n");
-        text.AppendLine("Number of unused slots in your schedule this round: " + roundStatistics[roundIndex].unusedSlots + "\n");
+        text.AppendLine("You personal points this round: " + Stats[roundIndex].PersonalPoints + "\n");
+        text.AppendLine(RoundBetweenComperPersonal(Stats));
+        text.AppendLine("You team points this round: " + Stats[roundIndex].TeamPoints + "\n");
+        text.AppendLine(RoundBetweenComperTeam(Stats));
+        text.AppendLine(RoundComper(Stats[roundIndex]));
+        text.AppendLine("Number of unplayed cards this round: " + Stats[roundIndex].UnPlayedCardsCount + "\n");
+        text.AppendLine("Number of unused slots in your schedule this round: " + Stats[roundIndex].unusedSlots + "\n");
 
         if (DidPassTheLimitScore())
             text.AppendLine("You and your team have passed the team score limit.\n");
         else
             text.AppendLine("You and your team didn't pass the team score limit.\n ");
-        SummeryText.text = text.ToString();
+        SummeryAnimation.Singelton.SummeryText.text = text.ToString();
     }
 
     private bool DidPassTheLimitScore()
     {
         int amount = 0;
-        float limit = 0;
         int roundIndex = RoundNumberScript.Instance.roundNumber.Value - 1;
 
-        var players = NetworkManager.ConnectedClientsIds;
+        var players = FindObjectsOfType<PlayerScript>();
         foreach(var player in players)
         {
-            List<RoundStatistics> roundStatistics = PlayerStats.Value[player];
-            amount += roundStatistics[roundIndex].TeamPoints;
-            limit += roundStatistics[0].TeamPoints;
+            RoundStatistics roundStatistics = player.RoundStatistics.Value;
+            amount += roundStatistics.TeamPoints;
         }
-        limit = limit * (float)0.1 * (roundIndex * 2);
-        return amount >= limit;//returna true if the team points of the team higher of the limit
+        return amount >= Constants.RandomConsts.TeamPointsLimit * players.Length;//returna true if the team points of the team higher of the limit
     }
 }
