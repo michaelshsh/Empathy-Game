@@ -31,11 +31,12 @@ public class PlayerScript : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) return;
+
         GameLogicScript.Instance.CurrentGameState.OnValueChanged += PlayerOnStateChange;
         PlayerName = $"UnNamed-{OwnerClientId}";
         labelText = GameObject.Find("PlayerLabel_UI").GetComponent<TextMeshProUGUI>();
 
-        if (GameLogicScript.Instance.CurrentGameState.Value==GameState.GameStart)
+        if (GameLogicScript.Instance.CurrentGameState.Value==GameState.GameStart || GameLogicScript.Instance.CurrentGameState.Value == GameState.RoundStart)
         {
             PlayerOnStateChange(SyncedToState.Value, GameState.SetupPhase); //setup if loaded mid game
         }
@@ -60,8 +61,7 @@ public class PlayerScript : NetworkBehaviour
         }
         if (newValue == GameState.RoundEnd)
         {
-            CountMyPoints();
-            KillPlayedCards();
+            CountMyPointsAndKillUsedCards();
             KillUnplayedCards();
             RoundStatistics.Value = localStats;
         }
@@ -80,22 +80,6 @@ public class PlayerScript : NetworkBehaviour
         }
     }
 
-    private void KillPlayedCards()
-    {
-        var AllSlots = FindObjectsOfType<SlotScheduleOnTrigger>();
-        foreach (var slot in AllSlots)
-        {
-            slot.UIText.text = "";
-            if(slot.TaskCard != null)
-            {
-                CardSlotsManager.InstanceSlotManager.availableSlot[slot.TaskCard.SlotIndex] = true;
-                Destroy(slot.TaskCard.gameObject);
-                slot.TaskCard = null;
-                slot.isUsedAsCoopCard = false;
-            }
-        }
-    }
-
     public void GetAndSetRandomLabel()
     {
         mylabel.Value = PlayerLabels.GetRandomLabelEnum();
@@ -103,21 +87,36 @@ public class PlayerScript : NetworkBehaviour
         labelText.text = $"#{PlayerLabels.EnumToString(mylabel.Value)}";
     }
 
-    private void CountMyPoints()
+    private void CountMyPointsAndKillUsedCards()
     {
         var AllSlots = FindObjectsOfType<SlotScheduleOnTrigger>();
         int Ppoints = 0, Tpoints = 0, unusedSlots = 0;
+        List<SlotScheduleOnTrigger> SlotsWithCardsToCount = new();
+
         foreach (var slot in AllSlots)
         {
             if (slot.TaskCard != null)
             {
-                Ppoints += slot.TaskCard.PersonalPoints;
-                Tpoints += slot.TaskCard.TeamPoints;
+                SlotsWithCardsToCount.Add(slot);
             }
             else
             {
                 unusedSlots++;
             }
+        }
+
+        foreach (var slot in SlotsWithCardsToCount)
+        {
+            if (slot.TaskCard != null)
+            {
+                var card = slot.TaskCard;
+                Ppoints += card.PersonalPoints;
+                Tpoints += card.TeamPoints;
+                ScheduleSlotsManagerScript.Instance.RemoveCardFromAllItsSlots(slot, card);
+                CardSlotsManager.InstanceSlotManager.availableSlot[card.SlotIndex] = true;
+                Destroy(card.gameObject);
+            }
+            slot.isUsedAsCoopCard = false;
         }
 
         localStats.TeamPoints = Tpoints;
@@ -131,7 +130,6 @@ public class PlayerScript : NetworkBehaviour
             PersonalPoints = Score.Value.PersonalPoints + Ppoints,
         };
         Score.Value = temp;
-
         
         Debug.Log($"adding {Ppoints}P {Tpoints}T points for player named:{PlayerName}");
     }
