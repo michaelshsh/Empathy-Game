@@ -156,7 +156,7 @@ public class ButtonManagerScript : MonoBehaviour
         changeMainMenuObjectsActivness(true);
         changeCreateMenuObjectsActiveness(false);
         changeJoinMenuObjectsActiveness(false);
-        changeRulesMenuObjectsActiveness(false);
+        // changeRulesMenuObjectsActiveness(false);
         Lobby.SetActive(false);
     }
 
