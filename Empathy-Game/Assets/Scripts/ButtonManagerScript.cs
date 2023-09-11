@@ -38,7 +38,6 @@ public class ButtonManagerScript : MonoBehaviour
         Instance = this;
         createButton.onClick.AddListener(CreateButtonClicked);
         joinButton.onClick.AddListener(JoinButtonClicked);
-        rulesButton.onClick.AddListener(RulesButtonClicked);
         backButton.onClick.AddListener(BackButtonClicked);
         createSpecificGameButton.onClick.AddListener(CreateSpecificGameButtonClicked);
         joinSpecificGameButton.onClick.AddListener(JoinSpecificGameButtonClicked);
@@ -159,13 +158,6 @@ public class ButtonManagerScript : MonoBehaviour
         changeJoinMenuObjectsActiveness(false);
         changeRulesMenuObjectsActiveness(false);
         Lobby.SetActive(false);
-    }
-
-    private void RulesButtonClicked()// every click on rules button does this
-    {
-        Debug.Log("Rules button clicked");
-        changeMainMenuObjectsActivness(false);
-        changeRulesMenuObjectsActiveness(true);
     }
 
     private void JoinButtonClicked()// every click on join button does this

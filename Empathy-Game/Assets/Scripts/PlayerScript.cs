@@ -64,6 +64,9 @@ public class PlayerScript : NetworkBehaviour
             CardSlotsManager.InstanceSlotManager.DrawCard();
             CardSlotsManager.InstanceSlotManager.DrawCard();
             CardSlotsManager.InstanceSlotManager.DrawCard();
+            NotificationWindowAnimation.Singlton.Close();
+            SummeryAnimation.Singelton.OnClosingWindow();
+            ScoreboardManegar.Singelton.Close();
         }
         if (newValue == GameState.RoundEnd)
         {
@@ -74,6 +77,11 @@ public class PlayerScript : NetworkBehaviour
             ScheduleSlotsManagerScript.Instance.DeletingTextFromSlots();
         }
         if (newValue == GameState.ShowSummery)
+        {
+            var players = FindObjectsOfType<PlayerScript>();
+            ShowSummery(players);
+        }
+        if (newValue == GameState.GameEnd)
         {
             var players = FindObjectsOfType<PlayerScript>();
             ShowSummery(players);
@@ -156,6 +164,14 @@ public class PlayerScript : NetworkBehaviour
         SummeryAnimation.Singelton.OnOpeningWindow();
         ScoreboardManegar.Singelton.SetScoreboared(Players);
         NotificationsManager.Singleton.ClearNotifications();
+    }
+
+    public void ShowSummeryGameOver(PlayerScript[] Players)
+    {
+        StatisticsScript.Instance.WriteStatsInSummeryGameOver(Stats);
+        SummeryAnimation.Singelton.MainMenuButton.gameObject.SetActive(true);
+        SummeryAnimation.Singelton.OnOpeningWindow();
+        ScoreboardManegar.Singelton.SetScoreboared(Players);
     }
 
     public void UpdateRoundStats()
