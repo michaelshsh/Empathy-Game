@@ -136,6 +136,20 @@ public class ScheduleSlotsManagerScript : MonoBehaviour
             RemoveAdjacentDown(slotsList[slot.IndexInList + 1], cardToRemove);
         }
     }
+    public SlotScheduleOnTrigger extractScheduleSlot(List<SlotScheduleOnTrigger> slotsScheduleOnTrigger, string scheduleSlotName)
+    {
+        int slotNumber;
+        // Assuming location will always be in the format "slot X" where X is a number.
+        if (int.TryParse(scheduleSlotName.Split(' ')[1], out slotNumber))
+        {
+            // Assuming slot numbers start from 9 and go up to 17.
+            if (slotNumber >= 9 && slotNumber <= 17)
+            {
+                return slotsScheduleOnTrigger[slotNumber - 9];
+            }
+        }
+        throw new ArgumentException($"Invalid location provided, scheduleSlotName - {scheduleSlotName}");
+    }
 
     private void Awake()
     {
@@ -157,5 +171,42 @@ public class ScheduleSlotsManagerScript : MonoBehaviour
         }
     }
 
-    
+    public void LockCardsUntilEndRound(SlotScheduleOnTrigger slot, string scheduleSlotName, Constants.CardTime.TimeEnum time)
+    {
+        Debug.Log("Entered LockCardsUntilEndRound");
+        int indexInList = slot.IndexInList;
+
+        bool canInsert = false;
+        List<SlotScheduleOnTrigger> slotsToInsert = new();
+
+        if (time == Constants.CardTime.TimeEnum.OneHour)
+        {
+            canInsert = slotsList[indexInList].IsAvilableForCard;
+            slotsToInsert.Add(slotsList[indexInList]);
+        }
+        else if (time == Constants.CardTime.TimeEnum.TwoHours && indexInList + 1 < slotsList.Count)
+        {
+            canInsert = slotsList[indexInList].IsAvilableForCard;
+            canInsert &= slotsList[indexInList + 1].IsAvilableForCard;
+            slotsToInsert.Add(slotsList[indexInList]);
+            slotsToInsert.Add(slotsList[indexInList + 1]);
+        }
+        else if (time == Constants.CardTime.TimeEnum.ThreeHours && indexInList + 2 < slotsList.Count)
+        {
+            canInsert = slotsList[indexInList].IsAvilableForCard;
+            canInsert &= slotsList[indexInList + 1].IsAvilableForCard;
+            canInsert &= slotsList[indexInList + 2].IsAvilableForCard;
+            slotsToInsert.Add(slotsList[indexInList]);
+            slotsToInsert.Add(slotsList[indexInList + 1]);
+            slotsToInsert.Add(slotsList[indexInList + 2]);
+        }
+
+        if (canInsert)
+        {
+            foreach (var _slot in slotsToInsert)
+            {
+                slot.LockUntilEndOfRound();
+            }
+        }
+    }
 }

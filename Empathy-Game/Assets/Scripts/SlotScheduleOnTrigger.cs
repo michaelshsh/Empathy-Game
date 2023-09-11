@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using static Constants.PlayerLabels;
 
@@ -24,7 +25,7 @@ public class SlotScheduleOnTrigger : MonoBehaviour
             ScheduleSlotsManagerScript.Instance.TryToInsertCardAt(cardThatHadEnteredSlot, IndexInList);
             if (cardThatHadEnteredSlot.isCoopCard)
             {
-                NotificationsManager.Singleton.SendNotification("wants to meet with you", gameObject.name, cardThatHadEnteredSlot.time, "QA", Constants.PlayerLabels.EnumToString(cardThatHadEnteredSlot.requiredLabel));
+                NotificationsManager.Singleton.SendNotification(NetworkManager.Singleton.LocalClientId ,"wants to meet with you", gameObject.name, cardThatHadEnteredSlot.time, "QA", Constants.PlayerLabels.EnumToString(cardThatHadEnteredSlot.requiredLabel));
             }
         }
     }
@@ -63,16 +64,19 @@ public class SlotScheduleOnTrigger : MonoBehaviour
     private void OnMouseDown()
     {
         mouseDown = true;
-        if (TaskCard != null && !isUsedAsCoopCard)
+        if (TaskCard != null && !isUsedAsCoopCard && !TaskCard.isLocked)
             ScheduleSlotsManagerScript.Instance.RemoveCardFromAllItsSlots(this, this.TaskCard);
     }
     private void OnMouseUp()
     {
         mouseDown = false;
     }
-    private void Update()
+    public void LockUntilEndOfRound()
     {
-        
+        if (TaskCard == null) // someone moved it while waiting
+        {
+            // what do we do?
+        }
+        TaskCard.isLocked = true;
     }
-
 }

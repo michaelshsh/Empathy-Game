@@ -34,7 +34,6 @@ public class CardScript : MonoBehaviour
     private float CardHeight;
     private float CardReturnSpeed;
     public bool isLocked = false;
-    public bool isWaitingForApproval = false;
 
     public bool InsertedToASlot { get; set; }
 

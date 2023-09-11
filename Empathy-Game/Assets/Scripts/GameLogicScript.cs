@@ -167,7 +167,7 @@ public sealed class GameLogicScript : NetworkBehaviour
 
     private void GameStartHandlerBeforeInvoke()
     {
-        TimerScript.Instance.SetRoundTime(15);
+        TimerScript.Instance.SetRoundTime(30);
         RoundNumberScript.Instance.SetUpMaxRounds(6);
     }
 }
