@@ -43,6 +43,7 @@ public class SummeryAnimation : MonoBehaviour
 
     public void ButtonClicked()
     {
+        LobbyManager.Instance.LeaveLobby();
         SceneManager.LoadScene("MainMenu");
     }
 }

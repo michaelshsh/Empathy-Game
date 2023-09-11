@@ -72,6 +72,7 @@ public sealed class GameLogicScript : NetworkBehaviour
                 GameStartHandlerBeforeInvoke();
                 break;
             case GameState.GameEnd:
+                TimerScript.Instance.TimerIsRunning.Value = false;
                 break;
             case GameState.ShowSummery:
                 break;
