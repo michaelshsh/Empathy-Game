@@ -37,7 +37,7 @@ public class PlayerScript : NetworkBehaviour
         if (!IsOwner) return;
 
         GameLogicScript.Instance.CurrentGameState.OnValueChanged += PlayerOnStateChange;
-        PlayerName.Value = $"UnNamed-{OwnerClientId}";
+        PlayerName.Value = LobbyManager.Instance.playerName;
         labelText = GameObject.Find("PlayerLabel_UI").GetComponent<TextMeshProUGUI>();
 
         if (GameLogicScript.Instance.CurrentGameState.Value==GameState.GameStart || GameLogicScript.Instance.CurrentGameState.Value == GameState.RoundStart)
@@ -45,7 +45,7 @@ public class PlayerScript : NetworkBehaviour
             PlayerOnStateChange(SyncedToState.Value, GameState.SetupPhase); //setup if loaded mid game
         }
         PlayerOnStateChange(SyncedToState.Value, GameLogicScript.Instance.CurrentGameState.Value);
-
+        Debug.Log($"Player {PlayerName.Value} spawned");
     }
 
     private void PlayerOnStateChange(GameState previousValue, GameState newValue)
@@ -62,6 +62,8 @@ public class PlayerScript : NetworkBehaviour
             CardSlotsManager.InstanceSlotManager.DrawCard();
             CardSlotsManager.InstanceSlotManager.DrawCard();
             CardSlotsManager.InstanceSlotManager.DrawCard();
+            CardSlotsManager.InstanceSlotManager.DrawCard();
+            CardSlotsManager.InstanceSlotManager.DrawCard();
             NotificationWindowAnimation.Singlton.Close();
             SummeryAnimation.Singelton.OnClosingWindow();
             ScoreboardManegar.Singelton.Close();
@@ -72,6 +74,7 @@ public class PlayerScript : NetworkBehaviour
             KillUnplayedCards();
             RoundStatistics.Value = localStats;
             UpdateRoundStats();
+            ScheduleSlotsManagerScript.Instance.DeletingTextFromSlots();
         }
         if (newValue == GameState.ShowSummery)
         {
@@ -93,6 +96,7 @@ public class PlayerScript : NetworkBehaviour
         foreach (var card in AllCards)
         {
             CardSlotsManager.InstanceSlotManager.availableSlot[card.SlotIndex] = true;
+            CardManager.InstanceCardManager.CardsInGame.Remove(card);
             Destroy(card.gameObject);
             localStats.UnPlayedCardsCount++;
         }
@@ -132,6 +136,7 @@ public class PlayerScript : NetworkBehaviour
                 Tpoints += card.TeamPoints;
                 ScheduleSlotsManagerScript.Instance.RemoveCardFromAllItsSlots(slot, card);
                 CardSlotsManager.InstanceSlotManager.availableSlot[card.SlotIndex] = true;
+                CardManager.InstanceCardManager.CardsInGame.Remove(card);
                 Destroy(card.gameObject);
             }
             slot.isUsedAsCoopCard = false;

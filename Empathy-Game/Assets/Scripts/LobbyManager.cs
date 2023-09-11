@@ -35,7 +35,7 @@ public class LobbyManager : MonoBehaviour
     }
 
 
-    public async Task CreateLobby(int maxPlayers)
+    public async Task CreateLobby(int maxPlayers, string _playerName)
     {
         try
         {
@@ -43,7 +43,7 @@ public class LobbyManager : MonoBehaviour
             CreateLobbyOptions options = new CreateLobbyOptions
             {
                 IsPrivate = false,
-                Player = GetPlayer(),
+                Player = GetPlayer(_playerName),
                 Data = new Dictionary<string, DataObject>
                 {
                     { "GameStarted", new DataObject(DataObject.VisibilityOptions.Public, "false") },
@@ -157,13 +157,13 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
-    public async Task JoinLobbyByCode(string lobbyCode)
+    public async Task JoinLobbyByCode(string lobbyCode, string _playerName)
     {
         try
         {
             JoinLobbyByCodeOptions joinLobbyByCodeOptions = new JoinLobbyByCodeOptions 
             { 
-                Player = GetPlayer()
+                Player = GetPlayer(_playerName)
             };
 
             Lobby lobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, joinLobbyByCodeOptions);
@@ -205,8 +205,12 @@ public class LobbyManager : MonoBehaviour
         PrintPlayers(joinLobby);
     }
 
-    public Player GetPlayer()
+    public Player GetPlayer(string _playerName)
     {
+        if (_playerName != "")
+        {
+            playerName = _playerName;
+        }
         return new Player
         {
             Data = new Dictionary<string, PlayerDataObject>

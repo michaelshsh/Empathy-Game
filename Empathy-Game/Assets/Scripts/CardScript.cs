@@ -133,8 +133,8 @@ public class CardScript : MonoBehaviour
 
     public void makeCardIgnoreOtherCards()
     {
-        for (int i = 0; i < CardManager.InstanceCardManager.CardsInGame.Count; i++)
-        {
+            for (int i = 0; i < CardManager.InstanceCardManager.CardsInGame.Count; i++)
+        {           
             Physics2D.IgnoreCollision(GetComponent<Collider2D>(), CardManager.InstanceCardManager.CardsInGame[i].GetComponent<Collider2D>());
         }
     }
