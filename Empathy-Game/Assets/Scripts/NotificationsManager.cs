@@ -109,6 +109,7 @@ public class NotificationsManager : NetworkBehaviour
     {
         Notification N = Instantiate(notificationDialog, NotificationWindow.transform);
         N.SetTextReminder("Accepted " + "from "+ _from + " " + msg);
+        PopUpWindow.Singleton.Addqueue("You received an acception to schedule appointment");
     }
 
     [ServerRpc(RequireOwnership = false)]

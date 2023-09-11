@@ -24,10 +24,12 @@ public class Notification : MonoBehaviour
     }
     public void SetText(string str, string _scheduleSlotName, Constants.CardTime.TimeEnum _time, ulong sender)
     {
-        msg.text = str + " for " + Constants.CardTime.EnumToString(_time) + "hours";
         scheduleSlotName = _scheduleSlotName;
         time = _time;
         _from = sender;
+        SlotScheduleOnTrigger slot = extractScheduleSlot(ScheduleSlotsManagerScript.Instance.slotsList, scheduleSlotName);
+        int time_ = 9 + slot.IndexInList;
+        msg.text = str + " for " + Constants.CardTime.EnumToString(_time) + " hours at " + time_.ToString() ;
         Debug.Log($"in SetText()  -  msg.txt - {msg.text}, scheduleSlotName - {scheduleSlotName}, time - {time}");
     }
 
