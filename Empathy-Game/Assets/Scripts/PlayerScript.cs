@@ -24,9 +24,14 @@ public class PlayerScript : NetworkBehaviour
     public NetworkVariable<RoundStatistics> RoundStatistics = new(new RoundStatistics(),
                                                     NetworkVariableReadPermission.Everyone,
                                                     NetworkVariableWritePermission.Owner);
+
     public NetworkVariable<FixedString128Bytes> PlayerName = new(new FixedString128Bytes(),
                                                     NetworkVariableReadPermission.Everyone,
                                                     NetworkVariableWritePermission.Owner);
+
+    public List<RoundStatistics> Stats = new List<RoundStatistics>();
+    [field: SerializeField] public FixedString128Bytes PlayerName { get; private set; }
+
 
     private RoundStatistics localStats;
     public override void OnNetworkSpawn()
@@ -65,6 +70,12 @@ public class PlayerScript : NetworkBehaviour
             CountMyPointsAndKillUsedCards();
             KillUnplayedCards();
             RoundStatistics.Value = localStats;
+            UpdateRoundStats();
+        }
+        if (newValue == GameState.ShowSummery)
+        {
+            var players = FindObjectsOfType<PlayerScript>();
+            ShowSummery(players);
         }
 
         SyncedToState.Value = newValue; //let server know we are synced
@@ -133,6 +144,20 @@ public class PlayerScript : NetworkBehaviour
         Score.Value = temp;
         
         Debug.Log($"adding {Ppoints}P {Tpoints}T points for player named:{PlayerName.Value}");
+    }
+
+    public void ShowSummery(PlayerScript[] Players)
+    {
+        Debug.Log("player id: " + OwnerClientId);
+        StatisticsScript.Instance.WriteStatsInSummery(Stats);
+        SummeryAnimation.Singelton.OnOpeningWindow();
+        ScoreboardManegar.Singelton.SetScoreboared(Players);
+        NotificationsManager.Singleton.ClearNotifications();
+    }
+
+    public void UpdateRoundStats()
+    {
+        Stats.Add(localStats);
     }
 
     //private void OnDestroy()

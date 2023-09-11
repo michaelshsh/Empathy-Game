@@ -150,6 +150,11 @@ namespace Constants
         private const string TwoHoursString = "2:00";
         private const string ThreeHoursString = "3:00";
     }
+
+    public static class RandomConsts
+    {
+       public static int TeamPointsLimit = 7;
+    }
 }
 
 public static class RandomEnum

@@ -73,6 +73,8 @@ public sealed class GameLogicScript : NetworkBehaviour
                 break;
             case GameState.GameEnd:
                 break;
+            case GameState.ShowSummery:
+                break;
         }
 
         Debug.Log($"Invoking state {newState} to all");
@@ -92,6 +94,7 @@ public sealed class GameLogicScript : NetworkBehaviour
                 break;
             case GameState.RoundEnd:
                 RoundEndAfterInvoked();
+                UpdateGameByState(GameState.ShowSummery);
                 break;
             case GameState.Victory:
                 break;
@@ -102,6 +105,8 @@ public sealed class GameLogicScript : NetworkBehaviour
                 break;
             case GameState.GameEnd:
                 FinishGameAfterInvoke();
+                break;
+            case GameState.ShowSummery:
                 break;
         }
     }
@@ -121,19 +126,17 @@ public sealed class GameLogicScript : NetworkBehaviour
         {
             Debug.Log($"player {player.PlayerName.Value} synced. score of: {player.Score.Value.PersonalPoints}P {player.Score.Value.TeamPoints}T");
         }
-        StatisticsScript.Instance.UpdateAllPlayersStatistics();
+        //StatisticsScript.Instance.UpdateAllPlayersStatistics();
+        //foreach (var player in players)
+        //{
+        //    var stats = StatisticsScript.Instance.GetPlayerScore(player)[RoundNumberScript.Instance.roundNumber.Value-1];
 
-        foreach (var player in players)
-        {
-            var stats = StatisticsScript.Instance.GetPlayerScore(player)[RoundNumberScript.Instance.roundNumber.Value-1];
-
-            Debug.Log($"{player.PlayerName}: Stats:" +
-                $"\n{stats.PersonalPoints}: Personal" +
-                $"\n{stats.TeamPoints}: Team" +
-                $"\n{stats.UnPlayedCardsCount}: UnPlayedCardsCount" +
-                $"\n{stats.unusedSlots}: unusedSlots");
-        }
-
+        //    Debug.Log($"{player.PlayerName}: Stats:" +
+        //        $"\n{stats.PersonalPoints}: Personal" +
+        //        $"\n{stats.TeamPoints}: Team" +
+        //        $"\n{stats.UnPlayedCardsCount}: UnPlayedCardsCount" +
+        //        $"\n{stats.unusedSlots}: unusedSlots");
+        //}
         //go to post round screen? display it directly? // will pop from its own code?
         //round number will incrimante alone through its code at round start!
         //timer will count end of round time
@@ -179,5 +182,6 @@ public enum GameState
     RoundStart,
     Victory,
     Lose,
-    GameEnd
+    GameEnd,
+    ShowSummery
 }

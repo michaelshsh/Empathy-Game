@@ -74,7 +74,7 @@ public class TimerScript : NetworkBehaviour
                     Debug.Log("TimerScript Calling GameState.RoundEnd");
                     GameLogicScript.Instance.UpdateGameByState(GameState.RoundEnd);
                 }
-                else if (GameLogicScript.Instance.CurrentGameState.Value == GameState.RoundEnd)
+                else
                 {
                     Debug.Log("TimerScript Calling GameState.SetupPhase");
                     GameLogicScript.Instance.UpdateGameByState(GameState.SetupPhase);
