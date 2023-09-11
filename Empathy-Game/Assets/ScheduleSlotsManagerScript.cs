@@ -156,6 +156,15 @@ public class ScheduleSlotsManagerScript : MonoBehaviour
             slotsList[i].IndexInList = i;
         }
     }
+    public void DeletingTextFromSlots()
+    {
+        foreach (var slot in slotsList)
+        {
+            slot.UIText.text = string.Empty;
+            slot.TaskCard = null;
+        }
+    }
 
-    
+
+
 }

@@ -71,6 +71,7 @@ public class PlayerScript : NetworkBehaviour
             KillUnplayedCards();
             RoundStatistics.Value = localStats;
             UpdateRoundStats();
+            ScheduleSlotsManagerScript.Instance.DeletingTextFromSlots();
         }
         if (newValue == GameState.ShowSummery)
         {
@@ -108,7 +109,7 @@ public class PlayerScript : NetworkBehaviour
 
         foreach (var slot in AllSlots)
         {
-            if (slot.TaskCard != null || slot.isUsedAsCoopCard)
+            if (slot.TaskCard != null)
             {
                 SlotsWithCardsToCount.Add(slot);
             }
