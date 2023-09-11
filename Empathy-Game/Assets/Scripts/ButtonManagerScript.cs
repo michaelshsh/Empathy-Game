@@ -19,6 +19,7 @@ public class ButtonManagerScript : MonoBehaviour
     [SerializeField] private Button joinSpecificGameButton; // join specific game button, at the join menu
     [SerializeField] private Button createSpecificGameButton; // create specific game button, at the create menu
     [SerializeField] private Button startGameButton; // start game button, at the lobby
+    [SerializeField] private TMP_InputField playerName;
     [SerializeField] private GameObject Lobby; // static game lobby
     [SerializeField] private TMP_InputField numberOfPlayers; // number of players in the game, at the create menu
     [SerializeField] private TextMeshProUGUI rulesOfTheGame; // rules of the game, at the rules menu
@@ -52,12 +53,14 @@ public class ButtonManagerScript : MonoBehaviour
     {
         gameIdField.gameObject.SetActive(activity);
         backButton.gameObject.SetActive(activity);
+        playerName.gameObject.SetActive(activity);
         joinSpecificGameButton.gameObject.SetActive(activity);
     }
     private void changeCreateMenuObjectsActiveness(bool activity)
     {
         backButton.gameObject.SetActive(activity);
         numberOfPlayers.gameObject.SetActive(activity);
+        playerName.gameObject.SetActive(activity);
         createSpecificGameButton.gameObject.SetActive(activity);
     }
     private void changeRulesMenuObjectsActiveness(bool activity)
@@ -72,7 +75,7 @@ public class ButtonManagerScript : MonoBehaviour
         Debug.Log($"trying to join lobby with code {gameIdField.text}");
         try
         {
-            await LobbyManager.Instance.JoinLobbyByCode(gameIdField.text);
+            await LobbyManager.Instance.JoinLobbyByCode(gameIdField.text, playerName.text);
             Debug.Log("did not throw exception");
         }
         catch (Exception)
@@ -108,7 +111,7 @@ public class ButtonManagerScript : MonoBehaviour
         changeCreateMenuObjectsActiveness(false);
         backButton.gameObject.SetActive(true); // back button is should be active at the lobby
 
-        await LobbyManager.Instance.CreateLobby(int.Parse(numberOfPlayers.text));
+        await LobbyManager.Instance.CreateLobby(int.Parse(numberOfPlayers.text), playerName.text);
         LobbyManager.Instance.lobbyActive = true;
         Lobby.SetActive(true);
         Debug.Log(LobbyManager.Instance.joinLobby.LobbyCode);
