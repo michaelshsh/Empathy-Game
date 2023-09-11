@@ -30,8 +30,6 @@ public class PlayerScript : NetworkBehaviour
                                                     NetworkVariableWritePermission.Owner);
 
     public List<RoundStatistics> Stats = new List<RoundStatistics>();
-    [field: SerializeField] public FixedString128Bytes PlayerName { get; private set; }
-
 
     private RoundStatistics localStats;
     public override void OnNetworkSpawn()
