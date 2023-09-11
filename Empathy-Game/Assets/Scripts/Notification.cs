@@ -4,22 +4,30 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
+using static Constants.CardTime;
 
 public class Notification : MonoBehaviour
 {
+    public static Notification Singelton;
+
     [SerializeField] TextMeshProUGUI msg;
     string scheduleSlotName;
     [SerializeField] Button accept;
+    [SerializeField] Button reject;
     Constants.CardTime.TimeEnum time;
+    [SerializeField] ulong _from;
     void Start()
     {
+        Notification.Singelton = this;
         accept.onClick.AddListener(AcceptClicked);
+        reject.onClick.AddListener(RejectClicked);
     }
-    public void SetText(string str, string _scheduleSlotName, Constants.CardTime.TimeEnum _time)
+    public void SetText(string str, string _scheduleSlotName, Constants.CardTime.TimeEnum _time, ulong sender)
     {
-        msg.text = str;
+        msg.text = str + " for " + Constants.CardTime.EnumToString(_time) + "hours";
         scheduleSlotName = _scheduleSlotName;
         time = _time;
+        _from = sender;
         Debug.Log($"in SetText()  -  msg.txt - {msg.text}, scheduleSlotName - {scheduleSlotName}, time - {time}");
     }
 
@@ -34,10 +42,16 @@ public class Notification : MonoBehaviour
         SlotScheduleOnTrigger slot = extractScheduleSlot(ScheduleSlotsManagerScript.Instance.slotsList, scheduleSlotName);
         Debug.Log($"slot name - {slot.name}");
         ScheduleSlotsManagerScript.Instance.TryToInsertCoopCardAt(time, msg, slot.IndexInList);
+        NotificationsManager.Singleton.DelteNotificationFromOtherPlayersAccept(msg.text, _from);
         // slot.SetTextOnSlot(msg.text);
     }
 
-    private SlotScheduleOnTrigger extractScheduleSlot(List<SlotScheduleOnTrigger> slotsScheduleOnTrigger, string scheduleSlotName)
+    public void RejectClicked()
+    {
+        RemoveNotification();
+    }
+
+    public SlotScheduleOnTrigger extractScheduleSlot(List<SlotScheduleOnTrigger> slotsScheduleOnTrigger, string scheduleSlotName)
     {
         int slotNumber;
         // Assuming location will always be in the format "slot X" where X is a number.
@@ -55,5 +69,15 @@ public class Notification : MonoBehaviour
     private void OnDisable()
     {
         Destroy(gameObject);
+    }
+
+    public string GetText()
+    {
+        return msg.text;
+    }
+
+    public void SetTextReminder(string s)
+    {
+        msg.text = s;
     }
 }

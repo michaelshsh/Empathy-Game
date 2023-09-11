@@ -4828,6 +4828,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fab203546805d9e4a8463c10dea3d626, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  notificationDialog: {fileID: 0}
   notification: {fileID: 0}
   NotificationWindow: {fileID: 0}
 --- !u!4 &1143379083
@@ -4857,6 +4858,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fab203546805d9e4a8463c10dea3d626, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  notificationDialog: {fileID: 1345985748701786459, guid: 03f92dd900ec85b4fbba24a67d195fd2, type: 3}
   notification: {fileID: 1426775607115883683, guid: 01d3005a6a3aa53459d2277b4ddb0d66, type: 3}
   NotificationWindow: {fileID: 1870895335}
 --- !u!1 &1148069232
