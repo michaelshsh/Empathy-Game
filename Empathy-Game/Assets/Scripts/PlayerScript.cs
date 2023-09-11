@@ -24,8 +24,9 @@ public class PlayerScript : NetworkBehaviour
     public NetworkVariable<RoundStatistics> RoundStatistics = new(new RoundStatistics(),
                                                     NetworkVariableReadPermission.Everyone,
                                                     NetworkVariableWritePermission.Owner);
-
-    [field: SerializeField] public FixedString128Bytes PlayerName { get; private set; }
+    public NetworkVariable<FixedString128Bytes> PlayerName = new(new FixedString128Bytes(),
+                                                    NetworkVariableReadPermission.Everyone,
+                                                    NetworkVariableWritePermission.Owner);
 
     private RoundStatistics localStats;
     public override void OnNetworkSpawn()
@@ -33,7 +34,7 @@ public class PlayerScript : NetworkBehaviour
         if (!IsOwner) return;
 
         GameLogicScript.Instance.CurrentGameState.OnValueChanged += PlayerOnStateChange;
-        PlayerName = $"UnNamed-{OwnerClientId}";
+        PlayerName.Value = $"UnNamed-{OwnerClientId}";
         labelText = GameObject.Find("PlayerLabel_UI").GetComponent<TextMeshProUGUI>();
 
         if (GameLogicScript.Instance.CurrentGameState.Value==GameState.GameStart || GameLogicScript.Instance.CurrentGameState.Value == GameState.RoundStart)
