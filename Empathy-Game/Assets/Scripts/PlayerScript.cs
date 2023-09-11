@@ -37,7 +37,7 @@ public class PlayerScript : NetworkBehaviour
         if (!IsOwner) return;
 
         GameLogicScript.Instance.CurrentGameState.OnValueChanged += PlayerOnStateChange;
-        PlayerName.Value = $"UnNamed-{OwnerClientId}";
+        PlayerName.Value = LobbyManager.Instance.playerName;
         labelText = GameObject.Find("PlayerLabel_UI").GetComponent<TextMeshProUGUI>();
 
         if (GameLogicScript.Instance.CurrentGameState.Value==GameState.GameStart || GameLogicScript.Instance.CurrentGameState.Value == GameState.RoundStart)
@@ -45,7 +45,7 @@ public class PlayerScript : NetworkBehaviour
             PlayerOnStateChange(SyncedToState.Value, GameState.SetupPhase); //setup if loaded mid game
         }
         PlayerOnStateChange(SyncedToState.Value, GameLogicScript.Instance.CurrentGameState.Value);
-
+        Debug.Log($"Player {PlayerName.Value} spawned");
     }
 
     private void PlayerOnStateChange(GameState previousValue, GameState newValue)
