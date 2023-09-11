@@ -24,7 +24,9 @@ public class ButtonManagerScript : MonoBehaviour
     [SerializeField] private TMP_InputField numberOfPlayers; // number of players in the game, at the create menu
     [SerializeField] private TextMeshProUGUI rulesOfTheGame; // rules of the game, at the rules menu
     [SerializeField] private TMP_InputField gameIdField; // game id field, at the join menu
-    [SerializeField] private TextMeshProUGUI listOfPlayers;
+    [SerializeField] private TextMeshProUGUI NameTemplate;
+    [SerializeField] private List<TextMeshProUGUI> listOfPlayersNames;
+    [SerializeField] private GameObject listOfPlayersContanier;
     [SerializeField] private TextMeshProUGUI gamePrompt;
 
 
@@ -185,10 +187,26 @@ public class ButtonManagerScript : MonoBehaviour
     {
         if (LobbyManager.Instance.lobbyActive && LobbyManager.Instance.joinLobby != null)
         {
-            listOfPlayers.text = "";
+            while(listOfPlayersNames.Count < LobbyManager.Instance.joinLobby.Players.Count)
+            {
+                Component newTextInstance = Instantiate(NameTemplate);
+                newTextInstance.transform.SetParent(listOfPlayersContanier.transform);
+                newTextInstance.gameObject.SetActive(true);
+                newTextInstance.transform.localScale = Vector3.one;
+                var newName = newTextInstance.GetComponent<TextMeshProUGUI>();
+                listOfPlayersNames.Add(newName);
+            }
+
+            int i = 0;
             foreach (Player player in LobbyManager.Instance.joinLobby.Players)
             {
-                listOfPlayers.text = listOfPlayers.text + player.Data["PlayerName"].Value + "\n";
+                var newName = listOfPlayersNames[i];
+                newName.text = player.Data["PlayerName"].Value;
+                //newName.transform.parent = listOfPlayersContanier.transform;
+
+                i++;
+                //listOfPlayersCurrect.Add(newName);
+                //listOfPlayers.text = listOfPlayers.text + player.Data["PlayerName"].Value + "\n";
             }
         }
         

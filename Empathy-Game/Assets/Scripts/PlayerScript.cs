@@ -24,8 +24,12 @@ public class PlayerScript : NetworkBehaviour
     public NetworkVariable<RoundStatistics> RoundStatistics = new(new RoundStatistics(),
                                                     NetworkVariableReadPermission.Everyone,
                                                     NetworkVariableWritePermission.Owner);
+
+    public NetworkVariable<FixedString128Bytes> PlayerName = new(new FixedString128Bytes(),
+                                                    NetworkVariableReadPermission.Everyone,
+                                                    NetworkVariableWritePermission.Owner);
+
     public List<RoundStatistics> Stats = new List<RoundStatistics>();
-    [field: SerializeField] public FixedString128Bytes PlayerName { get; private set; }
 
     private RoundStatistics localStats;
     public override void OnNetworkSpawn()
@@ -33,7 +37,7 @@ public class PlayerScript : NetworkBehaviour
         if (!IsOwner) return;
 
         GameLogicScript.Instance.CurrentGameState.OnValueChanged += PlayerOnStateChange;
-        PlayerName = $"UnNamed-{OwnerClientId}";
+        PlayerName.Value = $"UnNamed-{OwnerClientId}";
         labelText = GameObject.Find("PlayerLabel_UI").GetComponent<TextMeshProUGUI>();
 
         if (GameLogicScript.Instance.CurrentGameState.Value==GameState.GameStart || GameLogicScript.Instance.CurrentGameState.Value == GameState.RoundStart)
@@ -139,7 +143,7 @@ public class PlayerScript : NetworkBehaviour
         };
         Score.Value = temp;
         
-        Debug.Log($"adding {Ppoints}P {Tpoints}T points for player named:{PlayerName}");
+        Debug.Log($"adding {Ppoints}P {Tpoints}T points for player named:{PlayerName.Value}");
     }
 
     public void ShowSummery(PlayerScript[] Players)

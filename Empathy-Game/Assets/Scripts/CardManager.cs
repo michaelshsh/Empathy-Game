@@ -22,8 +22,8 @@ public sealed class CardManager : MonoBehaviour
     public List<CardScript> UsedCards = new List<CardScript>();
     public GameObject CardPrefab;
 
-    public int ChanceToDrawCoopCard = 50;   
-    public int ChanceToDrawSoloCard = 50;
+    public int ChanceToDrawCoopCard = 30;   
+    public int ChanceToDrawSoloCard = 70;
     private NonRepeatingTextGetter textGetter = new();
 
     // Start is called before the first frame update
@@ -91,6 +91,11 @@ public sealed class CardManager : MonoBehaviour
             coopCard.isCoopCard = true;
             coopCard.requiredLabel = randomLabel;
             coopCard.FreeText.text = $"|REQUIRES:{PlayerLabels.EnumToString(randomLabel)}|\n {randomText}";
+
+            coopCard.PersonalPoints /= 2; //less personal
+            coopCard.TeamPoints *= 2; // more team points
+
+            setupCardUI(coopCard);
         }
 
         return coopCard;
@@ -103,15 +108,22 @@ public sealed class CardManager : MonoBehaviour
 
         //time
         card.time = CardTime.GetRandomTimeEnum();
-        card.TimeText.text = CardTime.EnumToString(card.time);
 
         //points (should add logic, and ints)
-        card.PersonalPoints = UnityEngine.Random.Range(0, 15);
-        card.TeamPoints = UnityEngine.Random.Range(0, 15);
-        card.PersonalPointsText.text = $"+{card.PersonalPoints}";
-        card.TeamPointsText.text = $"+{card.TeamPoints}";
+        card.PersonalPoints = UnityEngine.Random.Range(1, 15);
+        card.TeamPoints = UnityEngine.Random.Range(1, 15);
+
+        setupCardUI(card);
 
         return card;
+    }
+
+    private void setupCardUI(CardScript card)
+    {
+        //should set up coopCard.FreeText.text on the calling method!
+        card.TimeText.text = CardTime.EnumToString(card.time);
+        card.PersonalPointsText.text = $"+{card.PersonalPoints}";
+        card.TeamPointsText.text = $"+{card.TeamPoints}";
     }
 
     public CardScript InitARandomCard(CardScript card)
