@@ -29,7 +29,7 @@ public class RelayManager : MonoBehaviour
         try
         {
             Debug.Log("starts CreateRelay()");
-            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(3); // num of players - 1 (not including host)
+            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(int.Parse(LobbyManager.Instance.joinLobby.Data["PlayersNum"].Value) + 1); // num of players - 1 (not including host)
             Debug.Log("did the allocation");
             string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
             Debug.Log($"Join code: {joinCode}");
@@ -57,6 +57,7 @@ public class RelayManager : MonoBehaviour
             RelayServerData relayServerData = new RelayServerData(joinAllocation, "dtls");
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
             NetworkManager.Singleton.StartClient();
+            Debug.Log("startedClient()");
         }
         catch (RelayServiceException e)
         {

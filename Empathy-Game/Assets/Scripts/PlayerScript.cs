@@ -57,7 +57,9 @@ public class PlayerScript : NetworkBehaviour
             CardSlotsManager.InstanceSlotManager.DrawCard();
             CardSlotsManager.InstanceSlotManager.DrawCard();
             CardSlotsManager.InstanceSlotManager.DrawCard();
-            CardSlotsManager.InstanceSlotManager.DrawCard();          
+            CardSlotsManager.InstanceSlotManager.DrawCard();
+            CardSlotsManager.InstanceSlotManager.DrawCard();
+            CardSlotsManager.InstanceSlotManager.DrawCard();
         }
         if (newValue == GameState.RoundEnd)
         {
