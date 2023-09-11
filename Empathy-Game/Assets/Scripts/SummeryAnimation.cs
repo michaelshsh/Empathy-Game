@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SummeryAnimation : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class SummeryAnimation : MonoBehaviour
     public CanvasGroup background;
     public GameObject summeryGroup;
     public TextMeshProUGUI SummeryText;
+    public Button MainMenuButton;
 
     private void Awake()
     {
@@ -36,5 +39,10 @@ public class SummeryAnimation : MonoBehaviour
     void OnComplete()
     {
         summeryGroup.SetActive(false);
+    }
+
+    public void ButtonClicked()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }

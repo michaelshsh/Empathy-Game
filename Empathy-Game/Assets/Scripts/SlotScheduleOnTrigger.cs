@@ -24,7 +24,7 @@ public class SlotScheduleOnTrigger : MonoBehaviour
             ScheduleSlotsManagerScript.Instance.TryToInsertCardAt(cardThatHadEnteredSlot, IndexInList);
             if (cardThatHadEnteredSlot.isCoopCard)
             {
-                NotificationsManager.Singleton.SendNotification("wants to meet with you", gameObject.name, cardThatHadEnteredSlot.time, "QA", Constants.PlayerLabels.EnumToString(cardThatHadEnteredSlot.requiredLabel));
+                NotificationsManager.Singleton.SendNotification("wants to meet with you", gameObject.name, cardThatHadEnteredSlot.time, Constants.PlayerLabels.EnumToString(cardThatHadEnteredSlot.requiredLabel));
             }
         }
     }
