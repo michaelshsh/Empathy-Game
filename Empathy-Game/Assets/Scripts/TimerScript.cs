@@ -38,10 +38,9 @@ public class TimerScript : NetworkBehaviour
         if (newValue == GameState.RoundEnd)
         {
             //timer for "end of round"
-            var roundTime = RoundTime;
-            SetRoundTime(10); // 10 sec to see post game
+            SetRoundTime(Constants.GameSettings.PostRoundTime); // 10 sec to see post game
             StartTimer();
-            SetRoundTime(roundTime); //set round time back for the next round
+            SetRoundTime(Constants.GameSettings.RoundTime); //set round time back for the next round
         }
     }
 

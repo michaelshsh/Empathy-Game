@@ -119,7 +119,7 @@ public sealed class GameLogicScript : NetworkBehaviour
         var players = FindObjectsOfType<PlayerScript>();
         foreach (var player in players)
         {
-            Debug.Log($"player {player.PlayerName} synced. score of: {player.Score.Value.PersonalPoints}P {player.Score.Value.TeamPoints}T");
+            Debug.Log($"player {player.PlayerName.Value} synced. score of: {player.Score.Value.PersonalPoints}P {player.Score.Value.TeamPoints}T");
         }
         StatisticsScript.Instance.UpdateAllPlayersStatistics();
 
@@ -150,7 +150,7 @@ public sealed class GameLogicScript : NetworkBehaviour
                 await Task.Delay(50); //(player.SyncedToState.Value == CurrentGameState.Value);
             }
 
-            Debug.Log($"player {player.PlayerName} synced.");
+            Debug.Log($"player {player.PlayerName.Value} synced.");
         }
 
         Debug.Log($"All players are synced");
@@ -164,8 +164,8 @@ public sealed class GameLogicScript : NetworkBehaviour
 
     private void GameStartHandlerBeforeInvoke()
     {
-        TimerScript.Instance.SetRoundTime(15);
-        RoundNumberScript.Instance.SetUpMaxRounds(6);
+        TimerScript.Instance.SetRoundTime(Constants.GameSettings.RoundTime);
+        RoundNumberScript.Instance.SetUpMaxRounds(Constants.GameSettings.RoundsCount);
     }
 }
 

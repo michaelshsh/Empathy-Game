@@ -132,7 +132,7 @@ public class PlayerScript : NetworkBehaviour
         };
         Score.Value = temp;
         
-        Debug.Log($"adding {Ppoints}P {Tpoints}T points for player named:{PlayerName}");
+        Debug.Log($"adding {Ppoints}P {Tpoints}T points for player named:{PlayerName.Value}");
     }
 
     //private void OnDestroy()
