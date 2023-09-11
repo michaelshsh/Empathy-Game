@@ -4,6 +4,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Net.Security;
+using Unity.Services.Authentication;
 
 public class SummeryAnimation : MonoBehaviour
 {
@@ -44,6 +46,7 @@ public class SummeryAnimation : MonoBehaviour
     public void ButtonClicked()
     {
         LobbyManager.Instance.LeaveLobby();
+        AuthenticationService.Instance.SignOut();
         SceneManager.LoadScene("MainMenu");
     }
 }
