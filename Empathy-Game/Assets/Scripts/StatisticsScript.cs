@@ -165,6 +165,42 @@ public class StatisticsScript : NetworkBehaviour
         SummeryAnimation.Singelton.SummeryText.text = text.ToString();
     }
 
+    public void WriteStatsInSummeryGameOver(List<RoundStatistics> Stats)
+    {
+        int roundIndex = RoundNumberScript.Instance.roundNumber.Value - 1;
+        StringBuilder text = new StringBuilder("");
+        text.AppendLine("You personal points this round: " + Stats[roundIndex].PersonalPoints + "\n");
+        text.AppendLine(RoundBetweenComperPersonal(Stats));
+        text.AppendLine("You team points this round: " + Stats[roundIndex].TeamPoints + "\n");
+        text.AppendLine(RoundBetweenComperTeam(Stats));
+        text.AppendLine(RoundComper(Stats[roundIndex]));
+        text.AppendLine("Number of unplayed cards this round: " + Stats[roundIndex].UnPlayedCardsCount + "\n");
+        text.AppendLine("Number of unused slots in your schedule this round: " + Stats[roundIndex].unusedSlots + "\n");
+
+        if (DidPassTheLimitScore())
+            text.AppendLine("You and your team have passed the team score limit.\n");
+        else
+            text.AppendLine("You and your team didn't pass the team score limit.\n ");
+
+        var Players = FindObjectsOfType<PlayerScript>();
+        int max = 0;
+        int playerP = 0;
+        foreach (var player in Players)
+        {
+            if (max < player.Score.Value.PersonalPoints)
+                max = player.Score.Value.PersonalPoints;
+            if (player.OwnerClientId.Equals(OwnerClientId))
+            {
+                text.AppendLine("Total team Points: " + player.Score.Value.TeamPoints.ToString() + " Total personal points: " + player.Score.Value.PersonalPoints.ToString() + "\n");
+                playerP = player.Score.Value.PersonalPoints;
+            }
+            
+        }
+        if (max <= playerP)
+            text.AppendLine("Congratulations you have collected the maximum number of personal points in the game\n");
+        SummeryAnimation.Singelton.SummeryText.text = text.ToString();
+    }
+
     private bool DidPassTheLimitScore()
     {
         int amount = 0;

@@ -74,6 +74,11 @@ public class PlayerScript : NetworkBehaviour
             var players = FindObjectsOfType<PlayerScript>();
             ShowSummery(players);
         }
+        if (newValue == GameState.GameEnd)
+        {
+            var players = FindObjectsOfType<PlayerScript>();
+            ShowSummery(players);
+        }
 
         SyncedToState.Value = newValue; //let server know we are synced
     }
@@ -150,6 +155,14 @@ public class PlayerScript : NetworkBehaviour
         SummeryAnimation.Singelton.OnOpeningWindow();
         ScoreboardManegar.Singelton.SetScoreboared(Players);
         NotificationsManager.Singleton.ClearNotifications();
+    }
+
+    public void ShowSummeryGameOver(PlayerScript[] Players)
+    {
+        StatisticsScript.Instance.WriteStatsInSummeryGameOver(Stats);
+        SummeryAnimation.Singelton.MainMenuButton.gameObject.SetActive(true);
+        SummeryAnimation.Singelton.OnOpeningWindow();
+        ScoreboardManegar.Singelton.SetScoreboared(Players);
     }
 
     public void UpdateRoundStats()
