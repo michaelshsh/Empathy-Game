@@ -162,6 +162,7 @@ public class ScheduleSlotsManagerScript : MonoBehaviour
         {
             slot.UIText.text = string.Empty;
             slot.TaskCard = null;
+            slot.isUsedAsCoopCard = false;
         }
     }
 
