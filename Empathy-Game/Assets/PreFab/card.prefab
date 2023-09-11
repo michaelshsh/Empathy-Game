@@ -945,7 +945,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.02, y: 0.03}
+  m_AnchoredPosition: {x: -0.009, y: -0.016}
   m_SizeDelta: {x: 4.7, y: 6.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &7541099684056169197
@@ -1023,8 +1023,9 @@ MonoBehaviour:
   FreeText: {fileID: 7541099684565609498}
   Played: 0
   SlotIndex: 0
-  slotOnSchedule: {fileID: 0}
   CardObj: {fileID: 0}
+  requiredLabel: 0
+  isCoopCard: 0
 --- !u!61 &7541099684056169192
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1038,7 +1039,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.08976209, y: -0.12342319}
+  m_Offset: {x: -0.038867712, y: 0.042598486}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1049,7 +1050,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.8149946, y: 1.3508794}
+  m_Size: {x: 4.579064, y: 6.056724}
   m_EdgeRadius: 0
 --- !u!50 &5348542959129397414
 Rigidbody2D:
