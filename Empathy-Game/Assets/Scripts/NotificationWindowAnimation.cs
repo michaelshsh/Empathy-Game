@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class NotificationWindowAnimation : MonoBehaviour
 {
+    public static NotificationWindowAnimation Singlton;
+
+    private void Awake()
+    {
+        NotificationWindowAnimation.Singlton = this;
+    }
     private void Start()
     {
         transform.localScale = Vector2.zero;

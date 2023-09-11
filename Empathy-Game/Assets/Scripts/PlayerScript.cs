@@ -57,7 +57,10 @@ public class PlayerScript : NetworkBehaviour
             CardSlotsManager.InstanceSlotManager.DrawCard();
             CardSlotsManager.InstanceSlotManager.DrawCard();
             CardSlotsManager.InstanceSlotManager.DrawCard();
-            CardSlotsManager.InstanceSlotManager.DrawCard();          
+            CardSlotsManager.InstanceSlotManager.DrawCard();
+            NotificationWindowAnimation.Singlton.Close();
+            SummeryAnimation.Singelton.OnClosingWindow();
+            ScoreboardManegar.Singelton.Close();
         }
         if (newValue == GameState.RoundEnd)
         {
