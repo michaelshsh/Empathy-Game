@@ -4,6 +4,13 @@ using static Constants.PlayerLabels;
 
 namespace Constants
 {
+    public static class GameSettings
+    {
+        public static readonly int RoundsCount = 6;
+        public static readonly int RoundTime = 45;
+        public static readonly int PostRoundTime = 20;
+    }
+
     public static class PlayerLabels
     {
         public enum LabelEnum

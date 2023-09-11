@@ -29,7 +29,7 @@ public class ScoreboardManegar : MonoBehaviour
             GameObject newGo = Instantiate(RowPrefab, RowParent);
         TextMeshProUGUI[] texts = newGo.GetComponentsInChildren<TextMeshProUGUI>();
         
-            texts[0].text = player.PlayerName.ToString();
+            texts[0].text = player.PlayerName.Value.ToString();
             texts[1].text = player.Score.Value.PersonalPoints.ToString();
             texts[2].text = player.Score.Value.TeamPoints.ToString();
         }
