@@ -87,6 +87,7 @@ public class PlayerScript : NetworkBehaviour
         foreach (var card in AllCards)
         {
             CardSlotsManager.InstanceSlotManager.availableSlot[card.SlotIndex] = true;
+            CardManager.InstanceCardManager.CardsInGame.Remove(card);
             Destroy(card.gameObject);
             localStats.UnPlayedCardsCount++;
         }
@@ -107,7 +108,7 @@ public class PlayerScript : NetworkBehaviour
 
         foreach (var slot in AllSlots)
         {
-            if (slot.TaskCard != null)
+            if (slot.TaskCard != null || slot.isUsedAsCoopCard)
             {
                 SlotsWithCardsToCount.Add(slot);
             }
@@ -126,6 +127,7 @@ public class PlayerScript : NetworkBehaviour
                 Tpoints += card.TeamPoints;
                 ScheduleSlotsManagerScript.Instance.RemoveCardFromAllItsSlots(slot, card);
                 CardSlotsManager.InstanceSlotManager.availableSlot[card.SlotIndex] = true;
+                CardManager.InstanceCardManager.CardsInGame.Remove(card);
                 Destroy(card.gameObject);
             }
             slot.isUsedAsCoopCard = false;
