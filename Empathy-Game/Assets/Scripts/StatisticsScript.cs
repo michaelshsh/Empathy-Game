@@ -159,9 +159,15 @@ public class StatisticsScript : NetworkBehaviour
         text.AppendLine("Number of unused slots in your schedule this round: " + Stats[roundIndex].unusedSlots + "\n");
 
         if (DidPassTheLimitScore())
+        {
             text.AppendLine("You and your team have passed the team score limit.\n");
+        }
         else
+        {
             text.AppendLine("You and your team didn't pass the team score limit.\n ");
+            GameLogicScript.Instance.UpdateGameByState(GameState.GameEnd);
+        }
+            
         SummeryAnimation.Singelton.SummeryText.text = text.ToString();
     }
 
@@ -178,9 +184,14 @@ public class StatisticsScript : NetworkBehaviour
         text.AppendLine("Number of unused slots in your schedule this round: " + Stats[roundIndex].unusedSlots + "\n");
 
         if (DidPassTheLimitScore())
+        {
             text.AppendLine("You and your team have passed the team score limit.\n");
+        }  
         else
+        {
             text.AppendLine("You and your team didn't pass the team score limit.\n ");
+        }
+            
 
         var Players = FindObjectsOfType<PlayerScript>();
         int max = 0;

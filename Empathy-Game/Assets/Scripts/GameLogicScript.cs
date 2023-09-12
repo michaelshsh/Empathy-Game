@@ -72,6 +72,7 @@ public sealed class GameLogicScript : NetworkBehaviour
                 GameStartHandlerBeforeInvoke();
                 break;
             case GameState.GameEnd:
+                TimerScript.Instance.TimerIsRunning.Value = false;
                 break;
             case GameState.ShowSummery:
                 break;
@@ -94,7 +95,14 @@ public sealed class GameLogicScript : NetworkBehaviour
                 break;
             case GameState.RoundEnd:
                 RoundEndAfterInvoked();
-                UpdateGameByState(GameState.ShowSummery);
+                if(RoundNumberScript.Instance.roundNumber.Value == Constants.GameSettings.RoundsCount)
+                {
+                    GameLogicScript.Instance.UpdateGameByState(GameState.GameEnd);
+                }
+                else
+                {
+                    UpdateGameByState(GameState.ShowSummery);
+                }
                 break;
             case GameState.Victory:
                 break;
@@ -114,6 +122,7 @@ public sealed class GameLogicScript : NetworkBehaviour
     private void FinishGameAfterInvoke()
     {
         LobbyManager.Instance.LeaveLobby();
+        TimerScript.Instance.TimerIsRunning.Value = false;
         // to finish the game through a button from the roundEnd window?
         // SceneManager.LoadScene("MainMenu");
     }
@@ -126,20 +135,7 @@ public sealed class GameLogicScript : NetworkBehaviour
         {
             Debug.Log($"player {player.PlayerName.Value} synced. score of: {player.Score.Value.PersonalPoints}P {player.Score.Value.TeamPoints}T");
         }
-        //StatisticsScript.Instance.UpdateAllPlayersStatistics();
-        //foreach (var player in players)
-        //{
-        //    var stats = StatisticsScript.Instance.GetPlayerScore(player)[RoundNumberScript.Instance.roundNumber.Value-1];
-
-        //    Debug.Log($"{player.PlayerName}: Stats:" +
-        //        $"\n{stats.PersonalPoints}: Personal" +
-        //        $"\n{stats.TeamPoints}: Team" +
-        //        $"\n{stats.UnPlayedCardsCount}: UnPlayedCardsCount" +
-        //        $"\n{stats.unusedSlots}: unusedSlots");
-        //}
-        //go to post round screen? display it directly? // will pop from its own code?
-        //round number will incrimante alone through its code at round start!
-        //timer will count end of round time
+        
     }
 
     private async Task AwaitPlayerSync()

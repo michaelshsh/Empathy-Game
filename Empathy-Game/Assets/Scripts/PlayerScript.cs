@@ -84,7 +84,7 @@ public class PlayerScript : NetworkBehaviour
         if (newValue == GameState.GameEnd)
         {
             var players = FindObjectsOfType<PlayerScript>();
-            ShowSummery(players);
+            ShowSummeryGameOver(players);
         }
 
         SyncedToState.Value = newValue; //let server know we are synced
