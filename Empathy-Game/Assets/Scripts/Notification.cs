@@ -46,7 +46,6 @@ public class Notification : MonoBehaviour
         ScheduleSlotsManagerScript.Instance.TryToInsertCoopCardAt(time, msg, slot.IndexInList);
         NotificationsManager.Singleton.DelteNotificationFromOtherPlayersAccept(msg.text, _from);
         // slot.SetTextOnSlot(msg.text);
-        RemoveNotification();
     }
 
     public void RejectClicked()
