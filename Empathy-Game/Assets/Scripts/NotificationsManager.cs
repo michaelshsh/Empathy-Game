@@ -27,7 +27,7 @@ public class NotificationsManager : NetworkBehaviour
         string name = "";
         foreach (var player in Players)
         {
-            if (player.OwnerClientId == OwnerClientId)
+            if (player.OwnerClientId.Equals(NetworkManager.Singleton.LocalClientId))
             {
                 name = Constants.PlayerLabels.EnumToString(player.mylabel.Value);
                 break;
@@ -35,7 +35,10 @@ public class NotificationsManager : NetworkBehaviour
         }
 
         string N = name + " " +  msg;
-        SendNotificationServerRpc(N, scheduleSlotName, time, _to, new ServerRpcParams { Receive = new ServerRpcReceiveParams { SenderClientId = OwnerClientId } });
+        Notification N_ = Instantiate(notificationDialog, NotificationWindow.transform);
+        N_.SetTextReminder("Accepted " + "from " + _to + " " + N + ". If the notification will be accepted you will get the team points.");
+        PopUpWindow.Singleton.Addqueue("You received an acception to schedule appointment");
+        SendNotificationServerRpc(N, scheduleSlotName, time, _to, new ServerRpcParams { Receive = new ServerRpcReceiveParams { SenderClientId = NetworkManager.Singleton.LocalClientId } });
     }
 
     void AddNotification(string msg, string scheduleSlotName, Constants.CardTime.TimeEnum time, ulong sender)
@@ -88,7 +91,7 @@ public class NotificationsManager : NetworkBehaviour
         string name = "";
         foreach (var player in Players)
         {
-            if (player.OwnerClientId == OwnerClientId)
+            if (player.OwnerClientId.Equals(NetworkManager.Singleton.LocalClientId))
             {
                 name = Constants.PlayerLabels.EnumToString(player.mylabel.Value);
                 break;
