@@ -28,6 +28,8 @@ public class LobbyManager : MonoBehaviour
         AuthenticationService.Instance.SignedIn += () => {
             Debug.Log($"Signed in {AuthenticationService.Instance.PlayerId}");
         };
+
+        AuthenticationService.Instance.ClearSessionToken();
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
         playerName = "PlayerName" + UnityEngine.Random.Range(10, 99);
