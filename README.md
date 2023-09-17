@@ -5,7 +5,7 @@ Welcome to the Teams Empathy Game repository! This innovative multiplayer comput
 ## Authors
 - Maya Faerman
 - Michael Shorki Shragay 207091844
-- Tomer Newman
+- Tomer Newman 318599305
 
 ## Game Overview
 **Teams Empathy Game** is a unique multiplayer card game that challenges players to think about the impact of their decisions on their collaborators. Here are some key features of the game:
