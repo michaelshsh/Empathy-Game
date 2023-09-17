@@ -200,9 +200,9 @@ public class StatisticsScript : NetworkBehaviour
         {
             if (max < player.Score.Value.PersonalPoints)
                 max = player.Score.Value.PersonalPoints;
-            if (player.OwnerClientId.Equals(OwnerClientId))
+            if (player.OwnerClientId.Equals(NetworkManager.Singleton.LocalClientId))
             {
-                text.AppendLine("Total team Points: " + player.Score.Value.TeamPoints.ToString() + " Total personal points: " + player.Score.Value.PersonalPoints.ToString() + "\n");
+                text.AppendLine("You can see your score in the scoreboard.");
                 playerP = player.Score.Value.PersonalPoints;
             }
             

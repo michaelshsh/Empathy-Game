@@ -37,7 +37,7 @@ public class NotificationsManager : NetworkBehaviour
         string N = name + " " +  msg;
         SendNotificationServerRpc(N, scheduleSlotName, time, _to, new ServerRpcParams { Receive = new ServerRpcReceiveParams { SenderClientId = NetworkManager.Singleton.LocalClientId } });
         Notification N_ = Instantiate(notificationDialog, NotificationWindow.transform);
-        N_.SetTextReminder("Accepted " + "from " + _to + " " + msg + ". If the request will be accepted, you will get the team points.");
+        N_.SetTextReminder("Sent message " + "from " + _to + " " + msg + ". If the request will be accepted, you will get the team points.");
         PopUpWindow.Singleton.Addqueue("You received an acception to schedule appointment");
     }
 
