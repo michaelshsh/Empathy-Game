@@ -190,6 +190,7 @@ public class StatisticsScript : NetworkBehaviour
         else
         {
             text.AppendLine("You and your team didn't pass the team score limit.\n ");
+            text.AppendLine("You can see your score in the scoreboard.\n");
         }
             
 
@@ -202,13 +203,13 @@ public class StatisticsScript : NetworkBehaviour
                 max = player.Score.Value.PersonalPoints;
             if (player.OwnerClientId.Equals(NetworkManager.Singleton.LocalClientId))
             {
-                text.AppendLine("You can see your score in the scoreboard.");
                 playerP = player.Score.Value.PersonalPoints;
             }
             
         }
         if (max <= playerP)
-            text.AppendLine("Congratulations you have collected the maximum number of personal points in the game\n");
+            text.AppendLine("Congratulations you have collected\n" +
+                "the maximum number of personal points in the game\n");
         SummeryAnimation.Singelton.SummeryText.text = text.ToString();
     }
 
