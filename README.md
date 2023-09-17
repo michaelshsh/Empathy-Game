@@ -4,7 +4,7 @@ Welcome to the Teams Empathy Game repository! This innovative multiplayer comput
 
 ## Authors
 - Maya Faerman
-- Michael Shorki Shragay
+- Michael Shorki Shragay 207091844
 - Tomer Newman
 
 ## Game Overview
