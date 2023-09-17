@@ -15,13 +15,18 @@ Welcome to the Teams Empathy Game repository! This innovative multiplayer comput
 - 🤝 **Collaboration:** The game emphasizes the importance of working together by keeping track of both individual and team scores.
 - 🌐 **Online Play:** Play with your coworkers online to strengthen team dynamics.
 
-## Getting Started
-To play the game, follow these steps:
 
-1. Visit the game by clicking [here](https://michaelshsh.github.io/Empathy-Game/).
-2. Create or join a multiplayer session with your coworkers.
-3. Read the game instructions to understand the rules and mechanics.
-4. Start playing, collaborating, and boosting empathy within your team!
+## How to Run the Game (for demo purposes) 🚀
+
+1. Open file explorer.
+2. Go to the game dir location.
+3. Enter dir GameBuilds.
+4. Unzip/extract directories "Client" and "Host".
+5. In each extracted directory, enter the directory and run EmpathyGame.exe.
+6. Have fun! 🙂
+
+## Third-Party Libraries 📚
+We utilize [GameCI](https://github.com/game-ci/documentation) for continuous integration. GameCI is licensed under the MIT License.
 
 ## Supervisor
 This project is developed under the supervision of **Dr. Uri Globus**.
