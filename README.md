@@ -3,7 +3,7 @@
 Welcome to the Teams Empathy Game repository! This innovative multiplayer computer card game is designed to boost collaboration between coworkers while fostering empathy and teamwork.
 
 ## Authors
-- Maya Faerman
+- Maya Faerman 208987099
 - Michael Shorki Shragay 207091844
 - Tomer Newman 318599305
 
